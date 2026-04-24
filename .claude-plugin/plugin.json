@@ -1,0 +1,25 @@
+{
+  "name": "seranking-mcp-skills",
+  "description": "Production SEO workflows for the SE Ranking MCP server. Turns raw API data into writer-ready content briefs, AI-search share-of-voice reports, audit change reports, backlink gap lists, keyword clusters, competitor gap analyses, and demand-gen landing pages.",
+  "version": "0.1.0",
+  "author": {
+    "name": "SE Ranking",
+    "email": "api@seranking.com",
+    "url": "https://seranking.com"
+  },
+  "homepage": "https://github.com/seranking/seranking-mcp-skills",
+  "repository": "https://github.com/seranking/seranking-mcp-skills",
+  "license": "MIT",
+  "keywords": [
+    "seo",
+    "mcp",
+    "se-ranking",
+    "claude",
+    "agent-skills",
+    "content-brief",
+    "ai-search",
+    "keyword-research",
+    "backlinks",
+    "site-audit"
+  ]
+}
