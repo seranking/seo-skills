@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [1.0.0] — 2026-04-27
+
+First production release. The catalogue covers **19 SEO skills** across keyword research, content briefing, page intelligence, technical and content audits, structured data, drift monitoring, SXO diagnostics, competitive analysis, paid search, AI-search optimization, sitemap analysis, subdomain mapping, and content opportunity mining — all powered by the [SE Ranking remote MCP](https://seranking.com/api/integrations/mcp).
+
+### Added
+- `CONTRIBUTING.md` at repo root with skill-authoring template, required structure, MCP tool conventions, and PR checklist.
+- README finalised for v1.0 maturity.
+
+### Changed
+- All three version strings bumped to 1.0.0.
+
+### Future work (planned for v1.x patch releases)
+- **Frontmatter upgrade:** add `allowed-tools` and `when_to_use` to all 19 skills to eliminate mid-run permission prompts and improve trigger precision.
+- **Handoff contract:** add `## Handoff` and `## Works well with` sections to every skill so chains across skills are explicit (catalog-specific convention).
+- **Folder taxonomy:** group skills by stage in subdirs declared via the manifest's `skills` field (research / build / optimize / monitor / audit / competitive).
+- **Examples:** add real, end-to-end runs for the most-requested skills (priority: `seo-page`, `seo-content-brief`, `seo-drift`, `seo-sxo`, `seo-technical-audit`).
+- **Lint workflow:** GitHub Actions to validate `SKILL.md` frontmatter and MCP tool name accuracy on PRs.
+- **`.mcp.json` decision:** decide whether to bundle the SE Ranking MCP via plugin-bundled `.mcp.json` (one-step install but tool-prefix changes) or keep external (no breaking change).
+
+### Catalogue summary at v1.0.0
+
+The 19 skills:
+
+1. `seo-content-brief` — writer-ready brief from a domain + topic
+2. `seo-ai-search-share-of-voice` — domain-level brand vs brand visibility across AI engines
+3. `seo-backlink-gap` — domains linking to competitors but not to you
+4. `seo-keyword-cluster` — content cluster plan (pillar + spokes architecture)
+5. `seo-competitor-gap-analysis` — keywords competitors rank for that you don't
+6. `seo-agency-landing-page` — demand-gen landing page for an SEO agency
+7. `seo-page` — URL-level keyword & traffic intelligence with verdict
+8. `seo-schema` — JSON-LD detect, validate, generate (6 templates)
+9. `seo-drift` — git for SEO: baseline / compare / history
+10. `seo-sxo` — read SERPs backwards to find page-type mismatches
+11. `seo-technical-audit` — focused one-shot technical audit
+12. `seo-content-audit` — E-E-A-T (60) + CITE (30) rubric for existing content
+13. `seo-sitemap` — sitemap vs audit diff
+14. `seo-competitor-pages` — "X vs Y" / "alternatives to X" page generator
+15. `seo-backlinks-profile` — full backlink profile with toxic-candidate flagging
+16. `seo-subdomain` — subdomain ownership map with cannibalization flags
+17. `seo-geo` — URL-level Generative Engine Optimization
+18. `seo-ads` — paid-search competitive intelligence
+19. `seo-keyword-niche` — longtail + question keyword content opportunity mining
+
 ## [0.7.0] — 2026-04-27
 
 ### Added

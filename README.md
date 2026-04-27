@@ -187,11 +187,11 @@ Every skill in this repo is designed to pace sequentially inside these limits. T
 
 ## Contributing
 
-This repo is the official Skills catalogue for the SE Ranking MCP server. We welcome issues and PRs:
+This repo is the official Skills catalogue for the SE Ranking MCP server. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the skill-authoring template, required structure, MCP tool conventions, and PR checklist.
 
-- **Bug reports**: open an issue with the skill name, the input, and the unexpected output.
-- **New skills**: PRs welcome. Follow the structure of existing skills (frontmatter + Prerequisites + Process + Output format + Tips). Keep each `SKILL.md` under 300 lines.
-- **Improvements**: PRs welcome. Include a before/after example run in the PR description.
+- **Bug reports** — open an issue with the skill name, the input, and the unexpected output.
+- **New skills** — PRs welcome. Use the template in `CONTRIBUTING.md`.
+- **Improvements** — PRs welcome. Include a before/after example run in the PR description.
 
 ## Links
 
