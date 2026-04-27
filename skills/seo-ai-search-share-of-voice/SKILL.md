@@ -1,5 +1,5 @@
 ---
-name: ai-search-share-of-voice
+name: seo-ai-search-share-of-voice
 description: Measure AI Search share of voice for a target domain versus competitors across ChatGPT, Perplexity, Gemini, Google AI Overview, and AI Mode. Pulls the AIO leaderboard, then samples prompts where each domain appears as a source or brand mention, and analyses topic clusters each brand owns. Use when the user asks for AI Search share of voice, LLM visibility tracking, AEO/GEO analysis, AI Overview competitive analysis, or wants to know which brands LLMs cite in their category.
 ---
 
@@ -38,10 +38,10 @@ Compare AI-search visibility for a target brand against competitors across every
 
 ## Output format
 
-Create a folder `ai-search-share-of-voice-{target-slug}-{YYYYMMDD}/` with:
+Create a folder `seo-ai-search-share-of-voice-{target-slug}-{YYYYMMDD}/` with:
 
 ```
-ai-search-share-of-voice-{target-slug}-{YYYYMMDD}/
+seo-ai-search-share-of-voice-{target-slug}-{YYYYMMDD}/
 ├── 01-leaderboard.md         # raw leaderboard per engine
 ├── 02-heatmap.md             # visual heatmap table
 ├── 03-prompts-{domain}.md    # one file per domain with 20 sampled prompts

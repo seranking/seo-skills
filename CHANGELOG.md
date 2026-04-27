@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [0.3.0] — 2026-04-27
+
+### Changed
+- Renamed all 7 skills with an `seo-` prefix so slash-command tab-completion groups them visually: `content-brief` → `seo-content-brief`, `agency-landing-page` → `seo-agency-landing-page`, and so on. Skills are now invoked as `/seranking-mcp-skills:seo-content-brief`. Folder names, frontmatter `name:` fields, and output-folder slug patterns (`seo-{skill}-{target-slug}-{YYYYMMDD}/`) all updated to match.
+- Renamed the bundled example run from `examples/ai-search-share-of-voice-wix-com-20260427/` to `examples/seo-ai-search-share-of-voice-wix-com-20260427/` for parity with the new slug convention.
+
 ## [0.2.0] — 2026-04-27
 
 ### Changed

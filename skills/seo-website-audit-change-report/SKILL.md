@@ -1,5 +1,5 @@
 ---
-name: website-audit-change-report
+name: seo-website-audit-change-report
 description: Diff this month's website audit against last month's snapshot and deliver a client-ready change report: new issues, resolved issues, severity-weighted prioritisation, traffic-at-risk per issue, and suggested fixes. Use when the user asks for an audit change report, audit diff, month-over-month audit comparison, regression report, or wants to review what got worse/better since the last audit.
 ---
 
@@ -44,10 +44,10 @@ Compare the latest audit against the previous snapshot for a domain and produce 
 
 ## Output format
 
-Create a folder `website-audit-change-report-{target-slug}-{YYYYMMDD}/` with:
+Create a folder `seo-website-audit-change-report-{target-slug}-{YYYYMMDD}/` with:
 
 ```
-website-audit-change-report-{target-slug}-{YYYYMMDD}/
+seo-website-audit-change-report-{target-slug}-{YYYYMMDD}/
 ├── 01-current-snapshot.md
 ├── 02-previous-snapshot.md
 ├── 03-diff-raw.md           # full diff, not prioritised

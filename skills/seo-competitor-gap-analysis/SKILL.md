@@ -1,5 +1,5 @@
 ---
-name: competitor-gap-analysis
+name: seo-competitor-gap-analysis
 description: Compare a target domain to its top organic competitors and surface keywords the competitors rank for that the target does not, filtered by intent, volume, and difficulty. Use when the user asks for a competitor gap analysis, keyword gap, organic content gap, missing keyword opportunities, or wants to see what their competitors are ranking for that they are not.
 ---
 
@@ -46,10 +46,10 @@ Identify the specific keywords your competitors rank for in the top 20 that your
 
 ## Output format
 
-Create a folder `competitor-gap-analysis-{target-slug}-{YYYYMMDD}/` with:
+Create a folder `seo-competitor-gap-analysis-{target-slug}-{YYYYMMDD}/` with:
 
 ```
-competitor-gap-analysis-{target-slug}-{YYYYMMDD}/
+seo-competitor-gap-analysis-{target-slug}-{YYYYMMDD}/
 ├── 01-competitors.md
 ├── 02-competitor-keywords-{domain}.md   # one per competitor
 ├── 03-target-keywords.md

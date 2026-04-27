@@ -1,5 +1,5 @@
 ---
-name: content-brief
+name: seo-content-brief
 description: Generate a writer-ready SEO content brief from a target domain and topic. Pulls domain overview, competitors, keyword gaps, SERP analysis, related and question keywords, AI Search citations, and existing internal-link sources, then synthesises a complete editorial brief a freelance writer can start from immediately. Use when the user asks for a content brief, blog brief, article outline, editor brief, or wants to capture organic traffic their competitors have.
 ---
 
@@ -51,10 +51,10 @@ Turn a domain plus a topic intent into a complete content editor brief: target k
 
 ## Output format
 
-Create a folder `content-brief-{target-slug}-{YYYYMMDD}/` with one file per step plus the final `BRIEF.md`:
+Create a folder `seo-content-brief-{target-slug}-{YYYYMMDD}/` with one file per step plus the final `BRIEF.md`:
 
 ```
-content-brief-{target-slug}-{YYYYMMDD}/
+seo-content-brief-{target-slug}-{YYYYMMDD}/
 ├── 01-domain-overview.md
 ├── 02-competitors.md
 ├── 03-keyword-gaps.md

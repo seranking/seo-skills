@@ -8,13 +8,13 @@ These skills are designed to work with the SE Ranking MCP server, but they docum
 
 | Skill | What it produces | Primary triggers |
 |---|---|---|
-| [`content-brief`](skills/content-brief/SKILL.md) | Writer-ready editor brief from a domain and topic, with keyword research, SERP analysis, competitor content teardown, internal linking plan, and AI Search angle | "content brief", "blog brief", "article outline", "editor brief" |
-| [`ai-search-share-of-voice`](skills/ai-search-share-of-voice/SKILL.md) | Share-of-voice heatmap across ChatGPT, Perplexity, Gemini, Google AI Overview, and AI Mode, plus topic-cluster ownership per brand | "AI Search share of voice", "LLM visibility", "AEO", "GEO analysis", "AI Overview competitive analysis" |
-| [`website-audit-change-report`](skills/website-audit-change-report/SKILL.md) | Month-over-month audit diff: new issues, resolved issues, worsened issues, and traffic-at-risk prioritisation | "audit change report", "audit diff", "month-over-month audit", "regression report" |
-| [`backlink-gap`](skills/backlink-gap/SKILL.md) | Prospect list of referring domains linking to multiple competitors but not to your site, enriched with authority, anchor samples, and outreach angles | "backlink gap", "link building opportunities", "competitor backlink intersection", "link prospecting" |
-| [`keyword-cluster-planner`](skills/keyword-cluster-planner/SKILL.md) | Intent-grouped clusters with pillar plus spokes architecture and H1/H2 suggestions per spoke | "keyword clustering", "topical map", "pillar content strategy", "content calendar from keywords" |
-| [`competitor-gap-analysis`](skills/competitor-gap-analysis/SKILL.md) | Keywords competitors rank for that the target does not, filtered by intent, volume, KD, and scored for priority | "competitor gap", "keyword gap", "organic content gap", "missing keyword opportunities" |
-| [`agency-landing-page`](skills/agency-landing-page/SKILL.md) | Demand-gen landing page for an SEO agency with a free-audit lead magnet, grounded in real niche data | "SEO agency landing page", "lead-gen page", "free-audit landing page" |
+| [`seo-content-brief`](skills/seo-content-brief/SKILL.md) | Writer-ready editor brief from a domain and topic, with keyword research, SERP analysis, competitor content teardown, internal linking plan, and AI Search angle | "content brief", "blog brief", "article outline", "editor brief" |
+| [`seo-ai-search-share-of-voice`](skills/seo-ai-search-share-of-voice/SKILL.md) | Share-of-voice heatmap across ChatGPT, Perplexity, Gemini, Google AI Overview, and AI Mode, plus topic-cluster ownership per brand | "AI Search share of voice", "LLM visibility", "AEO", "GEO analysis", "AI Overview competitive analysis" |
+| [`seo-website-audit-change-report`](skills/seo-website-audit-change-report/SKILL.md) | Month-over-month audit diff: new issues, resolved issues, worsened issues, and traffic-at-risk prioritisation | "audit change report", "audit diff", "month-over-month audit", "regression report" |
+| [`seo-backlink-gap`](skills/seo-backlink-gap/SKILL.md) | Prospect list of referring domains linking to multiple competitors but not to your site, enriched with authority, anchor samples, and outreach angles | "backlink gap", "link building opportunities", "competitor backlink intersection", "link prospecting" |
+| [`seo-keyword-cluster-planner`](skills/seo-keyword-cluster-planner/SKILL.md) | Intent-grouped clusters with pillar plus spokes architecture and H1/H2 suggestions per spoke | "keyword clustering", "topical map", "pillar content strategy", "content calendar from keywords" |
+| [`seo-competitor-gap-analysis`](skills/seo-competitor-gap-analysis/SKILL.md) | Keywords competitors rank for that the target does not, filtered by intent, volume, KD, and scored for priority | "competitor gap", "keyword gap", "organic content gap", "missing keyword opportunities" |
+| [`seo-agency-landing-page`](skills/seo-agency-landing-page/SKILL.md) | Demand-gen landing page for an SEO agency with a free-audit lead magnet, grounded in real niche data | "SEO agency landing page", "lead-gen page", "free-audit landing page" |
 
 ## Prerequisites
 
@@ -39,8 +39,8 @@ This repo is a Claude Code plugin marketplace. Add the marketplace once, install
 Skills are namespaced under the plugin. Trigger them with:
 
 ```
-/seranking-mcp-skills:content-brief
-/seranking-mcp-skills:ai-search-share-of-voice
+/seranking-mcp-skills:seo-content-brief
+/seranking-mcp-skills:seo-ai-search-share-of-voice
 ```
 
 To update the marketplace later: `/plugin marketplace update seranking`.
@@ -62,7 +62,7 @@ claude --plugin-dir ./seranking-mcp-skills
 git clone https://github.com/seranking/seranking-mcp-skills.git
 
 # Copy a single skill to your user-scoped skills directory
-cp -r seranking-mcp-skills/skills/content-brief ~/.claude/skills/
+cp -r seranking-mcp-skills/skills/seo-content-brief ~/.claude/skills/
 
 # Or copy all of them
 cp -r seranking-mcp-skills/skills/* ~/.claude/skills/
@@ -94,12 +94,12 @@ A typical skill run produces:
 
 The skills chain naturally. A typical agency workflow:
 
-1. Run `competitor-gap-analysis` to see what opportunities exist.
-2. Run `keyword-cluster-planner` on the gap output to plan content.
-3. Run `content-brief` on each cluster's pillar topic.
-4. Run `backlink-gap` to identify link targets for the new content.
-5. Run `website-audit-change-report` monthly to catch regressions.
-6. Run `ai-search-share-of-voice` quarterly to track LLM visibility.
+1. Run `seo-competitor-gap-analysis` to see what opportunities exist.
+2. Run `seo-keyword-cluster-planner` on the gap output to plan content.
+3. Run `seo-content-brief` on each cluster's pillar topic.
+4. Run `seo-backlink-gap` to identify link targets for the new content.
+5. Run `seo-website-audit-change-report` monthly to catch regressions.
+6. Run `seo-ai-search-share-of-voice` quarterly to track LLM visibility.
 
 ## Repository layout
 
@@ -109,22 +109,22 @@ seranking-mcp-skills/
 │   ├── marketplace.json                # Claude Code marketplace manifest
 │   └── plugin.json                     # Plugin manifest
 ├── skills/
-│   ├── content-brief/
+│   ├── seo-content-brief/
 │   │   └── SKILL.md
-│   ├── ai-search-share-of-voice/
+│   ├── seo-ai-search-share-of-voice/
 │   │   └── SKILL.md
-│   ├── website-audit-change-report/
+│   ├── seo-website-audit-change-report/
 │   │   └── SKILL.md
-│   ├── backlink-gap/
+│   ├── seo-backlink-gap/
 │   │   └── SKILL.md
-│   ├── keyword-cluster-planner/
+│   ├── seo-keyword-cluster-planner/
 │   │   └── SKILL.md
-│   ├── competitor-gap-analysis/
+│   ├── seo-competitor-gap-analysis/
 │   │   └── SKILL.md
-│   └── agency-landing-page/
+│   └── seo-agency-landing-page/
 │       └── SKILL.md
 ├── examples/                           # Real, end-to-end runs against public targets
-│   └── ai-search-share-of-voice-wix-com-20260427/
+│   └── seo-ai-search-share-of-voice-wix-com-20260427/
 ├── CHANGELOG.md
 ├── LICENSE
 └── README.md
@@ -132,7 +132,7 @@ seranking-mcp-skills/
 
 The repo is a Claude Code marketplace whose single plugin is the repo itself (marketplace `plugins[0].source` is `"./"`). This keeps skill folders visible at the top level rather than buried two layers deep.
 
-Every skill writes its output to a folder named `{skill-slug}-{target-slug}-{YYYYMMDD}/` (e.g., `content-brief-example-com-20260427/`). The date stamp keeps re-runs non-destructive and makes it easy to diff outputs over time. Browse [`examples/`](./examples/) to see what a finished run looks like before installing.
+Every skill writes its output to a folder named `{skill-slug}-{target-slug}-{YYYYMMDD}/` (e.g., `seo-content-brief-example-com-20260427/`). The date stamp keeps re-runs non-destructive and makes it easy to diff outputs over time. Browse [`examples/`](./examples/) to see what a finished run looks like before installing.
 
 ## Rate limits and costs
 
@@ -141,7 +141,7 @@ The SE Ranking MCP server has two namespaces with different rate limits:
 - **Data API** (`DATA_*`): 10 requests per second. Charges API credits per call.
 - **Project API** (`PROJECT_*`): 5 requests per second. Retrieval and management calls do not charge; writes consume quota slots.
 
-Every skill in this repo is designed to pace sequentially inside these limits. The largest skills (`competitor-gap-analysis` with full keyword dumps, `keyword-cluster-planner` with 20 seeds) can consume thousands of credits on large domains. Check `DATA_getCreditBalance` before running on production accounts, and use the `ceiling` parameters the skills document to cap cost.
+Every skill in this repo is designed to pace sequentially inside these limits. The largest skills (`seo-competitor-gap-analysis` with full keyword dumps, `seo-keyword-cluster-planner` with 20 seeds) can consume thousands of credits on large domains. Check `DATA_getCreditBalance` before running on production accounts, and use the `ceiling` parameters the skills document to cap cost.
 
 ## Contributing
 

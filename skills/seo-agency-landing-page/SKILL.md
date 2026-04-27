@@ -1,5 +1,5 @@
 ---
-name: agency-landing-page
+name: seo-agency-landing-page
 description: Generate a demand-gen landing page for an SEO agency, complete with pain-point hook, proof, a free-audit lead magnet flow, and CTAs tuned for cold traffic. Pulls real competitive and AI-search data for the agency's target niche to make the copy specific and credible. Use when the user asks for an SEO agency landing page, lead-gen page for an SEO agency, demand-gen page, free-audit landing page, or wants to convert cold traffic into discovery calls.
 ---
 
@@ -42,10 +42,10 @@ Produce a production-ready landing page for an SEO agency offering a free audit 
 
 ## Output format
 
-Create a folder `agency-landing-page-{target-slug}-{YYYYMMDD}/` with:
+Create a folder `seo-agency-landing-page-{target-slug}-{YYYYMMDD}/` with:
 
 ```
-agency-landing-page-{target-slug}-{YYYYMMDD}/
+seo-agency-landing-page-{target-slug}-{YYYYMMDD}/
 ├── 01-niche-data.md      # the real numbers pulled in step 1
 ├── 02-pain-points.md     # the 3 pains used in copy
 ├── index.html            # self-contained HTML page (Tailwind via CDN)

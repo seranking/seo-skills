@@ -6,7 +6,7 @@ Real, end-to-end runs of the skills in this plugin against publicly observable t
 
 | Skill | Target | Folder |
 |---|---|---|
-| `ai-search-share-of-voice` | wix.com vs Weebly / Hostinger / Squarespace / Webflow | [`ai-search-share-of-voice-wix-com-20260427/`](./ai-search-share-of-voice-wix-com-20260427/) |
+| `seo-ai-search-share-of-voice` | wix.com vs Weebly / Hostinger / Squarespace / Webflow | [`seo-ai-search-share-of-voice-wix-com-20260427/`](./seo-ai-search-share-of-voice-wix-com-20260427/) |
 
 ## How to read an example
 

@@ -1,5 +1,5 @@
 ---
-name: backlink-gap
+name: seo-backlink-gap
 description: Find referring domains that link to multiple competitors but not to your site, then enrich with authority, anchor samples, and outreach angle per row. Produces a prospect list an outreach team can start emailing tomorrow. Use when the user asks for backlink gap analysis, link building opportunities, competitor backlink intersection, link prospecting, or wants referring domains they are missing.
 ---
 
@@ -39,10 +39,10 @@ Produce an actionable link-prospecting list: domains linking to your top competi
 
 ## Output format
 
-Create a folder `backlink-gap-{target-slug}-{YYYYMMDD}/` with:
+Create a folder `seo-backlink-gap-{target-slug}-{YYYYMMDD}/` with:
 
 ```
-backlink-gap-{target-slug}-{YYYYMMDD}/
+seo-backlink-gap-{target-slug}-{YYYYMMDD}/
 ├── 01-target-baseline.md
 ├── 02-competitor-{domain}-refs.md   # one per competitor
 ├── 03-intersection-raw.md

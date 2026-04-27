@@ -1,5 +1,5 @@
 ---
-name: keyword-cluster-planner
+name: seo-keyword-cluster-planner
 description: Turn a list of seed keywords into intent-grouped clusters with search volume, a pillar plus spokes content architecture, and H1/H2 suggestions per cluster. Use when the user asks for keyword clustering, content cluster planning, topical map, pillar content strategy, keyword grouping by intent, or wants to plan a content calendar from a keyword list.
 ---
 
@@ -43,10 +43,10 @@ Transform seed keywords into a prioritised cluster plan: each cluster grouped by
 
 ## Output format
 
-Create a folder `keyword-cluster-planner-{target-slug}-{YYYYMMDD}/` with:
+Create a folder `seo-keyword-cluster-planner-{target-slug}-{YYYYMMDD}/` with:
 
 ```
-keyword-cluster-planner-{target-slug}-{YYYYMMDD}/
+seo-keyword-cluster-planner-{target-slug}-{YYYYMMDD}/
 ├── 01-seed-expansion.md
 ├── 02-filtered-keywords.md
 ├── 03-cluster-assignment.md
