@@ -1,6 +1,6 @@
 # SE Ranking MCP Skills
 
-Production-ready [Claude Agent Skills](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) for the [SE Ranking remote MCP](https://seranking.com/api/integrations/mcp). Each skill turns raw API data into a finished SEO deliverable: a content brief, a share-of-voice report, an audit change log, a backlink prospect list, a cluster plan, a gap analysis, a demand-gen landing page.
+Production-ready [Claude Agent Skills](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) for the [SE Ranking remote MCP](https://seranking.com/api/integrations/mcp). Each skill turns raw API data into a finished SEO deliverable: a content brief, a share-of-voice report, a backlink prospect list, a cluster plan, a gap analysis, a demand-gen landing page.
 
 These skills are designed to work with the SE Ranking MCP server, but they document every API call explicitly so they can also be adapted to other SEO data providers.
 
@@ -10,9 +10,8 @@ These skills are designed to work with the SE Ranking MCP server, but they docum
 |---|---|---|
 | [`seo-content-brief`](skills/seo-content-brief/SKILL.md) | Writer-ready editor brief from a domain and topic, with keyword research, SERP analysis, competitor content teardown, internal linking plan, and AI Search angle | "content brief", "blog brief", "article outline", "editor brief" |
 | [`seo-ai-search-share-of-voice`](skills/seo-ai-search-share-of-voice/SKILL.md) | Share-of-voice heatmap across ChatGPT, Perplexity, Gemini, Google AI Overview, and AI Mode, plus topic-cluster ownership per brand | "AI Search share of voice", "LLM visibility", "AEO", "GEO analysis", "AI Overview competitive analysis" |
-| [`seo-website-audit-change-report`](skills/seo-website-audit-change-report/SKILL.md) | Month-over-month audit diff: new issues, resolved issues, worsened issues, and traffic-at-risk prioritisation | "audit change report", "audit diff", "month-over-month audit", "regression report" |
 | [`seo-backlink-gap`](skills/seo-backlink-gap/SKILL.md) | Prospect list of referring domains linking to multiple competitors but not to your site, enriched with authority, anchor samples, and outreach angles | "backlink gap", "link building opportunities", "competitor backlink intersection", "link prospecting" |
-| [`seo-keyword-cluster-planner`](skills/seo-keyword-cluster-planner/SKILL.md) | Intent-grouped clusters with pillar plus spokes architecture and H1/H2 suggestions per spoke | "keyword clustering", "topical map", "pillar content strategy", "content calendar from keywords" |
+| [`seo-keyword-cluster`](skills/seo-keyword-cluster/SKILL.md) | Intent-grouped clusters with pillar plus spokes architecture and H1/H2 suggestions per spoke | "keyword clustering", "topical map", "pillar content strategy", "content calendar from keywords" |
 | [`seo-competitor-gap-analysis`](skills/seo-competitor-gap-analysis/SKILL.md) | Keywords competitors rank for that the target does not, filtered by intent, volume, KD, and scored for priority | "competitor gap", "keyword gap", "organic content gap", "missing keyword opportunities" |
 | [`seo-agency-landing-page`](skills/seo-agency-landing-page/SKILL.md) | Demand-gen landing page for an SEO agency with a free-audit lead magnet, grounded in real niche data | "SEO agency landing page", "lead-gen page", "free-audit landing page" |
 
@@ -95,11 +94,10 @@ A typical skill run produces:
 The skills chain naturally. A typical agency workflow:
 
 1. Run `seo-competitor-gap-analysis` to see what opportunities exist.
-2. Run `seo-keyword-cluster-planner` on the gap output to plan content.
+2. Run `seo-keyword-cluster` on the gap output to plan content.
 3. Run `seo-content-brief` on each cluster's pillar topic.
 4. Run `seo-backlink-gap` to identify link targets for the new content.
-5. Run `seo-website-audit-change-report` monthly to catch regressions.
-6. Run `seo-ai-search-share-of-voice` quarterly to track LLM visibility.
+5. Run `seo-ai-search-share-of-voice` quarterly to track LLM visibility.
 
 ## Repository layout
 
@@ -113,11 +111,9 @@ seranking-mcp-skills/
 │   │   └── SKILL.md
 │   ├── seo-ai-search-share-of-voice/
 │   │   └── SKILL.md
-│   ├── seo-website-audit-change-report/
-│   │   └── SKILL.md
 │   ├── seo-backlink-gap/
 │   │   └── SKILL.md
-│   ├── seo-keyword-cluster-planner/
+│   ├── seo-keyword-cluster/
 │   │   └── SKILL.md
 │   ├── seo-competitor-gap-analysis/
 │   │   └── SKILL.md
@@ -141,7 +137,7 @@ The SE Ranking MCP server has two namespaces with different rate limits:
 - **Data API** (`DATA_*`): 10 requests per second. Charges API credits per call.
 - **Project API** (`PROJECT_*`): 5 requests per second. Retrieval and management calls do not charge; writes consume quota slots.
 
-Every skill in this repo is designed to pace sequentially inside these limits. The largest skills (`seo-competitor-gap-analysis` with full keyword dumps, `seo-keyword-cluster-planner` with 20 seeds) can consume thousands of credits on large domains. Check `DATA_getCreditBalance` before running on production accounts, and use the `ceiling` parameters the skills document to cap cost.
+Every skill in this repo is designed to pace sequentially inside these limits. The largest skills (`seo-competitor-gap-analysis` with full keyword dumps, `seo-keyword-cluster` with 20 seeds) can consume thousands of credits on large domains. Check `DATA_getCreditBalance` before running on production accounts, and use the `ceiling` parameters the skills document to cap cost.
 
 ## Contributing
 

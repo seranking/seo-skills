@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [0.3.1] — 2026-04-27
+
+### Removed
+- `seo-website-audit-change-report` skill removed from the catalogue. A focused one-shot `seo-technical-audit` (planned for v0.4.0) will cover the audit-deliverable use case.
+
+### Changed
+- Renamed `seo-keyword-cluster-planner` → `seo-keyword-cluster`. Folder, frontmatter `name:`, output-folder slug pattern, and all README references updated. Description tightened to call out how the skill differs from `seo-content-brief` (single article) and the planned `seo-page` (existing URL) — this skill plans a content tier across many articles.
+
 ## [0.3.0] — 2026-04-27
 
 ### Changed
