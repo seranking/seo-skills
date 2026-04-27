@@ -132,4 +132,5 @@ seo-drift-{target-slug}-{YYYYMMDD}/
 - Baseline cadence: monthly is the natural rhythm because SE Ranking's history endpoints have monthly granularity. Weekly is too noisy for backlink data. Document recommended cadence in handoff to your team.
 - For deploy-time "did anything break in the last hour" use cases, the URL-mode page-fingerprint half is the workhorse — that doesn't depend on monthly data.
 - Don't auto-disavow or auto-fix anything based on drift findings. The skill diagnoses; humans decide.
+- **Authority-history all-zeros caveat:** if `DATA_getPageAuthorityHistory` (URL mode) or `DATA_getDomainAuthorityHistory` returns flat-zero values across the window, treat as "insufficient history" — don't compute a delta or surface a regression based on missing data. Cross-check the current-value endpoint (`DATA_getPageAuthority` / `DATA_getDomainOverviewWorldwide`) — if the current value is meaningful but history is flat, surface that as a data-quality flag in `DRIFT-REPORT.md` rather than fabricating a trend.
 - Cost of doing nothing: silent regressions. Cost of running monthly: ~15 credits. Run monthly.

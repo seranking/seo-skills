@@ -1,7 +1,7 @@
 {
   "name": "seranking-mcp-skills",
-  "description": "Production SEO workflows for the SE Ranking MCP server. Turns raw API data into writer-ready content briefs, AI-search share-of-voice reports, audit change reports, backlink gap lists, keyword clusters, competitor gap analyses, and demand-gen landing pages.",
-  "version": "1.0.0",
+  "description": "Production SEO skills for the SE Ranking MCP server. Turns raw API data into finished deliverables across keyword research, content briefing, page intelligence, technical and content audits, structured data, drift monitoring, SXO diagnostics, competitive analysis, paid search, AI-search optimization, sitemap analysis, subdomain mapping, and content opportunity mining.",
+  "version": "1.0.1",
   "author": {
     "name": "SE Ranking",
     "email": "api@seranking.com",

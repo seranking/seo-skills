@@ -11,7 +11,6 @@ Map a domain's paid-search footprint and the competitive landscape around its ta
 
 - SE Ranking MCP server connected.
 - User provides: (a) a target domain OR a target keyword (skill detects which), (b) target country (default `us`).
-- Optional: a tracked SE Ranking project for project-level ads stats (`DATA_getAdsStats` / project-namespace endpoints).
 
 ## Process
 
@@ -35,6 +34,7 @@ Map a domain's paid-search footprint and the competitive landscape around its ta
 
 5. **SERP ad/shopping presence** `DATA_getSerpResults`
    - For top 5 keywords (domain mode) or the target keyword (keyword mode):
+     - Use SERP-feature filters to detect ad-pack composition: `tads` (top ads above organic), `bads` (bottom ads below organic), `sads` (shopping ads / Google Shopping pack), `mads` (mobile/map-pack ads).
      - Top SERP ad slots (positions 1-4 above organic, 1-3 below).
      - Shopping pack presence (carousel of product cards).
      - Image pack, local pack — these displace ad inventory.
@@ -45,13 +45,15 @@ Map a domain's paid-search footprint and the competitive landscape around its ta
    - Identify: USP language used by leaders, pricing/discount mentions, audience segmentation, CTA verbs.
    - Highlight outliers (advertisers doing something different).
 
-7. **Optional: project-level enrichment** `DATA_getAdsStats`
-   - If the user has a tracked SE Ranking project for the target domain, pull connected-project stats.
-   - These add: campaign-level groupings, day-by-day trend, click/spend estimates.
-   - Skip if no project — surface what's missing without it.
+7. **Paid-keyword gap (domain mode)** `DATA_getDomainKeywords` with `type: 'adv'`
+   - Pull the user's domain's paid keywords using the `type: 'adv'` switch.
+   - For each top competitor (from step 2 or `DATA_getDomainCompetitors` with `type: 'adv'`): pull their paid keywords with `type: 'adv'`.
+   - Diff: paid keywords competitors bid on that the user's domain doesn't.
+   - This becomes the highest-leverage portion of the bid-keyword shortlist (step 8).
+   - Skip in keyword mode (no domain to gap against).
 
 8. **Recommended bid-keyword shortlist**
-   - For domain mode: keywords competitors bid on that the user's domain doesn't (paid-keyword gap).
+   - For domain mode: paid-keyword gap from step 7 + adjacent question-intent variants.
    - For keyword mode: question-intent and long-tail variants that are likely cheaper than the head term.
    - Each row: keyword, est. CPC, est. volume, who else bids, why-recommended.
 
@@ -68,7 +70,7 @@ seo-ads-{target-slug}-{YYYYMMDD}/
 ├── 03-question-variants.md        (DATA_getKeywordQuestions enrichment)
 ├── 04-serp-ad-shopping-pack.md    (SERP feature inventory per keyword)
 ├── 05-ad-copy-patterns.md         (clustered headline/description patterns)
-├── 06-project-stats.md            (only if connected project exists)
+├── 06-paid-keyword-gap.md         (domain mode: type='adv' diff vs competitors)
 ├── recommended-keywords.csv       (bid-keyword shortlist)
 └── ADS.md                         (synthesised brief)
 ```
@@ -126,7 +128,6 @@ See `recommended-keywords.csv`. Top 10:
 ## Constraints / caveats
 - CPC and volume estimates are directional. Actual costs depend on Quality Score, time of day, audience, etc.
 - {Note any ad-copy that's clearly seasonal / promotional and may not represent steady-state.}
-- {If no connected project: "Connect a SE Ranking project for this domain to enrich with campaign-level stats."}
 
 ## Recommended next step
 Cross-reference these paid keywords with `seo-keyword-cluster` output to find under-served paid clusters. For organic content opportunities corresponding to these paid keywords, run `seo-keyword-niche`.
@@ -143,5 +144,5 @@ Cross-reference these paid keywords with `seo-keyword-cluster` output to find un
 - Question-intent variants often have lower CPC and higher conversion than head terms. The shortlist in step 8 prioritises these.
 - Pair with `seo-keyword-niche` for organic content opportunities derived from paid keyword research.
 - Pair with `seo-competitor-pages` if the bidding landscape reveals "X vs Y" / "alternatives" intent — those keywords convert best as comparison pages, not paid ads.
-- The PPC project enrichment in step 7 requires a tracked project; this skill works without it but surfaces less detail.
+- **Ads data via shared DATA_* tools** — beyond the dedicated `DATA_getDomainAdsByDomain` / `DATA_getDomainAdsByKeyword`, the `type: 'adv'` enum switch on `DATA_getDomainKeywords`, `DATA_getDomainKeywordsComparison`, `DATA_getDomainCompetitors`, `DATA_getDomainPages`, and similar tools surfaces the paid view of the same data structures. Combine with the `tads/bads/sads/mads` SERP-feature filters and the CPC filter on SERP queries to map paid landscape comprehensively.
 - Don't recommend paid keywords without context. The shortlist is a starting point for the PPC team, not an autopilot.

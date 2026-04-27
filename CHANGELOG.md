@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [1.0.1] — 2026-04-27
+
+Validation-driven patch. A v1.0.0 smoke test against the live SE Ranking MCP turned up four issues; this release fixes them.
+
+### Fixed
+- **`seo-ads`** — removed all `DATA_getAdsStats` references (the tool does not exist in the SE Ranking MCP). Step 7 re-scoped to "paid-keyword gap" using `DATA_getDomainKeywords` with the `type: 'adv'` enum switch (the documented way to access ads data on shared DATA_* tools). Output folder updated: `06-project-stats.md` → `06-paid-keyword-gap.md`. Prerequisites no longer mention project-namespace endpoints (DATA-only scope).
+- **`seo-ads`** — Step 5 now explicitly names the SERP-feature filters (`tads`, `bads`, `sads`, `mads`) for ad-pack detection on `DATA_getSerpResults`.
+- **`seo-page`** — added Tips entry covering the `DATA_getPageAuthorityHistory` all-zeros case (validation found that very high-authority URLs like Wikipedia paradoxically return flat-zero history). Skill now flags as "insufficient history" rather than synthesising a misleading trajectory.
+- **`seo-drift`** — added the same all-zeros caveat for both `DATA_getPageAuthorityHistory` (URL mode) and `DATA_getDomainAuthorityHistory` (domain mode).
+- **Manifests** — `marketplace.json` `plugins[0].description` and `plugin.json` `description` no longer say "Seven production SEO workflows" / list the original 7 deliverables. Both now describe the v1.0 19-skill scope abstractly (no count, no fixed list — won't drift again).
+
+### Changed
+- All three version strings bumped to 1.0.1.
+
 ## [1.0.0] — 2026-04-27
 
 First production release. The catalogue covers **19 SEO skills** across keyword research, content briefing, page intelligence, technical and content audits, structured data, drift monitoring, SXO diagnostics, competitive analysis, paid search, AI-search optimization, sitemap analysis, subdomain mapping, and content opportunity mining — all powered by the [SE Ranking remote MCP](https://seranking.com/api/integrations/mcp).
