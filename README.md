@@ -15,7 +15,7 @@ These Claude Skills are designed to work with the SE Ranking MCP server, but the
 | [`seo-competitor-gap-analysis`](skills/seo-competitor-gap-analysis/SKILL.md) | Keywords competitors rank for that the target does not, filtered by intent, volume, KD, and scored for priority | "competitor gap", "keyword gap", "organic content gap", "missing keyword opportunities" |
 | [`seo-agency-landing-page`](skills/seo-agency-landing-page/SKILL.md) | Demand-gen landing page for an SEO agency with a free-audit lead magnet, grounded in real niche data | "SEO agency landing page", "lead-gen page", "free-audit landing page" |
 | [`seo-page`](skills/seo-page/SKILL.md) | URL-level keyword & traffic intelligence with keep / refresh / consolidate / kill verdict for one page | "analyze this page", "page SEO performance", "what does this URL rank for", "should I refresh this page" |
-| [`seo-schema`](skills/seo-schema/SKILL.md) | JSON-LD detect, validate, generate. Six bundled templates (Article / Product / LocalBusiness / FAQPage / HowTo / BreadcrumbList) | "schema markup", "structured data", "JSON-LD", "rich results", "schema validation" |
+| [`seo-schema`](skills/seo-schema/SKILL.md) | JSON-LD detect, validate, generate. Five bundled templates (Article / Product / LocalBusiness / FAQPage / BreadcrumbList) | "schema markup", "structured data", "JSON-LD", "rich results", "schema validation" |
 | [`seo-drift`](skills/seo-drift/SKILL.md) | Git for SEO — baseline, compare, history. Severity-coded regression report across authority, traffic, keywords, backlinks, page fingerprint | "SEO drift", "did anything break", "deployment check", "baseline this site", "SEO regression" |
 | [`seo-sxo`](skills/seo-sxo/SKILL.md) | Read SERPs backwards to find page-type mismatches. Scores the page from 4 personas; produces a wireframe for the SERP-winning page type | "why isn't this page ranking", "SXO", "page type mismatch", "intent mismatch", "search experience" |
 | [`seo-technical-audit`](skills/seo-technical-audit/SKILL.md) | One-shot technical audit: crawlability, indexability, security, mobile, structured data, JS rendering. Top-10 fix list ranked by impact × effort | "technical audit", "site audit", "audit my site", "crawl issues", "indexation issues" |
@@ -27,12 +27,14 @@ These Claude Skills are designed to work with the SE Ranking MCP server, but the
 | [`seo-geo`](skills/seo-geo/SKILL.md) | URL-level Generative Engine Optimization analysis. AIO citation footprint per primary keyword + page passage-level audit + recommendations to improve LLM citability | "GEO for this page", "AIO citation analysis", "AI search readiness for URL", "why isn't this page cited" |
 | [`seo-ads`](skills/seo-ads/SKILL.md) | Paid-search competitive intelligence. Domain ad footprint, bidding landscape per keyword, ad-copy patterns, SERP shopping/ad-pack visibility, recommended bid-keyword shortlist | "paid search analysis", "competitor ads", "PPC competitive", "who bids on this keyword", "shopping pack" |
 | [`seo-keyword-niche`](skills/seo-keyword-niche/SKILL.md) | Mine longtail + question keywords for niche content opportunities. Outputs a content-tier plan with template spec, URL pattern, sample pages, and thin-content quality gates | "longtail keywords", "question keywords", "niche content", "content opportunities at scale", "programmatic SEO" |
+| [`seo-firecrawl`](skills/seo-firecrawl/SKILL.md) | Ad-hoc web scraping, site mapping, full-site crawling, and within-domain search via Firecrawl. Returns raw HTML, JSON-LD, og:* / twitter:* metadata, JS-rendered DOM, and screenshots that WebFetch can't *(requires the [Firecrawl extension](#firecrawl-raw-html-json-ld-js-rendering-site-crawl))* | "scrape this page", "crawl this site", "map this site", "get the OG tags", "render this JS-heavy page" |
 
 ## Prerequisites
 
 - [Claude Code](https://code.claude.com), the Claude API, or [Claude.ai](https://claude.ai) with Skills enabled.
 - The [SE Ranking remote MCP](https://seranking.com/api/integrations/mcp) connected to your Claude workspace. In Claude Code: `claude mcp add --transport http se-ranking https://api.seranking.com/mcp`, then run `/mcp` in a session and sign in via OAuth — no API token to manage.
 - An SE Ranking account with API access enabled. [Sign up](https://seranking.com/api.html) if you don't already have one.
+- **Optional:** the [Firecrawl extension](#firecrawl-raw-html-json-ld-js-rendering-site-crawl) for skills that need raw HTML, JSON-LD, JS-rendered DOM, or full-site crawling. Eleven of the SE Ranking skills opportunistically use it; all degrade gracefully when it's absent.
 
 ## Install
 
@@ -93,6 +95,22 @@ cp -r seo-skills/skills/* /path/to/your/project/.claude/skills/
 ### Option 5: Claude API
 
 Upload any skill as a zip to the Claude API via the `/v1/skills` endpoints. See [Anthropic's Skills API guide](https://platform.claude.com/docs/en/build-with-claude/skills-guide).
+
+## Optional extensions
+
+Some skills work best when paired with optional MCP servers beyond SE Ranking. Each extension is opt-in — the skills that use it degrade gracefully when it's absent (the affected sections emit `(skipped — extension not installed)` notes rather than failing the run).
+
+### Firecrawl (raw HTML, JSON-LD, JS rendering, site crawl)
+
+`WebFetch` returns markdown only — every `<head>` `<meta>` tag, every `<link rel="canonical">`, every `<script type="application/ld+json">` block is stripped before the skill sees it. The Firecrawl extension closes that gap and adds full-site crawl, URL discovery, in-site search, and screenshots.
+
+```bash
+bash extensions/firecrawl/install.sh
+```
+
+The script verifies Node 20+, prompts for your `FIRECRAWL_API_KEY` (free tier is 500 credits/month at <https://firecrawl.dev>), and idempotently merges the MCP entry into `~/.claude/settings.json` (existing entries preserved). See [`extensions/firecrawl/README.md`](extensions/firecrawl/README.md) for full setup, free-tier credit math, troubleshooting, and tool-prefix details.
+
+**Skills that gain capabilities when Firecrawl is installed:** `seo-page`, `seo-schema`, `seo-geo`, `seo-technical-audit`, `seo-sitemap`, `seo-content-audit`, `seo-drift`, `seo-content-brief`, `seo-competitor-pages`, `seo-sxo`, `seo-backlinks-profile`, plus the dedicated `seo-firecrawl` orchestrator. Every Firecrawl-using skill supports a `--no-firecrawl` flag to opt out at runtime even when the extension is installed (saves credits).
 
 ## How these skills work
 
@@ -163,8 +181,15 @@ seo-skills/
 │   │   └── SKILL.md
 │   ├── seo-ads/
 │   │   └── SKILL.md
-│   └── seo-keyword-niche/
+│   ├── seo-keyword-niche/
+│   │   └── SKILL.md
+│   └── seo-firecrawl/                  # Ad-hoc Firecrawl orchestrator (extension required)
 │       └── SKILL.md
+├── extensions/
+│   └── firecrawl/                      # Optional Firecrawl MCP wiring
+│       ├── install.sh
+│       ├── uninstall.sh
+│       └── README.md
 ├── examples/                           # Real, end-to-end runs against public targets
 │   └── seo-ai-search-share-of-voice-wix-com-20260427/
 ├── CHANGELOG.md

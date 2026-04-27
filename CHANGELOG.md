@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.3.1] — 2026-04-27
+
+Documentation patch surfacing v2.3.0's Firecrawl integration in the README.
+
+### Added
+- `seo-firecrawl` row in the README skills table (marked as extension-required, anchor-linked to the new section).
+- New "Optional extensions" section between "Install" and "How these skills work" — Firecrawl install command, what it unlocks, free-tier credit math, and links to the extension's own README.
+- Prerequisites bullet calling out the optional Firecrawl extension.
+- `extensions/firecrawl/` and `skills/seo-firecrawl/` entries in the Repository layout tree.
+
+### Fixed
+- README's `seo-schema` row no longer lists "HowTo" among bundled templates — the template was removed in v2.1.0 (Google retired HowTo rich results in September 2023). Count corrected from "Six" to "Five".
+
+### Changed
+- All three version strings bumped to 2.3.1.
+
 ## [2.3.0] — 2026-04-27
 
 Completes the Firecrawl integration started in v2.2.0. Ships the install scaffold, the `seo-firecrawl` orchestrator skill, and four v1.5-track skill patches (`seo-content-brief`, `seo-competitor-pages`, `seo-sxo`, `seo-backlinks-profile`). Together with v2.2.0, every skill that genuinely benefits from Firecrawl is wired up — and the install path now actually ships in the plugin.
