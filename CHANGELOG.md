@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.1.0] — 2026-04-27
+
+Correctness pass — eight evidence-driven patches surfaced by the 2026-04-27 head-to-head against `AgriciDaniel/claude-seo` v1.9.6. No new dependencies; no Firecrawl yet (that ships in v2.2.0). Strictly better signal-to-noise across eight skills.
+
+### Changed (correctness)
+- **`seo-schema`** — removed HowTo from the active templates list; deleted `templates/how-to.json`. Google retired HowTo rich results in September 2023 (mobile + desktop); the skill no longer treats HowTo as a live option. SKILL.md description and step 5 updated; the deprecated entry remains documented in `references/google-rich-results.md` to explain *why* it's gone.
+- **`seo-schema`** — `references/google-rich-results.md` now leads with a Type-lifecycle table (Active / Restricted / Deprecated with effective dates) covering Article/Product/LocalBusiness/BreadcrumbList/Video/Recipe/Event/JobPosting/Course/Movie/Organization/WebSite as Active; FAQPage and Q&APage as Restricted (gov/health since 2023-08); HowTo as Deprecated (2023-09); Sitelinks Search Box as Deprecated (2024-11). The HowTo subsection is rewritten as deprecated guidance.
+- **`seo-content-audit`** — added an 8-item AI-content markers subsection in `references/core-eeat.md` (per the 2025-09 SQRG update) and a 4th veto in SKILL.md step 4: AI-generated YMYL content with no human-review markers. The veto fires only when ≥4 markers are present *and* the topic is YMYL *and* the page lacks all of: editor byline, "reviewed by" credit, "last reviewed"/"fact-checked on" date. AI assistance remains fine; the veto guards the YMYL accountability surface. `templates/verdict.md` updated with the new veto row.
+- **`seo-sitemap`** — explicit note that `<priority>` and `<changefreq>` are ignored by Google (per Google's own sitemap docs). The skill no longer validates them; if present, they're flagged as low-signal noise the user can strip. `<lastmod>` remains validated — it's the only optional tag Google still consumes.
+- **`seo-keyword-niche`** — new "Programmatic publishing — extra gates" subsection (step 9a) for tiers shipping 50+ pages: per-row uniqueness threshold (≥30% varying fields), min unique-fact count vs parent + sibling (≥5 facts), data-source independence (≥2 sources), index-bloat circuit-breaker (pause if GSC indexes <60% of submitted), crawl-budget honesty for sites >50k pages. Output `KEYWORD-NICHE-PLAN.md` template gates extended (rows 6–9).
+- **`seo-backlinks-profile`** — added a "Single-source by design" framing section explaining the deliberate choice to consult only the SE Ranking backlink index (no Ahrefs/Moz/Majestic/DFS/Common Crawl blending). Internally consistent metrics + reproducible health scores are the trade-off; users needing multi-source confirmation are pointed to a manual cross-check rather than a faked blended report.
+- **`seo-sxo`** — step 2 now surfaces a `mode=full` (default, `result_type=advanced`, ~750–900 cr/run) vs `mode=lite` (`result_type=standard`, ~80–150 cr/run) trade-off up front. `result_type=advanced` is required for AIO/PAA/pack data; `mode=lite` skips SERP-features and labels them in the output rather than reconstructing them from organic. Tips updated with concrete per-mode cost ranges.
+- **`seo-page`** — replaced the cannibalization step. Was: cross-check via parent-domain `DATA_getDomainKeywords` (heavy on large sites). Now: dedicated step 8 using `DATA_getDomainPages` ranked by traffic, capped at top 50 peers, scanning for any peer URL ranking ≤20 for the candidate's top-3 traffic-weighted keywords. New `06-cannibalization.md` output file and a "Same-domain cannibalization" section in `PAGE.md`. CONSOLIDATE verdict heuristic rewritten to anchor on the new signal.
+
+### Changed
+- All three version strings bumped to 2.1.0.
+
 ## [2.0.0] — 2026-04-27
 
 Repository rebrand for discoverability. The plugin is now `seo-skills` and the README leads with "Claude SEO Skills"; SE Ranking branding stays in the org (`seranking/seo-skills`), descriptions, and the underlying MCP context.

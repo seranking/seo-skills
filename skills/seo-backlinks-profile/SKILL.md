@@ -7,6 +7,16 @@ description: Full backlink profile for a domain — referring domains, anchor te
 
 A complete backlink profile audit for a domain. Surfaces composition (where do links come from?), quality (what's the authority distribution?), diversity (concentrated in a few IPs/subnets, or spread out?), trajectory (growing or decaying?), and risk (which links look manipulative?). Output includes a health score and a reviewable disavow-candidate list — never an auto-disavow.
 
+## Single-source by design
+
+This skill consults **only the SE Ranking backlink index**. We don't blend Ahrefs / Moz / Majestic / DataForSEO / Common Crawl into the same report. That's a deliberate choice, not a limitation:
+
+- **Internally consistent metrics.** Authority scores, anchor counts, and refdomain totals are computed against a single crawl. Multi-source blends produce numbers that look authoritative but actually average across crawls with different sampling, different freshness, and different definitions of "backlink" — the resulting ratios (e.g. dofollow %, anchor distribution) are noise.
+- **Reproducible health scores.** The 100-point health score in this report can be re-run a quarter later against the same source and the deltas are meaningful. With multi-source blends, a score drift can mean *anything*: source A reweighted, source B refreshed, source C changed its toxic heuristic.
+- **No data-source independence to model.** Any "do these sources agree?" question is unanswerable without a second backlink graph; we don't pretend to answer it. If you need cross-source confirmation (e.g. before legal disavow, before a high-stakes outreach campaign), pair this profile with a manual spot-check against Ahrefs/Majestic — that's a research task, not a skill output.
+
+If your workflow specifically *requires* multi-source blending (large agencies, link-builders billing on link counts), this skill is the wrong tool — use a vendor that aggregates multiple indexes. For everyone else, single-source produces the more honest report.
+
 ## Prerequisites
 
 - SE Ranking MCP server connected.

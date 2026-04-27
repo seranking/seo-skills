@@ -26,6 +26,7 @@
 - Anonymous authorship on YMYL topic: {triggered / not triggered}
 - Factual claims without sources: {triggered / not triggered}
 - Undisclosed affiliate/sponsored relationships: {triggered / not triggered}
+- AI-generated YMYL with no human review: {triggered / not triggered} ({n}/8 AI-content markers fired)
 - Answer in first 300 words: {present / missing}
 - Datestamp on time-sensitive content: {present / missing}
 - Entity disambiguation for proper nouns: {present / missing}

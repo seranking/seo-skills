@@ -48,7 +48,7 @@ Compare a domain's XML sitemap against the most recent SE Ranking website audit.
    - Sitemap referenced in `robots.txt`.
    - Encoding: each URL is XML-safe (ampersands escaped, etc.).
    - HTTPS consistency: sitemap URLs match the canonical protocol.
-   - **Note:** `<priority>` and `<changefreq>` are ignored by Google in 2026. Don't bother validating them; flag their presence as low-signal noise.
+   - **`<lastmod>` is the only optional tag Google still consumes.** Validate it (step 6). `<priority>` and `<changefreq>` have been **explicitly ignored by Google for years** (per [Google's sitemap docs](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap) — "Google ignores `priority` and `changefreq` values"). Don't validate them; if present, flag as low-signal noise the user can strip to shrink the sitemap.
 
 8. **Synthesise** `SITEMAP.md`
 
@@ -121,7 +121,7 @@ seo-sitemap-{target-slug}-{YYYYMMDD}/
 - Run `seo-technical-audit` first. Without an audit, this skill has nothing to compare.
 - Re-run after deploys that change page inventory (new content, removed pages, URL restructures).
 - Sitemap-of-sitemaps fan-out can be large for big sites — the skill recursively fetches all child sitemaps. For sites with 50+ child sitemaps, fetching dominates runtime; not credit cost.
-- `<priority>` and `<changefreq>` are dead signals. Don't waste time tuning them.
+- `<priority>` and `<changefreq>` are dead signals — Google explicitly ignores both. Don't waste time tuning them; if your sitemap generator emits them, the bytes are pure overhead. `<lastmod>` is still consumed, so keep that one accurate.
 - The "investigate orphans" list is often the highest-leverage finding — pages that exist but aren't linked are usually accidentally orphaned, and adding a couple of internal links can revive them.
 - Pair with `seo-drift` to track sitemap composition over time (URL count, lastmod patterns).
 - Cost: ~5–10 credits typical (mostly the `getCrawledPages` and `getDomainPages` calls).

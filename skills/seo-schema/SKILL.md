@@ -1,6 +1,6 @@
 ---
 name: seo-schema
-description: Detect existing JSON-LD structured data on a page, validate against Google's rich-result requirements, and generate missing schema markup (Article, Product, LocalBusiness, FAQPage, HowTo, BreadcrumbList). Produces paste-ready `<script type="application/ld+json">` blocks. Use when the user asks for "schema markup", "structured data", "JSON-LD", "rich results", "schema validation", or "fix the schema on this page".
+description: Detect existing JSON-LD structured data on a page, validate against Google's rich-result requirements, and generate missing schema markup (Article, Product, LocalBusiness, FAQPage, BreadcrumbList). Produces paste-ready `<script type="application/ld+json">` blocks. Use when the user asks for "schema markup", "structured data", "JSON-LD", "rich results", "schema validation", or "fix the schema on this page".
 ---
 
 # Schema Markup
@@ -41,11 +41,11 @@ Detect, validate, and generate Schema.org JSON-LD for a page. Output is paste-re
      - `article.json` — for editorial/blog content
      - `product.json` — for product/SKU pages
      - `local-business.json` — for brick-and-mortar landing pages
-     - `faq-page.json` — for explicit Q&A blocks
-     - `how-to.json` — for step-by-step instructions
+     - `faq-page.json` — for explicit Q&A blocks (gov/health allowlist only — see references/google-rich-results.md)
      - `breadcrumb-list.json` — for any page with breadcrumb navigation
    - Fill template fields from the live HTML (title → headline, h2s → mainEntity questions, etc.).
    - Mark any field that couldn't be auto-filled as `{REPLACE: ...}` so the user knows to complete it.
+   - **Don't generate `HowTo`** — Google retired HowTo rich results in September 2023 (mobile + desktop). The schema can still ship for semantic clarity, but expect zero rich-result uplift; flag this in the recommendation rationale rather than treating HowTo as a live option.
 
 6. **Validate generated JSON-LD**
    - Re-run the same validation rubric from step 3 on the generated blocks.

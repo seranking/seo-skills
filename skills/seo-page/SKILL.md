@@ -47,7 +47,14 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
 7. **Domain context** `DATA_getDomainOverviewWorldwide` (parent domain)
    - Light-weight: parent DA, total keywords, total traffic. Used to contextualise the page's PA against its domain.
 
-8. **Synthesise verdict**
+8. **Cannibalization check** `DATA_getDomainPages`
+   - Pull the parent domain's pages ranked by organic traffic. Cap at the top 50 — that's where the cannibalization risk concentrates.
+   - For the candidate URL's top-3 traffic-weighted keywords (from step 3), scan the peer-page list: does any other URL on the same domain rank in the top 20 for any of those keywords?
+   - **Cannibalization signal:** any peer URL ranking ≤ 20 for the candidate's top-3 keywords. Record peer URL, keyword, peer position vs candidate position, peer traffic.
+   - **Cheaper than the old approach.** Previous versions cross-checked via `DATA_getDomainKeywords` on the parent domain — that endpoint can return tens of thousands of rows on large sites and is unnecessarily heavy for this question. `DATA_getDomainPages` ranked by traffic surfaces the high-impact peers directly.
+   - If no peer URL competes, this signal is "no cannibalization detected" — pass through to step 9.
+
+9. **Synthesise verdict**
    - Apply the verdict heuristic (see Tips) to produce KEEP / REFRESH / CONSOLIDATE / KILL.
    - For REFRESH, identify the top 3 specific changes (e.g., "add an H2 on 'alternatives' which 7 of 10 SERP winners use").
    - Write `PAGE.md` (output spec below).
@@ -63,6 +70,7 @@ seo-page-{target-slug}-{YYYYMMDD}/
 ├── 03-authority.md          (PA + history)
 ├── 04-serp-context.md       (top 10 + AIO for top 3–5 keywords)
 ├── 05-page-snapshot.md      (HTML extracts)
+├── 06-cannibalization.md    (peer pages on the same domain competing for the top-3 keywords)
 ├── keywords.csv             (full keyword list with positions)
 └── PAGE.md                  (synthesised verdict + plan)
 ```
@@ -93,6 +101,10 @@ seo-page-{target-slug}-{YYYYMMDD}/
 - {keyword} — competitors {comp1}, {comp2} rank in top 5; this page is absent.
 - ...
 
+## Same-domain cannibalization
+- {peer URL} — ranks position {n} for "{keyword}" (candidate ranks position {m}). Peer estimated traffic: {n}/mo.
+- ... (only list rows where a peer URL ranks ≤ 20 for one of the candidate's top-3 keywords; if none, write "No same-domain cannibalization detected on top-3 keywords.")
+
 ## AI Search angle
 - {n} of {checked} AIO queries on the URL's keywords cite this page.
 - The AIOs that DON'T cite this page tend to cite {pattern} (e.g., comparison tables, step-by-step how-tos).
@@ -122,7 +134,7 @@ Reasoning: {1–2 sentences anchored in objective signals from above}.
 - Verdict heuristic:
   - **KEEP**: PA stable or up; traffic stable or up; top 3 keywords held in their positions; AIO citations present where AIO appears.
   - **REFRESH**: any of (PA dropped >5 in 90 days; traffic dropped >20%; a top-3 keyword fell to position 11+; AIO citations missing while competitors get cited).
-  - **CONSOLIDATE**: page ranks for keywords that another URL on the same domain also ranks for and outranks (cannibalization detected via cross-checking with `DATA_getDomainKeywords` for the parent domain).
+  - **CONSOLIDATE**: cannibalization detected (step 8) — a peer URL on the same domain ranks ≤ 20 for one or more of the candidate's top-3 keywords. CONSOLIDATE harden when the peer outranks the candidate AND captures higher traffic; otherwise CONSOLIDATE recommendation is "merge into the candidate" rather than "kill the candidate."
   - **KILL**: PA <10 AND traffic <50/mo AND no top-10 keyword AND no internal links pointing to it.
 - Don't invent reasons. Anchor every claim in `PAGE.md` to a number from the raw data files.
 - When between KEEP and REFRESH, default to REFRESH — small refreshes compound.

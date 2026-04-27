@@ -32,7 +32,12 @@ Score an existing piece of content against modern E-E-A-T (Experience, Expertise
 4. **Score E-E-A-T** using `references/core-eeat.md`
    - 60-item rubric across 4 dimensions (15 items each).
    - Per-item: yes/no/partial. Compute dimension scores (0–100% each).
-   - Apply 3 veto checks (anonymous author on YMYL topic / no sources on factual claims / undisclosed affiliate links). Any veto = no-publish.
+   - Score the 8-item **AI-content markers** subsection (see references/core-eeat.md → "AI-content markers"). Mark each fired/not-fired.
+   - Apply 4 veto checks. Any veto = no-publish.
+     1. Anonymous author on YMYL topic.
+     2. Factual claims with no sources cited.
+     3. Undisclosed affiliate / sponsored relationships.
+     4. AI-generated YMYL content with no human-review markers (≥4 AI-content markers fired AND YMYL topic AND no editor byline / "reviewed by" credit / "last reviewed" or "fact-checked on" date).
 
 5. **Score CITE** using `references/cite.md`
    - 30-item CITE rubric (Clear answer in 1st 200 words, Include primary stats, Timestamp freshness, Entity authority).
@@ -90,9 +95,10 @@ seo-content-audit-{target-slug}-{YYYYMMDD}/
 
 ## Veto checks
 
-- {Veto 1}: {triggered / not triggered}
-- {Veto 2}: {triggered / not triggered}
-- {Veto 3}: {triggered / not triggered}
+- Anonymous author on YMYL: {triggered / not triggered}
+- Unsourced factual claims: {triggered / not triggered}
+- Undisclosed affiliate / sponsored: {triggered / not triggered}
+- AI-generated YMYL with no human review: {triggered / not triggered} ({n}/8 AI-content markers fired)
 - ...
 
 ## AI Search readiness

@@ -22,6 +22,10 @@ Diagnose why a "well-optimized" page doesn't rank. Reads the actual SERP for the
 2. **Pull the SERP** `DATA_getSerpResults` and `DATA_getSerpTaskAdvancedResults`
    - Top 10 organic results with URL, title, snippet.
    - SERP features: AI Overview presence, People Also Ask, image carousel, video carousel, shopping pack, Twitter pack, Featured Snippet, etc.
+   - **Mode selection (cost driver — read this).** SERP feature data (AIO/PAA/carousels) only comes back when the task runs with `result_type=advanced`. That is also the most expensive single call this skill makes (≈ 700 credits per keyword on heavily-trafficked terms in the 2026-04 validation run).
+     - **Default — `mode=full`:** runs `result_type=advanced`. Returns features + organic. Use when persona scoring needs PAA / AIO / pack signals (most cases).
+     - **`mode=lite` (`result_type=standard`):** organic top-10 only, no SERP features, ≈ 50–100 credits. Use when (a) the user is screening many keywords and SERP features aren't load-bearing, (b) credits are constrained, (c) the user explicitly asks for a cheap pass. The persona scoring still runs but the SERP-features row in `SXO-REPORT.md` will read `(skipped — lite mode)` and the dominant-pattern detection will rely on URL/title heuristics alone.
+     - Surface the chosen mode + estimated cost up front. If the user didn't specify and the keyword looks ad-heavy or commercial-high-volume, recommend `mode=lite` first and re-run with `mode=full` only if dominant-pattern confidence is low.
 
 3. **Pull AIO context** `DATA_getAiOverview`
    - If AIO is present for the keyword, capture the answer text and citation list.
@@ -125,7 +129,8 @@ seo-sxo-{target-slug}-{YYYYMMDD}/
 ## Tips
 
 - Respect rate limit: 10 req/sec. The SERP calls in step 2/3 are fast; WebFetch calls in step 4 dominate latency, not API.
-- Call `DATA_getCreditBalance` before running. ~10–20 credits typical.
+- **Cost is mode-dependent.** `mode=full` is ~750–900 credits per run (the SERP-advanced call dominates). `mode=lite` is ~80–150 credits. Always call `DATA_getCreditBalance` before running and surface the estimate against remaining balance.
+- **`result_type=advanced` is the only way to get AIO / PAA / pack data.** The standard SERP endpoint returns organic-only. Don't try to reconstruct SERP features from organic results — that's the cost the user is paying for.
 - Page-type classification is a heuristic — `references/page-type-patterns.md` documents the signals so users can override. If the heuristic gets a result wrong, edit that file with the correction.
 - The 4 personas are opinionated. They come from the framework's original source — don't invent more without good reason.
 - The SXO score is directional. An 85/100 doesn't guarantee ranking; a 35/100 strongly suggests the page won't break through. Treat as a diagnostic, not a forecast.
