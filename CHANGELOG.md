@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [0.6.0] — 2026-04-27
+
+### Added
+- **`seo-competitor-pages`** — Generate "X vs Y", "alternatives to X", and "best X for Y" landing pages targeting comparative-intent keywords. Pulls competitor data, comparative SERPs, top 3 SERP-winner page structures (via WebFetch). Produces a balanced page draft with feature matrix, PAA-derived FAQ, and paste-ready Product/Breadcrumb/FAQPage schema.
+- **`seo-backlinks-profile`** — Full backlink profile (broader than `seo-backlink-gap`'s gap-only scope). Authority distribution, anchor classification, IP/subnet diversity, growth/decay trend, toxic-candidate heuristic. Output includes a 100-point profile health score and a reviewable disavow-candidate list (never auto-disavow).
+- **`seo-subdomain`** — Subdomain ownership map. Uses `DATA_getDomainSubdomains` plus per-subdomain queries (overview, top keywords, competitors, backlinks). Surfaces topic-ownership matrix and cannibalization flags. Recommends consolidate / split / leave-alone with risk notes.
+
+### Changed
+- README skills table extended to 16 rows; repo-layout block updated.
+- All three version strings bumped to 0.6.0.
+
 ## [0.5.0] — 2026-04-27
 
 ### Added

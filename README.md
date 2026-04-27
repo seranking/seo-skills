@@ -21,6 +21,9 @@ These skills are designed to work with the SE Ranking MCP server, but they docum
 | [`seo-technical-audit`](skills/seo-technical-audit/SKILL.md) | One-shot technical audit: crawlability, indexability, security, mobile, structured data, JS rendering. Top-10 fix list ranked by impact × effort | "technical audit", "site audit", "audit my site", "crawl issues", "indexation issues" |
 | [`seo-content-audit`](skills/seo-content-audit/SKILL.md) | E-E-A-T (60-item) + CITE (30-item) audit for existing content with publish / publish-with-fixes / no-publish verdict and citation-readiness analysis | "content quality audit", "E-E-A-T check", "is this content good", "review this article", "AI search readiness" |
 | [`seo-sitemap`](skills/seo-sitemap/SKILL.md) | Compare a domain's XML sitemap to the most recent SE Ranking audit. Surfaces missing-from-sitemap, orphans, broken entries, lastmod issues | "sitemap analysis", "check my sitemap", "missing pages", "orphan pages", "sitemap health" |
+| [`seo-competitor-pages`](skills/seo-competitor-pages/SKILL.md) | Generate "X vs Y" / "alternatives to X" / "best X for Y" landing pages with feature matrix, schema, balanced verdict, and CTA flow | "comparison page", "vs page", "alternatives page", "X vs Y", "alternative to X" |
+| [`seo-backlinks-profile`](skills/seo-backlinks-profile/SKILL.md) | Full backlink profile audit (vs gap-only `seo-backlink-gap`): authority distribution, anchor diversity, IP/subnet concentration, growth/decay, toxic-candidate flagging | "backlink profile", "link profile audit", "anchor distribution", "toxic links", "disavow candidates" |
+| [`seo-subdomain`](skills/seo-subdomain/SKILL.md) | Subdomain ownership map. Lists subdomains, topic ownership, fragmentation/cannibalization flags, consolidate / split recommendations | "subdomain analysis", "subdomain ownership", "blog vs main domain", "should I consolidate subdomains" |
 
 ## Prerequisites
 
@@ -145,7 +148,13 @@ seranking-mcp-skills/
 │   │   ├── SKILL.md
 │   │   ├── references/                 # core-eeat (60 items) + cite (30 items)
 │   │   └── templates/verdict.md
-│   └── seo-sitemap/
+│   ├── seo-sitemap/
+│   │   └── SKILL.md
+│   ├── seo-competitor-pages/
+│   │   └── SKILL.md
+│   ├── seo-backlinks-profile/
+│   │   └── SKILL.md
+│   └── seo-subdomain/
 │       └── SKILL.md
 ├── examples/                           # Real, end-to-end runs against public targets
 │   └── seo-ai-search-share-of-voice-wix-com-20260427/
