@@ -18,6 +18,7 @@ For one URL, surface its AI-search citation footprint and recommend the page-lev
 1. **Validate & preflight**
    - Confirm URL is fetchable.
    - `DATA_getCreditBalance` — surface remaining credits. ~10–20 credits typical.
+   - **Firecrawl availability check.** If `mcp__firecrawl-mcp__firecrawl_scrape` is available, the JSON-LD parse in step 7 and the new AI-protocol-files step 8 use it (~3 Firecrawl credits). If unavailable, those steps emit `(skipped — Firecrawl not installed; install via extensions/firecrawl/install.sh)` notes in `GEO.md` rather than failing the run. User may pass `--no-firecrawl` to skip Firecrawl even when available (saves credits).
 
 2. **URL keyword footprint** `DATA_getUrlOverviewWorldwide` and `DATA_getDomainKeywords` (URL-filtered)
    - Pull URL's overview (keywords, traffic).
@@ -49,11 +50,19 @@ For one URL, surface its AI-search citation footprint and recommend the page-lev
    - Extract the cited passage (often a snippet from the AIO answer).
    - Compare passage shape: candidate vs cited. Surface specific structural / content / freshness gaps.
 
-7. **Schema check**
-   - Re-parse the page's JSON-LD. Specifically check for: `Article`/`BlogPosting` with valid `author` + `datePublished` + `dateModified`; `FAQPage` if Q&A blocks present; `BreadcrumbList`; `mainEntityOfPage` self-canonical.
+7. **Schema check** `mcp__firecrawl-mcp__firecrawl_scrape`
+   - WebFetch in step 5 returned markdown — JSON-LD blocks were stripped before parsing. The schema check requires Firecrawl to recover them.
+   - **If Firecrawl available:** scrape the target URL once (1 Firecrawl credit), parse the returned `html` for every `<script type="application/ld+json">` block. Specifically check for: `Article`/`BlogPosting` with valid `author` + `datePublished` + `dateModified`; `FAQPage` if Q&A blocks present; `BreadcrumbList`; `mainEntityOfPage` self-canonical.
+   - **If Firecrawl unavailable:** write `Schema check: skipped — Firecrawl required to parse JSON-LD blocks (WebFetch returns markdown only).` into `06-schema-check.md`, mirror the same line in the GEO.md "Schema check" section. Don't infer from markdown — that's the bug this section closes.
    - Schema isn't a direct citation signal but it correlates strongly with citation rates in Google's AIO.
 
-8. **Synthesise** `GEO.md`
+8. **AI-protocol files** `mcp__firecrawl-mcp__firecrawl_scrape`
+   - **If Firecrawl available:** scrape `https://{domain}/llms.txt` and `https://{domain}/.well-known/rsl.json` (and the legacy `/RSL.txt` location as a fallback). Cost: 2 Firecrawl credits (one per file).
+   - For each file: capture HTTP status (200 / 404 / other), full body if present, and a parsed summary (declared content categories, allow/deny scope, attribution requirements).
+   - Surface in `07-ai-protocol-files.md` and in GEO.md as a new "AI-protocol files" section. These signal the domain's stance on LLM training and citation — present-and-permissive correlates with higher AIO citation rates.
+   - **If Firecrawl unavailable:** write `AI-protocol files: skipped — Firecrawl not installed.` Don't fall back to WebFetch (it would work for plain text but the integration stays uniform; runtime savings are negligible).
+
+9. **Synthesise** `GEO.md`
 
 ## Output format
 
@@ -66,7 +75,8 @@ seo-geo-{target-slug}-{YYYYMMDD}/
 ├── 03-leaderboards.md           (full leaderboards per keyword)
 ├── 04-page-passages.md          (extracted passages + citability scores)
 ├── 05-cited-source-comparison.md (gap vs cited sources)
-├── 06-schema-check.md           (JSON-LD audit for GEO-relevant types)
+├── 06-schema-check.md           (JSON-LD audit for GEO-relevant types — requires Firecrawl)
+├── 07-ai-protocol-files.md      (llms.txt + RSL status and content — requires Firecrawl)
 └── GEO.md                       (synthesised report + recommendations)
 ```
 
@@ -109,11 +119,16 @@ Lowest-scoring passages (refresh candidates):
 2. ...
 
 ## Schema check
-- `Article` (or sub-type) present and valid: {✓/✗}
+- `Article` (or sub-type) present and valid: {✓/✗ | skipped — Firecrawl required}
 - `author` populated with `@type: Person` and `url`: {✓/✗}
 - `datePublished` + `dateModified` ISO 8601: {✓/✗}
 - `FAQPage` for visible Q&A: {✓/✗/N-A}
 - `BreadcrumbList`: {✓/✗}
+
+## AI-protocol files
+- `/llms.txt` present: {✓ status 200 / ✗ status {n} / skipped — Firecrawl required}
+- `/.well-known/rsl.json` (or `/RSL.txt`) present: {✓ / ✗ / skipped}
+- Stance summary: {permissive / restrictive / mixed / unknown — based on declared categories and allow/deny scope}
 
 ## Recommendations (top 5 to improve citability)
 
@@ -130,7 +145,7 @@ Re-run `seo-geo` on this URL in 30 days after applying the recommendations. AIO 
 ## Tips
 
 - Respect rate limit. ~5 keywords × 2 AIO calls = ~10 calls; plus 2–3 WebFetch on cited sources. Easy.
-- Cost: ~10–20 credits typical.
+- Cost: ~10–20 SE Ranking credits typical, plus ~3 Firecrawl credits when the extension is installed (1 for target-URL JSON-LD, 2 for AI-protocol files). The skill degrades gracefully without Firecrawl — the schema and AI-protocol sections emit explicit "skipped" notes rather than silently dropping.
 - **Citation isn't ranking.** A page can rank well organically and still not be cited in AIO. The opposite happens too — cited pages often rank below their citation rate.
 - The biggest GEO levers are usually:
   1. Definitive answer in the first 200 words.

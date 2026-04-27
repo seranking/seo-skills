@@ -18,6 +18,7 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
 1. **Validate & preflight**
    - Confirm the URL is fetchable; derive parent domain.
    - `DATA_getCreditBalance` — surface remaining credits and the estimated cost (~10–15 credits typical).
+   - **Firecrawl availability check.** If `mcp__firecrawl-mcp__firecrawl_scrape` is available, step 6 recovers `og:*`, `twitter:*`, canonical, robots meta, JSON-LD types, and hreflang count from the raw `<head>` (1 Firecrawl credit). Without Firecrawl those fields can't be populated — WebFetch returns markdown only and strips them. The skill still runs; the affected lines emit `(skipped — Firecrawl not installed)` in `PAGE.md`. User may pass `--no-firecrawl` to skip Firecrawl even when available (treats it as "not installed" for credit conservation).
    - If the user supplied a primary keyword, use it. Otherwise infer it in step 3.
 
 2. **URL-level overview** `DATA_getUrlOverviewWorldwide`
@@ -39,10 +40,14 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
      - SERP features present (PAA, image carousel, video, shopping, etc.).
      - AIO presence and citations — is this URL cited in the AIO?
 
-6. **HTML sense-check** `WebFetch`
-   - Fetch the URL.
-   - Extract: `<title>`, meta description, all `<h1..h6>`, canonical, robots, lang, schema types present (parse JSON-LD blocks), word count, internal-link count, image count.
-   - Sense-check: does the page actually talk about its top-ranking keyword in title and H1? If a page ranks for keywords it doesn't address textually, that's a strong consolidation signal.
+6. **HTML sense-check** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
+   - **WebFetch first** (free, instant): extract `<title>`, meta description, all `<h1..h6>`, lang, word count, internal-link count, image count. WebFetch returns markdown so anything in `<head>` beyond `<title>` is lost — the next bullet recovers it.
+   - **Firecrawl second** (1 Firecrawl credit) — recovers what WebFetch can't see:
+     - From `metadata`: `og:title`, `og:description`, `og:image`, `twitter:card`, `viewport`, robots meta, canonical URL.
+     - From the returned `html`: every `<script type="application/ld+json">` block. Parse each as JSON, list detected `@type`s (Article, BreadcrumbList, Organization, Product, etc.). Note any block that fails to parse.
+     - hreflang: count `<link rel="alternate" hreflang="…">` occurrences.
+   - **If Firecrawl unavailable:** the WebFetch portion still runs; populate Page basics' OG / Twitter / canonical / robots / JSON-LD / hreflang lines as `(skipped — Firecrawl not installed)`. Don't infer from markdown.
+   - **Sense-check:** does the page actually talk about its top-ranking keyword in title and H1? If a page ranks for keywords it doesn't address textually, that's a strong consolidation signal.
 
 7. **Domain context** `DATA_getDomainOverviewWorldwide` (parent domain)
    - Light-weight: parent DA, total keywords, total traffic. Used to contextualise the page's PA against its domain.
@@ -88,6 +93,18 @@ seo-page-{target-slug}-{YYYYMMDD}/
 - Page authority: {PA} ({↑/↓ trajectory over 90 days})
 - Primary topic: {topic}
 - AIO citations: {n} of {checked} primary-keyword AIOs cite this URL
+
+## Page basics
+- `<title>`: {value}
+- meta description: {value | absent}
+- `og:title`: {value | absent | skipped — Firecrawl required}
+- `og:description`: {value | absent | skipped}
+- `og:image`: {url | absent | skipped}
+- `twitter:card`: {summary | summary_large_image | absent | skipped}
+- `<link rel="canonical">`: {URL | self-referential | absent | skipped}
+- meta robots: {index,follow | noindex,nofollow | absent | skipped}
+- JSON-LD types detected: {Article, BreadcrumbList, Organization | none | skipped}
+- hreflang variants: {n | skipped}
 
 ## What this page wins
 - {keyword} — position {n}, ~{volume} monthly searches, ~{traffic} monthly clicks.
@@ -135,7 +152,7 @@ Reasoning: {1–2 sentences anchored in objective signals from above}.
   - **KEEP**: PA stable or up; traffic stable or up; top 3 keywords held in their positions; AIO citations present where AIO appears.
   - **REFRESH**: any of (PA dropped >5 in 90 days; traffic dropped >20%; a top-3 keyword fell to position 11+; AIO citations missing while competitors get cited).
   - **CONSOLIDATE**: cannibalization detected (step 8) — a peer URL on the same domain ranks ≤ 20 for one or more of the candidate's top-3 keywords. CONSOLIDATE harden when the peer outranks the candidate AND captures higher traffic; otherwise CONSOLIDATE recommendation is "merge into the candidate" rather than "kill the candidate."
-  - **KILL**: PA <10 AND traffic <50/mo AND no top-10 keyword AND no internal links pointing to it.
+  - **KILL**: PA <10 AND traffic <50/mo AND no top-10 keyword AND no internal links pointing to it. **Hardens** when JSON-LD schema is also absent (Firecrawl detected zero blocks) — the page has no signals for any crawler, organic or AI.
 - Don't invent reasons. Anchor every claim in `PAGE.md` to a number from the raw data files.
 - When between KEEP and REFRESH, default to REFRESH — small refreshes compound.
 - The `keywords.csv` is the auditable trail. If a stakeholder questions the verdict, walk them through the CSV row by row.

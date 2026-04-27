@@ -2,6 +2,47 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.2.0] — 2026-04-27
+
+Firecrawl integration ships across 7 skills, closing the "WebFetch can't see the `<head>`" correctness gap that v2.1.0 explicitly deferred. Each affected skill now uses `mcp__firecrawl-mcp__firecrawl_scrape` (or `firecrawl_map`) to recover `og:*`, `twitter:*`, canonical, robots, JSON-LD, and X-Robots-Tag content that WebFetch's markdown conversion strips. Firecrawl is treated as an optional enhancement: every Firecrawl-using step degrades gracefully — emitting an explicit `(skipped — Firecrawl not installed)` note in the deliverable — rather than failing the run.
+
+**Install path (separate concern).** This release wires up the skills but does **not** ship the `extensions/firecrawl/` install scaffold or the `seo-firecrawl` orchestrator skill — both are referenced in degradation notes and arrive in a follow-up release. Users wanting Firecrawl today install it manually: export `FIRECRAWL_API_KEY` and add `mcpServers.firecrawl-mcp = { command: "npx", args: ["-y", "firecrawl-mcp"] }` to `~/.claude/settings.json`. Free tier is 500 credits/month.
+
+### Fixed (correctness — claims WebFetch couldn't deliver)
+- **`seo-page`** step 6 — claimed to extract canonical, robots, and JSON-LD via WebFetch. WebFetch returns markdown and strips all three. Fixed: WebFetch handles `<title>`/headings/prose; Firecrawl recovers `<head>` metadata + JSON-LD. New "Page basics" section in `PAGE.md` lists og/twitter/canonical/robots/JSON-LD types/hreflang count. KILL-verdict heuristic hardens when JSON-LD is also absent.
+- **`seo-schema`** steps 1-2 — claimed to "Pull the page's HTML" via WebFetch and "Extract every `<script type='application/ld+json'>` block". Both impossible. Fixed: Firecrawl is now the primary fetch path; without it the skill becomes generate-only (steps 4-6) and skips detect/validate (2-3, 7) with explicit notice rather than producing markdown-inferred guesses.
+- **`seo-schema`** step 7 — competitor benchmark "WebFetch their HTML, detect their schema types" was inferring from markdown. Fixed: Firecrawl scrape on top-10 SERP results, real JSON-LD parse, "schema types used by 6+ winners that this page is missing" emitted only when benchmark actually ran.
+- **`seo-geo`** step 7 — "Re-parse the page's JSON-LD" had nothing to parse (step 5's WebFetch returned markdown). Fixed: Firecrawl scrape feeds the schema check; falls back to explicit `skipped — Firecrawl required` note rather than silently passing.
+- **`seo-content-audit`** step 1 — claimed to extract schema types from WebFetch markdown. Fixed: Firecrawl recovers Article/BlogPosting/Person schema and the structural byline DOM. Veto check #4 (AI-on-YMYL with no human review) gains high-confidence inputs when Firecrawl is available and falls back to lower-confidence prose-only inspection without it (caveat surfaced in `VERDICT.md`).
+
+### Added (Firecrawl-only capabilities)
+- **`seo-geo`** new step 8 — `/llms.txt` and `/.well-known/rsl.json` (with `/RSL.txt` fallback) discovery via Firecrawl. New `07-ai-protocol-files.md` output and "AI-protocol files" section in `GEO.md` summarizing the domain's stance toward LLM training/citation.
+- **`seo-technical-audit`** new step 8 — "Modern signals checklist". For 5 sample URLs from the SE Ranking audit, Firecrawl scrape detects (a) JS-rendered canonical vs initial-HTML canonical divergence, (b) JS-injected noindex, (c) X-Robots-Tag header. Plus one extra `firecrawl_scrape` on `/robots.txt` parses AI-crawler User-Agent rules — `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended`, `ChatGPT-User`, `Bytespider`, `CCBot`. New `05-modern-signals.md` output and "Modern signals" subsection in `TECH-AUDIT.md`. SE Ranking's audit crawler can't see any of this.
+- **`seo-sitemap`** Mode-2 — when no XML sitemap is reachable, or it returns < 10% of the audit's crawled-page count, or the user passes `--discover`, `firecrawl_map(limit=500)` enumerates URLs from the homepage + internal navigation. The four diffs (missing/orphans/broken/lastmod) run identically with discovered URLs substituting for declared sitemap URLs. New `01b-firecrawl-discovered.md` output. New "Mode" section in `SITEMAP.md` documents which mode ran.
+- **`seo-drift`** URL-mode snapshots — Firecrawl captures `<head>` (canonical, robots, og:*, twitter:*) plus full JSON-LD content alongside the WebFetch markdown. Compare-mode diffs now detect schema additions/removals, canonical changes, robots-meta changes — none of which WebFetch could see. Without Firecrawl, those fields surface as `not comparable — Firecrawl-only fields missing from {baseline | current} snapshot` rather than as a green-pass. `--no-firecrawl` flag opts out for credit conservation.
+
+### Cost surfacing
+Every patched skill's preflight (step 1) surfaces estimated Firecrawl credit cost alongside `DATA_getCreditBalance`. Per-run estimates:
+
+| Skill | Firecrawl credits per run |
+|---|---|
+| `seo-page` | 1 (target URL) |
+| `seo-schema` | 1 + 10 if step 7 runs (top-10 SERP scrape) |
+| `seo-geo` | 3 (target JSON-LD + `/llms.txt` + RSL) |
+| `seo-technical-audit` | ~6 (5 sample URLs + `/robots.txt`) |
+| `seo-sitemap` Mode-2 | ~50 typical, hard cap 250 |
+| `seo-content-audit` | 1 per URL audited (default cap 50, hard cap 200) |
+| `seo-drift` URL mode | 1 per snapshot capture |
+
+### Deferred (planned follow-up)
+- **`extensions/firecrawl/`** install scaffold (`install.sh`, `uninstall.sh`, `README.md`) — referenced in degradation notes; not shipped this release.
+- **`seo-firecrawl`** orchestrator skill — ad-hoc scrape/map/crawl/search interface; ships alongside the install scaffold.
+- **v1.5-track integrations** (per `docs/FIRECRAWL_INTEGRATION_PLAN.md` §6 v1.5) — `seo-content-brief` top-3 winners scrape, `seo-competitor-pages` bulk on-page CSV, `seo-sxo` screenshot mode, `seo-backlinks-profile` link-source verification.
+- **Tool-prefix smoke test** — must run on a clean profile before broad release. Plan §10 risk: if the registered prefix differs from `mcp__firecrawl-mcp__firecrawl_*`, every reference in the 7 patched skills silently mis-fires.
+
+### Changed
+- All three version strings bumped to 2.2.0.
+
 ## [2.1.0] — 2026-04-27
 
 Correctness pass — eight evidence-driven patches surfaced by the 2026-04-27 head-to-head against `AgriciDaniel/claude-seo` v1.9.6. No new dependencies; no Firecrawl yet (that ships in v2.2.0). Strictly better signal-to-noise across eight skills.

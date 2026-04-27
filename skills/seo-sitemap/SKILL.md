@@ -20,13 +20,13 @@ Compare a domain's XML sitemap against the most recent SE Ranking website audit.
    - Normalise the domain.
    - `DATA_listAudits` → confirm an audit exists for this domain. If none, surface a clear message: "Run `seo-technical-audit` first; this skill compares the sitemap to that audit's crawl."
    - Use the most recent `done` audit by default.
+   - **Firecrawl availability check.** If `mcp__firecrawl-mcp__firecrawl_map` is available, Mode-2 (URL discovery via crawl) is offered when the sitemap is missing or suspect. Cost: ~0.5 Firecrawl credits per URL discovered, hard cap 500 URLs (~250 credits). Without Firecrawl, the skill runs Mode-1 only and notes the gap if Mode-2 was needed. User may pass `--no-firecrawl` to force Mode-1 even when Firecrawl is available (saves credits at the cost of orphan/missing analysis when sitemap is broken).
 
-2. **Fetch the sitemap** `WebFetch`
-   - First try `https://{domain}/sitemap.xml`.
-   - If that 404s, fetch `/robots.txt` and look for `Sitemap:` directives.
-   - If still nothing, ask the user for the sitemap URL.
-   - For sitemap-of-sitemaps (sitemap index), recursively fetch each child sitemap.
-   - Build the canonical URL list from the sitemap.
+2. **Build URL lists** `WebFetch` (sitemap) + `mcp__firecrawl-mcp__firecrawl_map` (optional Mode-2)
+   - **Mode-1 (default).** Try `https://{domain}/sitemap.xml`. If 404, fetch `/robots.txt` and look for `Sitemap:` directives. For sitemap-of-sitemaps, recursively fetch each child sitemap. Build the canonical URL list from the sitemap.
+   - **Mode-2 trigger.** Switch on Mode-2 when (a) no sitemap is reachable, (b) the sitemap returns < 10% of the audit's `DATA_getCrawledPages` count, or (c) the user explicitly requests `--discover`. Always surface the trigger and the cost estimate to the user before running Mode-2.
+   - **Mode-2 execution** (requires Firecrawl): call `firecrawl_map(url=domain, limit=500)`. The response is the URL list Firecrawl could discover from the homepage and internal linking. Use this list as the "sitemap-equivalent" in step 6 — the diffs run identically, just with discovered URLs in place of declared sitemap URLs.
+   - **If Mode-2 is needed but Firecrawl is unavailable:** continue with whatever sitemap data Mode-1 returned (possibly empty). Surface clearly in `SITEMAP.md`: `Mode-2 (Firecrawl URL discovery) needed but Firecrawl not installed — sitemap-vs-audit diffs run on partial data only.`
 
 3. **Pull the audit's crawled pages** `DATA_getCrawledPages`
    - All URLs the crawler found, with status codes, indexability flags, depth.
@@ -58,7 +58,8 @@ Create a folder `seo-sitemap-{target-slug}-{YYYYMMDD}/` with:
 
 ```
 seo-sitemap-{target-slug}-{YYYYMMDD}/
-├── 01-sitemap-raw.md           (fetched sitemap content, URL list extracted)
+├── 01-sitemap-raw.md           (fetched sitemap content, URL list extracted — Mode-1)
+├── 01b-firecrawl-discovered.md (only if Mode-2 ran: URL list from firecrawl_map)
 ├── 02-audit-pages.md           (audit's crawled-pages list, DATA_getCrawledPages)
 ├── 03-missing-from-sitemap.md  (URLs found by crawler, not in sitemap)
 ├── 04-orphans-from-sitemap.md  (URLs in sitemap, not found by crawler)
@@ -75,11 +76,17 @@ seo-sitemap-{target-slug}-{YYYYMMDD}/
 
 > Sitemap pulled {YYYY-MM-DD} · Audit reference {audit-date}
 
+## Mode
+
+- **Mode-1 (sitemap-vs-audit):** {ran / skipped — no sitemap reachable}
+- **Mode-2 (Firecrawl URL discovery):** {ran with {n} URLs / not triggered / triggered but Firecrawl not installed}
+
 ## Health summary
 
 | Metric | Value | Status |
 |---|---|---|
-| Sitemap URLs | {n} | — |
+| Sitemap URLs (Mode-1) | {n} | — |
+| Discovered URLs (Mode-2, if ran) | {n} | — |
 | Audit crawled URLs (200, indexable) | {n} | — |
 | Missing from sitemap (probable adds) | {n} | {🔴 if >5%} |
 | Orphans from sitemap (probable cuts or link-ins) | {n} | {🟡 if >5} |
@@ -124,4 +131,4 @@ seo-sitemap-{target-slug}-{YYYYMMDD}/
 - `<priority>` and `<changefreq>` are dead signals — Google explicitly ignores both. Don't waste time tuning them; if your sitemap generator emits them, the bytes are pure overhead. `<lastmod>` is still consumed, so keep that one accurate.
 - The "investigate orphans" list is often the highest-leverage finding — pages that exist but aren't linked are usually accidentally orphaned, and adding a couple of internal links can revive them.
 - Pair with `seo-drift` to track sitemap composition over time (URL count, lastmod patterns).
-- Cost: ~5–10 credits typical (mostly the `getCrawledPages` and `getDomainPages` calls).
+- Cost: ~5–10 SE Ranking credits typical (mostly the `getCrawledPages` and `getDomainPages` calls). Mode-2 adds Firecrawl credits at ~0.5 per discovered URL — surface the estimate before triggering.

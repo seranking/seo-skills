@@ -18,6 +18,7 @@ A one-shot technical SEO audit for a domain. Pulls SE Ranking's audit data, cate
 1. **Validate target & preflight**
    - Normalise domain (strip protocol, trailing slash).
    - `DATA_getCreditBalance` — surface remaining credits. A re-check of an existing audit is cheap; creating a new audit is significantly more expensive (cost varies by page count). Surface the cost before deciding.
+   - **Firecrawl availability check.** If `mcp__firecrawl-mcp__firecrawl_scrape` is available, step 8 (Modern signals checklist) runs on 5 sample URLs and `/robots.txt` (~6 Firecrawl credits, hard cap). Without it, that step is skipped — the SE Ranking audit data still produces the full technical-audit deliverable, but without JS-render canonical/noindex divergence, X-Robots-Tag headers, or AI-crawler robots-rule analysis. User may pass `--no-firecrawl` to skip step 8 even when Firecrawl is available (saves credits).
 
 2. **Find or create the audit** `DATA_listAudits`
    - List audits for the domain.
@@ -47,7 +48,16 @@ A one-shot technical SEO audit for a domain. Pulls SE Ranking's audit data, cate
    - Score each finding: severity × affected-page-count / effort.
    - Build the top-10 fix list.
 
-8. **Synthesise** `TECH-AUDIT.md`
+8. **Modern signals checklist** `mcp__firecrawl-mcp__firecrawl_scrape`
+   - SE Ranking's audit crawler doesn't execute JS and doesn't expose response headers per page. This step surfaces what's invisible to it.
+   - **If Firecrawl available** (~6 Firecrawl credits, hard cap): pick 5 sample URLs from the audit — bias toward high-traffic landing pages and pages already flagged with noindex / canonical issues. For each:
+     - **JS-rendered canonical vs initial-HTML canonical.** Compare `metadata.canonical` (after JS render) against the canonical the audit recorded. Flag any divergence — JS-injected canonical changes silently break indexing on JS-heavy sites.
+     - **JS-rendered noindex.** Check `metadata.robots` for `noindex` after render. Catches client-side-only `noindex` injection that the audit can't see.
+     - **X-Robots-Tag header.** Read response headers from `metadata`. Flag any `noindex` / `nofollow` / `none` directives at the HTTP layer.
+     - Then make one additional call: `firecrawl_scrape` on `/robots.txt` (1 credit). Parse for AI-crawler User-Agent rules — `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended`, `ChatGPT-User`, `Bytespider`, `CCBot`. Surface allow/disallow scope per agent.
+   - **If Firecrawl unavailable:** skip this step. Note in `TECH-AUDIT.md`: `Modern signals (JS canonical/noindex divergence, X-Robots-Tag, AI-crawler robots.txt rules): skipped — Firecrawl not installed.`
+
+9. **Synthesise** `TECH-AUDIT.md`
 
 ## Output format
 
@@ -65,6 +75,7 @@ seo-technical-audit-{target-slug}-{YYYYMMDD}/
 │   └── content.md
 ├── 03-key-pages-issues.md       (top 5 traffic pages, all their issues)
 ├── 04-robots-sitemap-snapshot.md (raw fetched files)
+├── 05-modern-signals.md          (JS-render canonical/noindex divergence, X-Robots-Tag, AI-crawler rules — requires Firecrawl)
 ├── issues.csv                   (every issue: code, severity, count, fix, effort)
 └── TECH-AUDIT.md                (synthesised: top-10 fix list + category summary)
 ```
@@ -112,6 +123,13 @@ seo-technical-audit-{target-slug}-{YYYYMMDD}/
 
 ### Content ({n} issues)
 - ...
+
+### Modern signals ({n} findings — Firecrawl)
+- {URL} — initial-HTML canonical `{X}` differs from JS-rendered canonical `{Y}` (divergence)
+- {URL} — JS-rendered `noindex` not visible to static crawler
+- {URL} — `X-Robots-Tag: noindex` at HTTP layer
+- robots.txt — `GPTBot`: {allow / disallow `/path`}, `ClaudeBot`: {…}, `Google-Extended`: {…}, ...
+- (Or: `Modern signals: skipped — Firecrawl not installed`)
 
 ## Key-page deep dives
 

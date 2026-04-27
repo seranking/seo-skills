@@ -15,9 +15,14 @@ Score an existing piece of content against modern E-E-A-T (Experience, Expertise
 
 ## Process
 
-1. **Fetch content** `WebFetch`
-   - Pull the page HTML.
-   - Extract: byline, publish date, last-updated date, schema types (especially `Article`/`BlogPosting`/`Person`), word count, H-tag hierarchy, source citations (links to authorities, numbered references), images, tables, code blocks, comment thread (if present).
+1. **Fetch content** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
+   - **Cost note.** WebFetch is free; Firecrawl is 1 credit per URL audited (default cap 50 URLs, hard cap 200). Surface Firecrawl availability and the projected credit count before continuing. User may pass `--no-firecrawl` to force WebFetch-only inspection (lower-confidence veto checks; see step 4 caveat).
+   - **WebFetch first** (free, instant): pull the markdown for word count, H-tag hierarchy, source citations (links to authorities, numbered references), images, tables, code blocks, comment thread.
+   - **Firecrawl second** — recovers what WebFetch's markdown loses:
+     - From `metadata`: canonical URL, robots, lang, `og:title`.
+     - From the returned `html`: every `<script type="application/ld+json">` block. Parse for `Article` / `BlogPosting` schema and extract `author` (name, `@type: Person`, optional `url` + `sameAs`), `datePublished` / `dateModified` (ISO 8601), `publisher`, `mainEntityOfPage`. Detect `Person` schema standalone if present.
+     - DOM-level byline detection: locate the structural byline (`<a rel="author">`, `<meta name="author">`, `<span class="byline">`, `[itemprop="author"]`). Distinguish a real byline element from prose mentions ("Written by Jane in collaboration..." in body text is not a byline; `<a rel="author">Jane Doe</a>` is).
+   - **If Firecrawl unavailable:** WebFetch portion runs unchanged. Mark schema-type detection and structural byline detection as `(skipped — Firecrawl required)` in `01-content-snapshot.md`. Step 4's veto checks #1 and #4 fall back to prose-level inspection (less reliable) — surface that caveat in `VERDICT.md`.
 
 2. **AIO context** `DATA_getAiOverview` and `DATA_getAiOverviewLeaderboard`
    - For the target keyword: is there an AIO?
@@ -34,10 +39,10 @@ Score an existing piece of content against modern E-E-A-T (Experience, Expertise
    - Per-item: yes/no/partial. Compute dimension scores (0–100% each).
    - Score the 8-item **AI-content markers** subsection (see references/core-eeat.md → "AI-content markers"). Mark each fired/not-fired.
    - Apply 4 veto checks. Any veto = no-publish.
-     1. Anonymous author on YMYL topic.
+     1. Anonymous author on YMYL topic. (High-confidence with Firecrawl-recovered author schema + DOM byline; medium-confidence with prose-only inspection.)
      2. Factual claims with no sources cited.
      3. Undisclosed affiliate / sponsored relationships.
-     4. AI-generated YMYL content with no human-review markers (≥4 AI-content markers fired AND YMYL topic AND no editor byline / "reviewed by" credit / "last reviewed" or "fact-checked on" date).
+     4. AI-generated YMYL content with no human-review markers (≥4 AI-content markers fired AND YMYL topic AND no editor byline / "reviewed by" credit / "last reviewed" or "fact-checked on" date). The "editor byline / reviewed by" check uses Firecrawl-recovered DOM byline + Article-schema `author` when available; falls back to prose-level pattern match if Firecrawl is absent (lower confidence — note in `VERDICT.md`).
 
 5. **Score CITE** using `references/cite.md`
    - 30-item CITE rubric (Clear answer in 1st 200 words, Include primary stats, Timestamp freshness, Entity authority).
@@ -124,7 +129,7 @@ See:
 ## Tips
 
 - Respect rate limit. AIO + AIO-prompts queries are ~5–10 calls; plenty of headroom.
-- Call `DATA_getCreditBalance` before running. ~10–15 credits typical.
+- Call `DATA_getCreditBalance` before running. ~10–15 SE Ranking credits typical, plus 1 Firecrawl credit per URL audited when Firecrawl is installed (default cap 50 URLs).
 - The thresholds (75% E-E-A-T, 70% CITE) are starting points. Tune per domain — a YMYL site (medical, financial) should require higher (85%/80%); a general-interest blog can run lower (65%/60%).
 - The veto checks are not negotiable. A piece with anonymous authorship on a YMYL topic doesn't pass regardless of score.
 - For pieces that score "publish with fixes," the top-5 list is the deliverable. Hand it to the writer; re-audit after fixes.

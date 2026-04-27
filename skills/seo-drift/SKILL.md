@@ -31,15 +31,19 @@ List all stored baselines for the target with their dates and key metrics (DA, t
 ### baseline mode
 
 1. **Validate target.** Determine if domain or URL. Domain = `example.com`; URL = anything starting with `http(s)://`.
-2. **Preflight.** `DATA_getCreditBalance` — typical baseline costs ~10–20 credits depending on whether step 5 is included.
+2. **Preflight.** `DATA_getCreditBalance` — typical baseline costs ~10–20 SE Ranking credits depending on whether step 4 (URL-mode page snapshot) is included. **Firecrawl availability check.** In URL mode, if `mcp__firecrawl-mcp__firecrawl_scrape` is available, the snapshot also captures `<head>` + JSON-LD content (+1 Firecrawl credit per URL). Without it the snapshot is partial — canonical / robots / og:* / JSON-LD changes won't be detectable on diff. User may pass `--no-firecrawl` to skip Firecrawl even when available (saves credits at the cost of diff coverage).
 3. **Domain snapshot** (always):
    - `DATA_getDomainOverviewWorldwide` — DA, traffic, organic + paid keyword counts.
    - `DATA_getDomainKeywords` — top 100 organic keywords with positions.
    - `DATA_getBacklinksSummary` — backlinks total, referring domains total.
    - `DATA_getBacklinksRefDomains` — top 20 referring domains with authority.
-4. **Page snapshot** (if target is a URL): `WebFetch` the URL.
-   - Extract: `<title>`, meta description, all `<h1..h6>`, canonical URL, robots meta, lang attribute, schema types present (parse JSON-LD), word count, internal-link count, image count.
-   - Compute a fingerprint hash of the above structure.
+4. **Page snapshot** (if target is a URL): `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
+   - **WebFetch** (free): extract `<title>`, all `<h1..h6>`, lang, word count, internal-link count, image count, body markdown for prose-level diff.
+   - **Firecrawl** (1 Firecrawl credit per URL) — recovers `<head>` and `<script>` content WebFetch strips:
+     - From `metadata`: canonical URL, robots meta, og:title, og:description, og:image, twitter:card.
+     - From returned `html`: every `<script type="application/ld+json">` block. Capture both detected `@type`s and a hash of the full block content (so any schema-content change is detected on diff, not just type-list changes).
+   - **If Firecrawl unavailable (or `--no-firecrawl` passed):** only WebFetch fields enter the fingerprint. `BASELINE.md` notes: `Snapshot fields recovered via WebFetch only — canonical, robots, og:*, twitter:*, and JSON-LD changes will not be detected on subsequent compares. Install Firecrawl for full coverage.`
+   - Compute a fingerprint hash of the captured fields.
    - Also capture page authority: `DATA_getPageAuthority`.
 5. **Write snapshot file** `seo-drift-{target-slug}-{YYYYMMDD}/snapshot.json`.
 6. **Update index** `seo-drift-{target-slug}/baselines.json` — append `{date, snapshot_path}` entry.
@@ -56,7 +60,8 @@ List all stored baselines for the target with their dates and key metrics (DA, t
    - Top-3 keyword count: ±15% = yellow, ±40% = red.
    - Top-100 keyword churn: any high-volume drop = red.
    - Net referring domains: -5 to -20 = yellow, <-20 = red.
-   - Page-level (URL mode): any change to canonical / robots / lang / H1 = red; title or meta description change = yellow; schema types added/removed = yellow.
+   - Page-level (URL mode): any change to canonical / robots / lang / H1 = red; title or meta description change = yellow; schema types added/removed = yellow; og:* / twitter:* changes = yellow.
+   - **Firecrawl-dependent diff caveat:** canonical / robots / og:* / twitter:* / JSON-LD diffs require both baseline and current snapshots to have been captured with Firecrawl. If either snapshot was WebFetch-only, those fields surface as `not comparable — Firecrawl-only fields missing from {baseline | current} snapshot` rather than as a green pass.
 4. **Synthesise** `DRIFT-REPORT.md` — red findings first, then yellow, then green/positive deltas. End with a "what to investigate first" recommendation.
 
 ### history mode
@@ -127,7 +132,7 @@ seo-drift-{target-slug}-{YYYYMMDD}/
 ## Tips
 
 - Respect rate limit: 10 req/sec. Baseline runs 4–6 sequential calls; pace easily.
-- Call `DATA_getCreditBalance` before running. Domain baseline ~10–15 credits; URL baseline ~15–20 credits; compare ~20–30 credits.
+- Call `DATA_getCreditBalance` before running. Domain baseline ~10–15 SE Ranking credits; URL baseline ~15–20 SE Ranking credits + 1 Firecrawl credit; compare ~20–30 SE Ranking credits + 1 Firecrawl credit (current-state capture).
 - Snapshot storage is **local-only** in v0.4.0. If your team needs shared baselines, point everyone at the same `seo-drift-{target-slug}/` directory in a shared filesystem or commit it to a private repo. Baselines are JSON — git-friendly.
 - Baseline cadence: monthly is the natural rhythm because SE Ranking's history endpoints have monthly granularity. Weekly is too noisy for backlink data. Document recommended cadence in handoff to your team.
 - For deploy-time "did anything break in the last hour" use cases, the URL-mode page-fingerprint half is the workhorse — that doesn't depend on monthly data.
