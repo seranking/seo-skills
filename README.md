@@ -20,7 +20,7 @@ These skills are designed to work with the SE Ranking MCP server, but they docum
 
 - [Claude Code](https://code.claude.com), the Claude API, or [Claude.ai](https://claude.ai) with Skills enabled.
 - The [SE Ranking MCP server](https://github.com/seranking/seo-data-api-mcp-server) installed and configured.
-- A `DATA_API_TOKEN` set in your environment. Some skills also benefit from a `PROJECT_API_TOKEN` if you want to use project-scoped tools (rank tracking, AIRT prompts).
+- An SE Ranking API token set as `DATA_API_TOKEN` in your environment. That single token is all the skills need.
 - [Sign up for SE Ranking API access](https://seranking.com/api.html) if you don't already have a token.
 
 ## Install
@@ -127,10 +127,11 @@ seranking-mcp-skills/
 │           │   └── SKILL.md
 │           └── agency-landing-page/
 │               └── SKILL.md
-├── examples/                           # Sample runs (coming soon)
 ├── LICENSE
 └── README.md
 ```
+
+Every skill writes its output to a folder named `{skill-slug}-{target-slug}-{YYYYMMDD}/` (e.g., `content-brief-example-com-20260427/`). The date stamp keeps re-runs non-destructive and makes it easy to diff outputs over time.
 
 ## Rate limits and costs
 

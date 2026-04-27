@@ -10,6 +10,7 @@ Turn a domain plus a topic intent into a complete content editor brief: target k
 ## Prerequisites
 
 - SE Ranking MCP server connected with a valid `DATA_API_TOKEN`.
+- Claude's `WebFetch` tool available (used for top-3 content teardown).
 - User has provided: (a) target domain, (b) market/country (default: `us`), and optionally (c) a seed topic or intent. If no seed topic is given, discover the best opportunity from the keyword-gap step.
 
 ## Process
@@ -49,10 +50,10 @@ Turn a domain plus a topic intent into a complete content editor brief: target k
 
 ## Output format
 
-Create a folder `content-brief-{slug}/` with one file per step plus the final `BRIEF.md`:
+Create a folder `content-brief-{target-slug}-{YYYYMMDD}/` with one file per step plus the final `BRIEF.md`:
 
 ```
-content-brief-{slug}/
+content-brief-{target-slug}-{YYYYMMDD}/
 ├── 01-domain-overview.md
 ├── 02-competitors.md
 ├── 03-keyword-gaps.md
