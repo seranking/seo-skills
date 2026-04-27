@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [0.2.0] — 2026-04-27
+
+### Changed
+- Flattened the repo layout: skill folders are now at `skills/<name>/SKILL.md` (was `plugins/seranking-mcp-skills/skills/<name>/SKILL.md`). The marketplace's `plugins[0].source` is `"./"`, and `plugin.json` lives alongside `marketplace.json` under `.claude-plugin/`. Matches the single-plugin convention used by other community plugins (e.g. `AgriciDaniel/claude-seo`).
+- Updated README install Options 2–4 to use the new flat paths. Users installing via `/plugin marketplace add seranking/seranking-mcp-skills` are unaffected; users using `--plugin-dir` or `cp -r` need to update their paths.
+
 ## [0.1.1] — 2026-04-27
 
 ### Changed

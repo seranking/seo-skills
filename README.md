@@ -51,8 +51,8 @@ To update the marketplace later: `/plugin marketplace update seranking`.
 # Clone the repo
 git clone https://github.com/seranking/seranking-mcp-skills.git
 
-# Load the plugin directly from its subdirectory
-claude --plugin-dir ./seranking-mcp-skills/plugins/seranking-mcp-skills
+# Load the plugin directly from the cloned directory
+claude --plugin-dir ./seranking-mcp-skills
 ```
 
 ### Option 3: Copy individual skills
@@ -62,10 +62,10 @@ claude --plugin-dir ./seranking-mcp-skills/plugins/seranking-mcp-skills
 git clone https://github.com/seranking/seranking-mcp-skills.git
 
 # Copy a single skill to your user-scoped skills directory
-cp -r seranking-mcp-skills/plugins/seranking-mcp-skills/skills/content-brief ~/.claude/skills/
+cp -r seranking-mcp-skills/skills/content-brief ~/.claude/skills/
 
 # Or copy all of them
-cp -r seranking-mcp-skills/plugins/seranking-mcp-skills/skills/* ~/.claude/skills/
+cp -r seranking-mcp-skills/skills/* ~/.claude/skills/
 ```
 
 Skills copied this way are not namespaced. Trigger them directly by description match.
@@ -75,7 +75,7 @@ Skills copied this way are not namespaced. Trigger them directly by description 
 Copy into a specific project's `.claude/skills/` directory to make the skills available only when Claude Code runs in that project.
 
 ```bash
-cp -r seranking-mcp-skills/plugins/seranking-mcp-skills/skills/* /path/to/your/project/.claude/skills/
+cp -r seranking-mcp-skills/skills/* /path/to/your/project/.claude/skills/
 ```
 
 ### Option 5: Claude API
@@ -106,32 +106,31 @@ The skills chain naturally. A typical agency workflow:
 ```
 seranking-mcp-skills/
 ├── .claude-plugin/
-│   └── marketplace.json               # Claude Code plugin marketplace manifest
-├── plugins/
-│   └── seranking-mcp-skills/
-│       ├── .claude-plugin/
-│       │   └── plugin.json            # Plugin manifest
-│       └── skills/
-│           ├── content-brief/
-│           │   └── SKILL.md
-│           ├── ai-search-share-of-voice/
-│           │   └── SKILL.md
-│           ├── website-audit-change-report/
-│           │   └── SKILL.md
-│           ├── backlink-gap/
-│           │   └── SKILL.md
-│           ├── keyword-cluster-planner/
-│           │   └── SKILL.md
-│           ├── competitor-gap-analysis/
-│           │   └── SKILL.md
-│           └── agency-landing-page/
-│               └── SKILL.md
+│   ├── marketplace.json                # Claude Code marketplace manifest
+│   └── plugin.json                     # Plugin manifest
+├── skills/
+│   ├── content-brief/
+│   │   └── SKILL.md
+│   ├── ai-search-share-of-voice/
+│   │   └── SKILL.md
+│   ├── website-audit-change-report/
+│   │   └── SKILL.md
+│   ├── backlink-gap/
+│   │   └── SKILL.md
+│   ├── keyword-cluster-planner/
+│   │   └── SKILL.md
+│   ├── competitor-gap-analysis/
+│   │   └── SKILL.md
+│   └── agency-landing-page/
+│       └── SKILL.md
 ├── examples/                           # Real, end-to-end runs against public targets
 │   └── ai-search-share-of-voice-wix-com-20260427/
 ├── CHANGELOG.md
 ├── LICENSE
 └── README.md
 ```
+
+The repo is a Claude Code marketplace whose single plugin is the repo itself (marketplace `plugins[0].source` is `"./"`). This keeps skill folders visible at the top level rather than buried two layers deep.
 
 Every skill writes its output to a folder named `{skill-slug}-{target-slug}-{YYYYMMDD}/` (e.g., `content-brief-example-com-20260427/`). The date stamp keeps re-runs non-destructive and makes it easy to diff outputs over time. Browse [`examples/`](./examples/) to see what a finished run looks like before installing.
 
