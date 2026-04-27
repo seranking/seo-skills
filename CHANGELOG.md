@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [0.7.0] — 2026-04-27
+
+### Added
+- **`seo-geo`** — URL-level Generative Engine Optimization. Pulls per-keyword AIO presence and citation lists, audits page passages for citability, compares vs cited sources, surfaces page-level changes that improve LLM citation rates. Distinct from `seo-ai-search-share-of-voice` (domain-level brand vs brand) — this is one URL, deeper.
+- **`seo-ads`** — Paid-search competitive intelligence. Two modes (domain mode for a brand's paid footprint, keyword mode for the bidding landscape on a single term). Uses `DATA_getDomainAdsByDomain` / `DATA_getDomainAdsByKeyword`, ad-copy clustering, SERP shopping/ad-pack visibility, optional project-level enrichment via `DATA_getAdsStats`. Output includes a recommended bid-keyword shortlist.
+- **`seo-keyword-niche`** — Mine longtail + question keywords for niche content opportunities. Pulls `DATA_getLongTailKeywords` + `DATA_getKeywordQuestions` + related/similar at depth, clusters by intent, proposes a content tier (template, URL pattern, sample pages) with anti-thin-content quality gates. Pilot-first recommendation — 10 well-templated pages beat 1000 thin ones.
+
+### Changed
+- README skills table extended to 19 rows. **All 13 new skills now in place — every skill on the v0.4 → v0.7 build-out plan is implemented.**
+- All three version strings bumped to 0.7.0.
+
 ## [0.6.0] — 2026-04-27
 
 ### Added
