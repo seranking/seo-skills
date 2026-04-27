@@ -1,0 +1,22 @@
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "{REPLACE: question 1 — must be visibly on the page}",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "{REPLACE: answer 1 — must match the visible answer}"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "{REPLACE: question 2}",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "{REPLACE: answer 2}"
+      }
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+---
+name: seo-page
+description: URL-level SEO intelligence — which keywords this page ranks for, traffic captured, position history, SERP context, and AI Search citation status. Produces a keep / refresh / consolidate / kill verdict for one page. Distinct from `seo-technical-audit` (which checks technical health, not keyword/traffic performance) and from `seo-content-brief` (which produces a NEW article from a topic). Use when the user asks "analyze this page", "page SEO performance", "what does this URL rank for", "page traffic", "should I refresh this page", or provides a single URL for analysis.
+---
+
+# Page Intelligence
+
+Show what a single URL ranks for, what traffic it captures, where its weak and strong points are, and what to do about it. The deliverable is an opinionated verdict — **KEEP**, **REFRESH**, **CONSOLIDATE**, or **KILL** — anchored in objective signals from SE Ranking's URL-level data.
+
+## Prerequisites
+
+- SE Ranking MCP server connected (remote OAuth via `claude mcp add`).
+- Claude's `WebFetch` tool available (for the page-level HTML sense-check).
+- User provides: (a) a target URL, optionally (b) target market country (default: `us`), (c) primary topical keyword (auto-inferred from `<title>` + `<h1>` if not supplied).
+
+## Process
+
+1. **Validate & preflight**
+   - Confirm the URL is fetchable; derive parent domain.
+   - `DATA_getCreditBalance` — surface remaining credits and the estimated cost (~10–15 credits typical).
+   - If the user supplied a primary keyword, use it. Otherwise infer it in step 3.
+
+2. **URL-level overview** `DATA_getUrlOverviewWorldwide`
+   - Pull keyword count, organic traffic estimate, paid keyword count, paid traffic estimate, top regions.
+   - Note: traffic estimates are directional — they don't replace Google Search Console.
+
+3. **Ranking keywords** `DATA_getDomainKeywords` (filter by URL)
+   - Pull every keyword the URL ranks for in the target country, with positions.
+   - Sort by traffic-weighted score: `volume × CTR-by-position` (use a standard CTR curve: 1=28%, 2=15%, 3=11%, 4=8%, 5=7%, 6=5%, 7=4%, 8=3%, 9=2%, 10=2%, 11+=1%).
+   - Take the top 3–5 as the URL's "primary keywords" for SERP work in step 5.
+
+4. **Page authority** `DATA_getPageAuthority` + `DATA_getPageAuthorityHistory`
+   - Current PA score and its 12-month trajectory.
+   - Flag any drop > 5 points in the last 90 days.
+
+5. **SERP context** `DATA_getSerpResults` and `DATA_getAiOverview`
+   - For each of the 3–5 primary keywords:
+     - Top 10 organic results (URL, title, snippet).
+     - SERP features present (PAA, image carousel, video, shopping, etc.).
+     - AIO presence and citations — is this URL cited in the AIO?
+
+6. **HTML sense-check** `WebFetch`
+   - Fetch the URL.
+   - Extract: `<title>`, meta description, all `<h1..h6>`, canonical, robots, lang, schema types present (parse JSON-LD blocks), word count, internal-link count, image count.
+   - Sense-check: does the page actually talk about its top-ranking keyword in title and H1? If a page ranks for keywords it doesn't address textually, that's a strong consolidation signal.
+
+7. **Domain context** `DATA_getDomainOverviewWorldwide` (parent domain)
+   - Light-weight: parent DA, total keywords, total traffic. Used to contextualise the page's PA against its domain.
+
+8. **Synthesise verdict**
+   - Apply the verdict heuristic (see Tips) to produce KEEP / REFRESH / CONSOLIDATE / KILL.
+   - For REFRESH, identify the top 3 specific changes (e.g., "add an H2 on 'alternatives' which 7 of 10 SERP winners use").
+   - Write `PAGE.md` (output spec below).
+
+## Output format
+
+Create a folder `seo-page-{target-slug}-{YYYYMMDD}/` with:
+
+```
+seo-page-{target-slug}-{YYYYMMDD}/
+├── 01-url-overview.md       (raw DATA_getUrlOverviewWorldwide)
+├── 02-keywords.md           (raw DATA_getDomainKeywords filtered)
+├── 03-authority.md          (PA + history)
+├── 04-serp-context.md       (top 10 + AIO for top 3–5 keywords)
+├── 05-page-snapshot.md      (HTML extracts)
+├── keywords.csv             (full keyword list with positions)
+└── PAGE.md                  (synthesised verdict + plan)
+```
+
+`PAGE.md` follows this shape:
+
+```markdown
+# Page Intelligence: {URL}
+
+> Snapshot dated {YYYY-MM-DD} · Country: {country} · Primary keyword: {keyword}
+
+## Snapshot
+- Ranking keywords: {n}
+- Estimated monthly organic traffic: {n}
+- Page authority: {PA} ({↑/↓ trajectory over 90 days})
+- Primary topic: {topic}
+- AIO citations: {n} of {checked} primary-keyword AIOs cite this URL
+
+## What this page wins
+- {keyword} — position {n}, ~{volume} monthly searches, ~{traffic} monthly clicks.
+- ... (top 3–5)
+
+## Almost-wins (page-2 refresh opportunities)
+- {keyword} — position {n}, ~{volume} monthly searches. The top 3 SERP winners all do {pattern} that this page doesn't.
+- ... (top 3 examples)
+
+## What this page misses
+- {keyword} — competitors {comp1}, {comp2} rank in top 5; this page is absent.
+- ...
+
+## AI Search angle
+- {n} of {checked} AIO queries on the URL's keywords cite this page.
+- The AIOs that DON'T cite this page tend to cite {pattern} (e.g., comparison tables, step-by-step how-tos).
+- Recommended GEO move: {one specific change}.
+
+## Verdict: {KEEP | REFRESH | CONSOLIDATE | KILL}
+
+Reasoning: {1–2 sentences anchored in objective signals from above}.
+
+### If REFRESH — top 3 changes
+1. {Specific change}
+2. {Specific change}
+3. {Specific change}
+
+## Raw data
+- keywords.csv — full enriched ranking-keyword list
+- 04-serp-context.md — per-keyword SERP top-10 with AIO
+- 05-page-snapshot.md — HTML extracts
+```
+
+`keywords.csv` columns: `keyword,volume,kd,position,intent,traffic_estimate,url`
+
+## Tips
+
+- Respect SE Ranking Data API rate limit: 10 requests per second. The 3–5 SERP queries in step 5 should be paced sequentially.
+- Call `DATA_getCreditBalance` before running. ~10–15 credits is typical for one URL.
+- Verdict heuristic:
+  - **KEEP**: PA stable or up; traffic stable or up; top 3 keywords held in their positions; AIO citations present where AIO appears.
+  - **REFRESH**: any of (PA dropped >5 in 90 days; traffic dropped >20%; a top-3 keyword fell to position 11+; AIO citations missing while competitors get cited).
+  - **CONSOLIDATE**: page ranks for keywords that another URL on the same domain also ranks for and outranks (cannibalization detected via cross-checking with `DATA_getDomainKeywords` for the parent domain).
+  - **KILL**: PA <10 AND traffic <50/mo AND no top-10 keyword AND no internal links pointing to it.
+- Don't invent reasons. Anchor every claim in `PAGE.md` to a number from the raw data files.
+- When between KEEP and REFRESH, default to REFRESH — small refreshes compound.
+- The `keywords.csv` is the auditable trail. If a stakeholder questions the verdict, walk them through the CSV row by row.
+- For pages with very low data (new pages, <5 ranking keywords), the verdict is unreliable. Flag as "insufficient data — re-run after 60 days" rather than forcing a verdict.

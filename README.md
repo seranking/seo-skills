@@ -1,6 +1,6 @@
 # SE Ranking MCP Skills
 
-Production-ready [Claude Agent Skills](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) for the [SE Ranking remote MCP](https://seranking.com/api/integrations/mcp). Each skill turns raw API data into a finished SEO deliverable: a content brief, a share-of-voice report, a backlink prospect list, a cluster plan, a gap analysis, a demand-gen landing page.
+Production-ready [Claude Agent Skills](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) for the [SE Ranking remote MCP](https://seranking.com/api/integrations/mcp). Each skill turns raw API data into a finished SEO deliverable — content briefs, page intelligence, structured data, drift monitoring, SXO diagnostics, competitive analysis, and more.
 
 These skills are designed to work with the SE Ranking MCP server, but they document every API call explicitly so they can also be adapted to other SEO data providers.
 
@@ -14,6 +14,10 @@ These skills are designed to work with the SE Ranking MCP server, but they docum
 | [`seo-keyword-cluster`](skills/seo-keyword-cluster/SKILL.md) | Intent-grouped clusters with pillar plus spokes architecture and H1/H2 suggestions per spoke | "keyword clustering", "topical map", "pillar content strategy", "content calendar from keywords" |
 | [`seo-competitor-gap-analysis`](skills/seo-competitor-gap-analysis/SKILL.md) | Keywords competitors rank for that the target does not, filtered by intent, volume, KD, and scored for priority | "competitor gap", "keyword gap", "organic content gap", "missing keyword opportunities" |
 | [`seo-agency-landing-page`](skills/seo-agency-landing-page/SKILL.md) | Demand-gen landing page for an SEO agency with a free-audit lead magnet, grounded in real niche data | "SEO agency landing page", "lead-gen page", "free-audit landing page" |
+| [`seo-page`](skills/seo-page/SKILL.md) | URL-level keyword & traffic intelligence with keep / refresh / consolidate / kill verdict for one page | "analyze this page", "page SEO performance", "what does this URL rank for", "should I refresh this page" |
+| [`seo-schema`](skills/seo-schema/SKILL.md) | JSON-LD detect, validate, generate. Six bundled templates (Article / Product / LocalBusiness / FAQPage / HowTo / BreadcrumbList) | "schema markup", "structured data", "JSON-LD", "rich results", "schema validation" |
+| [`seo-drift`](skills/seo-drift/SKILL.md) | Git for SEO — baseline, compare, history. Severity-coded regression report across authority, traffic, keywords, backlinks, page fingerprint | "SEO drift", "did anything break", "deployment check", "baseline this site", "SEO regression" |
+| [`seo-sxo`](skills/seo-sxo/SKILL.md) | Read SERPs backwards to find page-type mismatches. Scores the page from 4 personas; produces a wireframe for the SERP-winning page type | "why isn't this page ranking", "SXO", "page type mismatch", "intent mismatch", "search experience" |
 
 ## Prerequisites
 
@@ -117,8 +121,20 @@ seranking-mcp-skills/
 │   │   └── SKILL.md
 │   ├── seo-competitor-gap-analysis/
 │   │   └── SKILL.md
-│   └── seo-agency-landing-page/
-│       └── SKILL.md
+│   ├── seo-agency-landing-page/
+│   │   └── SKILL.md
+│   ├── seo-page/
+│   │   └── SKILL.md
+│   ├── seo-schema/
+│   │   ├── SKILL.md
+│   │   ├── templates/                  # 6 JSON-LD starter templates
+│   │   └── references/google-rich-results.md
+│   ├── seo-drift/
+│   │   ├── SKILL.md
+│   │   └── references/drift-thresholds.md
+│   └── seo-sxo/
+│       ├── SKILL.md
+│       └── references/                 # page-type patterns + persona rubrics
 ├── examples/                           # Real, end-to-end runs against public targets
 │   └── seo-ai-search-share-of-voice-wix-com-20260427/
 ├── CHANGELOG.md

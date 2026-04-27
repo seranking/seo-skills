@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [0.4.0] — 2026-04-27
+
+### Added
+- **`seo-page`** — URL-level keyword & traffic intelligence. Pulls `DATA_getUrlOverviewWorldwide`, `DATA_getDomainKeywords` (URL-filtered), `DATA_getPageAuthority` + history, top SERPs and AIO citations for the URL's primary keywords. Output: keep / refresh / consolidate / kill verdict for one page.
+- **`seo-schema`** — Schema.org JSON-LD detect, validate, generate. Six bundled templates (Article, Product, LocalBusiness, FAQPage, HowTo, BreadcrumbList) under `skills/seo-schema/templates/`; rich-results spec snapshot at `skills/seo-schema/references/google-rich-results.md`. Output: paste-ready `<script>` blocks.
+- **`seo-drift`** — Git for SEO. Three subcommands (`baseline`, `compare`, `history`). Uses SE Ranking's history endpoints (`DATA_getDomainOverviewHistory`, `DATA_getCumulativeBacklinksHistory`, `DATA_getNewLost*`, etc.) plus `WebFetch` page fingerprinting. Severity thresholds at `skills/seo-drift/references/drift-thresholds.md`.
+- **`seo-sxo`** — Reads SERPs backwards to detect page-type mismatches. Classifies each top-10 result by page type, scores the candidate page from 4 personas (Skimmer, Researcher, Buyer, Validator), and produces a wireframe for the SERP-winning page type when there's a mismatch. References under `skills/seo-sxo/references/`. Acknowledges Florian Schmitz (Pro Hub Challenge in `claude-seo`) for the SXO framework.
+
+### Changed
+- README skills table extended to 10 rows; intro line generalised; repo-layout block updated to show new skill folders + supporting files.
+- All three version strings bumped to 0.4.0.
+
 ## [0.3.1] — 2026-04-27
 
 ### Removed
