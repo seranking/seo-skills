@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.5.3] — 2026-04-29
+
+README slash-command syntax fix. The Claude Code section instructed users to trigger skills with `/seo-skills:seo-content-brief` (plugin-namespaced form). Empirically the prefix isn't required — `/seo-content-brief` works directly. The 2.0.0 CHANGELOG entry that introduced the namespaced form is preserved as historical record (it described what was true at the time), but current docs now show the simpler form.
+
+### Changed
+- Claude Code section: trigger examples updated to `/seo-content-brief`, `/seo-page`. Added "or just describe what you want and Claude picks the right skill" — natural-language invocation is the primary path; slash commands are the explicit alternative.
+- Cowork section: dropped the "they're namespaced" claim (which was likely wrong-by-extension from the Claude Code mis-documentation) and replaced with the same trigger-by-name-or-by-description framing.
+- All three version strings bumped to 2.5.3.
+
 ## [2.5.2] — 2026-04-29
 
 README restructure for non-technical users. Install moved above the skills table (was below — readers had to scroll past 22 rows to find install instructions). Install reduced from 7 options to 3, ordered by friendliness: Claude Desktop (Cowork) first, Claude Code (slash commands) second, manual install (only for `seo-google` and extensions) third.

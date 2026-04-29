@@ -17,7 +17,7 @@ The easiest setup — no terminal needed. Cowork in Claude Desktop installs the 
 3. Click **Add marketplace** and enter `seranking/seo-skills`.
 4. Install the plugin once the marketplace loads.
 
-Skills are available in your next Cowork session. They're namespaced — trigger them by name like `seo-content-brief`, `seo-page`, etc.
+Skills are available in your next Cowork session. Trigger them by name — `seo-content-brief`, `seo-page`, etc. — or just describe what you want and Claude picks the right one.
 
 ### 2. Claude Code (slash commands)
 
@@ -28,7 +28,7 @@ If you use Claude Code in the terminal:
 /plugin install seo-skills@seranking
 ```
 
-Trigger skills with `/seo-skills:seo-content-brief`, `/seo-skills:seo-page`, etc. Update the marketplace later with `/plugin marketplace update seranking`.
+Trigger skills with `/seo-content-brief`, `/seo-page`, etc. — no `seo-skills:` prefix needed. Or just describe what you want and Claude picks the right skill. Update the marketplace later with `/plugin marketplace update seranking`.
 
 ### 3. Manual install (only if you want `seo-google` or the optional extensions)
 
