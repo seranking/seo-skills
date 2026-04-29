@@ -28,6 +28,8 @@ These Claude Skills are designed to work with the SE Ranking MCP server, but the
 | [`seo-ads`](skills/seo-ads/SKILL.md) | Paid-search competitive intelligence. Domain ad footprint, bidding landscape per keyword, ad-copy patterns, SERP shopping/ad-pack visibility, recommended bid-keyword shortlist | "paid search analysis", "competitor ads", "PPC competitive", "who bids on this keyword", "shopping pack" |
 | [`seo-keyword-niche`](skills/seo-keyword-niche/SKILL.md) | Mine longtail + question keywords for niche content opportunities. Outputs a content-tier plan with template spec, URL pattern, sample pages, and thin-content quality gates | "longtail keywords", "question keywords", "niche content", "content opportunities at scale", "programmatic SEO" |
 | [`seo-firecrawl`](skills/seo-firecrawl/SKILL.md) | Ad-hoc web scraping, site mapping, full-site crawling, and within-domain search via Firecrawl. Returns raw HTML, JSON-LD, og:* / twitter:* metadata, JS-rendered DOM, and screenshots that WebFetch can't *(requires the [Firecrawl extension](#firecrawl-raw-html-json-ld-js-rendering-site-crawl))* | "scrape this page", "crawl this site", "map this site", "get the OG tags", "render this JS-heavy page" |
+| [`seo-plan`](skills/seo-plan/SKILL.md) | Phased SEO roadmap for a domain — quarter-by-quarter, tied to competitive position, content gaps, technical debt, and AI Search readiness. Sequences specialist-skill outputs into one site-level plan with owners, metrics, and a critical path | "SEO plan", "SEO strategy", "SEO roadmap", "90-day plan", "where do we focus next" |
+| [`seo-google`](skills/seo-google/SKILL.md) | Google's own SEO data: GSC Search Analytics + URL Inspection + Sitemaps, PageSpeed Insights, CrUX field data + 25-week history, Indexing API, GA4 organic, YouTube, NLP, Knowledge Graph, Web Risk, Keyword Planner. 4 credential tiers; lower tiers are useful on their own *(requires the [Google APIs extension](#google-apis-real-cwv-gsc-ga4-youtube-keyword-planner))* | "search console", "GSC", "PageSpeed", "CrUX", "URL inspection", "real CWV data", "GA4 organic", "google api setup" |
 
 ## Prerequisites
 
@@ -35,6 +37,7 @@ These Claude Skills are designed to work with the SE Ranking MCP server, but the
 - The [SE Ranking remote MCP](https://seranking.com/api/integrations/mcp) connected to your Claude workspace. In Claude Code: `claude mcp add --transport http se-ranking https://api.seranking.com/mcp`, then run `/mcp` in a session and sign in via OAuth — no API token to manage.
 - An SE Ranking account with API access enabled. [Sign up](https://seranking.com/api.html) if you don't already have one.
 - **Optional:** the [Firecrawl extension](#firecrawl-raw-html-json-ld-js-rendering-site-crawl) for skills that need raw HTML, JSON-LD, JS-rendered DOM, or full-site crawling. Eleven of the SE Ranking skills opportunistically use it; all degrade gracefully when it's absent.
+- **Optional:** the [Google APIs extension](#google-apis-real-cwv-gsc-ga4-youtube-keyword-planner) for the `seo-google` skill (GSC, PSI, CrUX, GA4, etc.). Higher tiers also feed real impressions/clicks/CWV/conversions into `seo-page`, `seo-drift`, `seo-technical-audit`, `seo-content-audit`, and `seo-plan`.
 
 ## Install
 
@@ -112,6 +115,20 @@ The script verifies Node 20+, prompts for your `FIRECRAWL_API_KEY` (free tier is
 
 **Skills that gain capabilities when Firecrawl is installed:** `seo-page`, `seo-schema`, `seo-geo`, `seo-technical-audit`, `seo-sitemap`, `seo-content-audit`, `seo-drift`, `seo-content-brief`, `seo-competitor-pages`, `seo-sxo`, `seo-backlinks-profile`, plus the dedicated `seo-firecrawl` orchestrator. Every Firecrawl-using skill supports a `--no-firecrawl` flag to opt out at runtime even when the extension is installed (saves credits).
 
+### Google APIs (real CWV, GSC, GA4, YouTube, Keyword Planner)
+
+The `seo-google` skill needs the Google API client libraries plus a free Google Cloud project. All Google APIs used here are free (with quotas). Setup is one-time. Adapted with attribution from [`AgriciDaniel/claude-seo`](https://github.com/AgriciDaniel/claude-seo)'s upstream `seo-google` skill (MIT) — same Python scripts and reference docs, namespaced to `~/.config/seo-skills/`.
+
+```bash
+bash extensions/google/install.sh
+```
+
+The script verifies Python 3.10+, pip-installs the Google API libraries (`google-api-python-client`, `google-auth*`, `google-analytics-data`, plus `matplotlib` + `weasyprint` + `openpyxl` for PDF/HTML/XLSX reports), creates `~/.config/seo-skills/`, writes a stub `google-api.json`, and runs the credential checker.
+
+Fill in the config per [`skills/seo-google/references/auth-setup.md`](skills/seo-google/references/auth-setup.md) (8-step walkthrough). The skill detects which tier is unlocked and only enables the matching commands — Tier 0 (API key) gives PSI + CrUX + YouTube + NLP + Knowledge Graph + Web Risk; Tier 1 (+ service account) adds GSC + Indexing; Tier 2 (+ GA4 property ID) adds GA4; Tier 3 (+ Ads dev token) adds Keyword Planner. See [`extensions/google/README.md`](extensions/google/README.md) for full setup, troubleshooting, and rate-limit reference.
+
+**Skills that gain capabilities when Google APIs are configured:** `seo-google` (the dedicated skill — fully gated on this extension), plus `seo-page`, `seo-drift`, `seo-technical-audit`, `seo-content-audit`, `seo-sitemap`, `seo-geo`, `seo-keyword-cluster`, `seo-keyword-niche`, and `seo-plan` (real impressions/clicks/conversions/CWV instead of estimates when configured).
+
 ## How these skills work
 
 Each skill is a single `SKILL.md` file with YAML frontmatter. Claude loads the frontmatter at startup to know when to use the skill, then loads the body only when triggered, then reads any bundled reference files only when needed. This is Anthropic's [progressive disclosure](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview#how-skills-work) pattern.
@@ -183,13 +200,36 @@ seo-skills/
 │   │   └── SKILL.md
 │   ├── seo-keyword-niche/
 │   │   └── SKILL.md
-│   └── seo-firecrawl/                  # Ad-hoc Firecrawl orchestrator (extension required)
-│       └── SKILL.md
+│   ├── seo-firecrawl/                  # Ad-hoc Firecrawl orchestrator (extension required)
+│   │   └── SKILL.md
+│   ├── seo-plan/
+│   │   └── SKILL.md
+│   └── seo-google/                     # Google APIs skill (extension required)
+│       ├── SKILL.md
+│       ├── assets/templates/           # 3 report templates (cwv-audit, gsc-performance, indexation)
+│       └── references/                 # 10 API reference docs (auth, GSC, PSI, CrUX, GA4, etc.)
+├── scripts/                            # Python scripts called by seo-google (forked from AgriciDaniel/claude-seo, MIT)
+│   ├── google_auth.py
+│   ├── pagespeed_check.py
+│   ├── crux_history.py
+│   ├── gsc_query.py
+│   ├── gsc_inspect.py
+│   ├── indexing_notify.py
+│   ├── ga4_report.py
+│   ├── youtube_search.py
+│   ├── nlp_analyze.py
+│   ├── keyword_planner.py
+│   └── google_report.py
 ├── extensions/
-│   └── firecrawl/                      # Optional Firecrawl MCP wiring
+│   ├── firecrawl/                      # Optional Firecrawl MCP wiring
+│   │   ├── install.sh
+│   │   ├── uninstall.sh
+│   │   └── README.md
+│   └── google/                         # Optional Google APIs Python toolchain
 │       ├── install.sh
 │       ├── uninstall.sh
-│       └── README.md
+│       ├── README.md
+│       └── LICENSE-AgriciDaniel.txt    # MIT attribution for forked content
 ├── examples/                           # Real, end-to-end runs against public targets
 │   └── seo-ai-search-share-of-voice-wix-com-20260427/
 ├── CHANGELOG.md

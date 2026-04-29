@@ -6,3 +6,8 @@ node_modules/
 dist/
 .vscode/
 .idea/
+
+# Python bytecode (scripts/ runs Python files; never commit caches)
+__pycache__/
+*.pyc
+*.pyo

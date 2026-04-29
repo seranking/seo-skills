@@ -25,7 +25,7 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
    - Pull keyword count, organic traffic estimate, paid keyword count, paid traffic estimate, top regions.
    - Note: traffic estimates are directional — they don't replace Google Search Console.
 
-3. **Ranking keywords** `DATA_getDomainKeywords` (filter by URL)
+3. **Ranking keywords** `DATA_getDomainKeywords` (use the `url` param for exact match — not `filter_url`)
    - Pull every keyword the URL ranks for in the target country, with positions.
    - Sort by traffic-weighted score: `volume × CTR-by-position` (use a standard CTR curve: 1=28%, 2=15%, 3=11%, 4=8%, 5=7%, 6=5%, 7=4%, 8=3%, 9=2%, 10=2%, 11+=1%).
    - Take the top 3–5 as the URL's "primary keywords" for SERP work in step 5.
@@ -42,10 +42,10 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
 
 6. **HTML sense-check** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
    - **WebFetch first** (free, instant): extract `<title>`, meta description, all `<h1..h6>`, lang, word count, internal-link count, image count. WebFetch returns markdown so anything in `<head>` beyond `<title>` is lost — the next bullet recovers it.
-   - **Firecrawl second** (1 Firecrawl credit) — recovers what WebFetch can't see:
+   - **Firecrawl second** (1 Firecrawl credit; pass `formats: ["rawHtml"]`) — recovers what WebFetch can't see. Pin the format to `rawHtml`; the default `html` is post-processed and silently strips canonical, hreflang, and `<script type="application/ld+json">` blocks on many sites. If those head fields come back zero on a site that obviously has them (any major SaaS homepage), you forgot the `rawHtml` flag — re-run.
      - From `metadata`: `og:title`, `og:description`, `og:image`, `twitter:card`, `viewport`, robots meta, canonical URL.
-     - From the returned `html`: every `<script type="application/ld+json">` block. Parse each as JSON, list detected `@type`s (Article, BreadcrumbList, Organization, Product, etc.). Note any block that fails to parse.
-     - hreflang: count `<link rel="alternate" hreflang="…">` occurrences.
+     - From the returned `rawHtml`: every `<script type="application/ld+json">` block. Parse each as JSON, list detected `@type`s (Article, BreadcrumbList, Organization, Product, etc.). Note any block that fails to parse.
+     - hreflang: count `<link rel="alternate" hreflang="…">` occurrences in `rawHtml`.
    - **If Firecrawl unavailable:** the WebFetch portion still runs; populate Page basics' OG / Twitter / canonical / robots / JSON-LD / hreflang lines as `(skipped — Firecrawl not installed)`. Don't infer from markdown.
    - **Sense-check:** does the page actually talk about its top-ranking keyword in title and H1? If a page ranks for keywords it doesn't address textually, that's a strong consolidation signal.
 

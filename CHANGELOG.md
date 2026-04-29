@@ -2,6 +2,74 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.5.0] — 2026-04-29
+
+Adds `seo-google` — direct access to Google's own SEO data (GSC Search Analytics + URL Inspection + Sitemaps, PageSpeed Insights v5, CrUX field data + 25-week history, Indexing API v3, GA4 Data API, YouTube Data v3, Cloud Natural Language, Knowledge Graph Search, Web Risk, Google Ads Keyword Planner) plus a PDF/HTML/XLSX report generator. This is the catalogue's first Python-script skill — earlier skills are SKILL.md only.
+
+**Adapted with attribution from [`AgriciDaniel/claude-seo`](https://github.com/AgriciDaniel/claude-seo) v1.9.6 (MIT).** All 11 Python scripts (`scripts/google_*.py`, `scripts/pagespeed_check.py`, `scripts/crux_history.py`, `scripts/gsc_*.py`, `scripts/indexing_notify.py`, `scripts/ga4_report.py`, `scripts/youtube_search.py`, `scripts/nlp_analyze.py`, `scripts/keyword_planner.py`, `scripts/google_report.py`), all 10 reference docs under `skills/seo-google/references/`, and 3 report templates under `skills/seo-google/assets/templates/` are forked verbatim. Two minimal adaptations only: (a) config path `~/.config/claude-seo/` → `~/.config/seo-skills/` for clean coexistence with the upstream plugin, (b) example service-account name `claude-seo` → `seo-skills` in `auth-setup.md`. Functional behaviour is otherwise unchanged. Upstream MIT copyright is preserved at `extensions/google/LICENSE-AgriciDaniel.txt`.
+
+### Added
+- **`skills/seo-google/SKILL.md`** — 21-command router. Subcommands: `setup`, `pagespeed`, `crux`, `crux-history`, `gsc`, `inspect`, `inspect-batch`, `sitemaps`, `index`, `index-batch`, `ga4`, `ga4-pages`, `youtube`, `youtube-video`, `nlp`, `entities`, `keywords`, `volume`, `entity`, `safety`, `quotas`, `report`. Each command shells out to a Python script with `--json` output.
+- **`skills/seo-google/references/`** — 10 reference docs: `auth-setup.md` (8-step Google Cloud project setup walkthrough), `search-console-api.md`, `pagespeed-crux-api.md`, `ga4-data-api.md`, `indexing-api.md`, `keyword-planner-api.md`, `nlp-api.md`, `supplementary-apis.md` (Knowledge Graph + Web Risk), `youtube-api.md`, `rate-limits-quotas.md`.
+- **`skills/seo-google/assets/templates/`** — 3 report templates: `cwv-audit-report.md`, `gsc-performance-report.md`, `indexation-status-report.md`.
+- **`scripts/`** — new repo-root directory with 11 Python scripts (~235KB total).
+- **`extensions/google/install.sh`** — pip-installs Google API libraries (`google-api-python-client`, `google-auth*`, `google-analytics-data`, `requests`) plus optional report libraries (`matplotlib`, `weasyprint`, `openpyxl`). Creates `~/.config/seo-skills/` (700) with a stub `google-api.json` (600) the user fills in. Runs the credential checker. Idempotent.
+- **`extensions/google/uninstall.sh`** — removes config + token; preserves user's service-account JSON files and pip libraries (with instructions to remove them manually).
+- **`extensions/google/README.md`** — full setup, troubleshooting, rate-limit table, credential-tier reference.
+- **`extensions/google/LICENSE-AgriciDaniel.txt`** — preserves upstream MIT copyright per license requirement.
+- README skills table extended to 22 rows (`seo-google` row, marked extension-required).
+- README "Optional extensions" section gains "Google APIs" subsection with install command, tier model, and link to the extension README.
+- README repo-layout block updated to show `scripts/`, `extensions/google/`, and the new `references/` + `assets/templates/` under `seo-google/`.
+- Prerequisites bullet calling out the optional Google APIs extension.
+
+### Credential tiers (key design borrowed from upstream)
+- **Tier 0** (API key only): `pagespeed`, `crux`, `crux-history`, `youtube`, `youtube-video`, `nlp`, `entities`, `entity`, `safety`.
+- **Tier 1** (+ service account, added as Full to GSC): adds `gsc`, `inspect`, `inspect-batch`, `sitemaps`, `index`, `index-batch`.
+- **Tier 2** (+ GA4 property ID, service account added as Viewer): adds `ga4`, `ga4-pages`.
+- **Tier 3** (+ Google Ads developer token + customer ID): adds `keywords`, `volume`.
+Each tier is independently useful — Tier 0 alone unlocks real CWV field data via PSI + CrUX.
+
+### Cross-skill upgrades enabled by `seo-google`
+When `seo-google` is configured at the appropriate tier, several existing skills can swap *estimates* for *measurements*:
+- **`seo-page`** — replace SE Ranking traffic estimate with real GSC `query,page` impressions/clicks (Tier 1); confirm indexation via URL Inspection (Tier 1).
+- **`seo-drift`** — add 25-week CrUX history trend (Tier 0) and GSC delta tracking (Tier 1) to baseline/compare snapshots.
+- **`seo-technical-audit`** — real CWV field data via PSI + CrUX (Tier 0); real indexation status via URL Inspection (Tier 1).
+- **`seo-content-audit`** — NLP entity/sentiment analysis enhances E-E-A-T scoring (Tier 0); GSC confirms whether the page is earning impressions for its target keywords (Tier 1).
+- **`seo-sitemap`** — GSC sitemap status shows which sitemaps Google has actually consumed and their error/warning counts (Tier 1).
+- **`seo-geo`** — GSC `dimensions=searchAppearance` includes AI Overview impressions (Tier 1).
+- **`seo-keyword-cluster`** / **`seo-keyword-niche`** — gold-standard Keyword Planner volumes (Tier 3) replace SE Ranking estimates when configured.
+- **`seo-plan`** — Phase-1 baseline uses real impressions/clicks/conversions (Tier 1+2) instead of estimates.
+These integrations are wired in the `seo-google` SKILL.md's "Cross-Skill Integration" section and `extensions/google/README.md`. The existing skills do not yet auto-detect Google credentials and prefer real data when present — that is a separate v1.5-track follow-up.
+
+### Architectural notes
+- First skill in the catalogue with bundled Python scripts (`scripts/` at repo root). All earlier skills were SKILL.md only and called MCP tools. The new pattern is documented in the repo-layout README block.
+- Scripts use sibling-import style (`from google_auth import ...`) with try/except for path resolution — same pattern as upstream. Works whether the assistant invokes `python scripts/<name>.py` from the plugin root or via an absolute path.
+- Two-extension pattern now established: `extensions/firecrawl/` (MCP server wiring) + `extensions/google/` (pip + config wiring). Future extensions can pick whichever fits.
+
+### Deferred
+- Wiring real-data preferences into the existing skills (e.g., `seo-page` auto-detecting GSC and using it instead of SE Ranking traffic estimates). Currently the cross-skill integrations exist as documented patterns in `seo-google`'s own SKILL.md, not as auto-detection in the consumer skills. Tracking for v2.6 / v3.0.
+- Smoke-test on a clean profile install. The pip install path is well-trodden, but `weasyprint` system-dep fallout (cairo/pango on Linux, Xcode CLT on macOS) is the most likely real-world snag.
+
+### Changed
+- All three version strings bumped to 2.5.0.
+
+## [2.4.0] — 2026-04-29
+
+Adds `seo-plan` — the strategic-roadmap layer above the existing 20-skill catalogue. Surfaced by the 2026-04-28 head-to-head against `AgriciDaniel/claude-seo` v1.9.6, which had a `seo-plan` we lacked. This skill does not replace specialist skills — it composes their outputs into a phased site-level plan with sequencing, owners, metrics, and a critical path.
+
+### Added
+- **`skills/seo-plan/SKILL.md`** — phased SEO roadmap for a domain. Inputs: target domain (+ optional country, business type, planning horizon, constraints). Process: detect business type from homepage signals → baseline domain via `DATA_getDomainOverviewWorldwide` + history + DA + backlinks → competitive frame via `DATA_getDomainCompetitors` → ingest specialist-skill outputs (`seo-technical-audit`, `seo-content-audit`, `seo-competitor-gap-analysis`, `seo-ai-search-share-of-voice`, `seo-backlinks-profile`); if missing, queue them as Phase 0 → score four pillars (technical / content / topical / AI Search) → apply business-type template (saas / ecommerce / local / publisher / agency / b2b-services) → phase the plan into Foundations → Build → Compound+measure → pick metrics (one leading + one lagging per phase) → emit a critical-path dependency map. Output: `PLAN.md` + 8 numbered raw-data files. Deliberately distinct from `seo-keyword-cluster` (keyword architecture for one topic), `seo-content-brief` (one article), and `seo-keyword-niche` (longtail content tier).
+- README skills table extended to 21 rows.
+- README repo-layout block updated to show the new `seo-plan/` folder.
+
+### Known scope gaps surfaced by `seo-plan` (deferred)
+The skill explicitly flags two business-type templates with thin coverage in the current catalogue. These are not blockers — `seo-plan` degrades by recommending manual sub-steps — but they're real gaps worth tracking:
+- **`local` template** — no `seo-local` skill exists yet (GBP optimisation, NAP consistency, citations, location pages, multi-location). `seo-plan` flags Phase 0 manual GBP audit when business type is `local`.
+- **`ecommerce` template** — partial coverage. `seo-ads` reaches the Shopping pack via SERP-feature filters but does not cover Amazon marketplace, Merchant API data, product schema validation depth, or competitor pricing. A dedicated `seo-ecommerce` skill is the obvious follow-up if demand surfaces.
+
+### Changed
+- All three version strings bumped to 2.4.0.
+
 ## [2.3.1] — 2026-04-27
 
 Documentation patch surfacing v2.3.0's Firecrawl integration in the README.
