@@ -1,5 +1,7 @@
 # Audit issue severity mapping
 
+> Updated 2026-05-01 with IndexNow, extended security headers, and Dec-2025 JS-SEO risks (currency parity with `AgriciDaniel/claude-seo`).
+
 Maps SE Ranking's audit issue codes (and common issue names) to severity, suggested fix, and effort estimate. Used by `seo-technical-audit` to score impact × effort and produce the top-10 fix list.
 
 ## Severity scale
@@ -43,13 +45,18 @@ Maps SE Ranking's audit issue codes (and common issue names) to severity, sugges
 
 ### Security
 
-| Issue | Severity | Fix | Effort |
-|---|---|---|---|
-| HTTP page (not HTTPS) | Critical | Redirect HTTP → HTTPS site-wide; update internal links | M |
-| Mixed content (HTTPS page loading HTTP resources) | High | Update resource URLs to HTTPS or //protocol-relative | S |
-| Missing HSTS header | Medium | Add `Strict-Transport-Security` header | S |
-| Expired or self-signed certificate | Critical | Renew certificate via the CA | S |
-| Mixed-case domain in canonical | Low | Normalise to lowercase | S |
+| Issue code | Issue | Severity | Fix | Effort |
+|---|---|---|---|---|
+| `http_not_https` | HTTP page (not HTTPS) | Critical | Redirect HTTP → HTTPS site-wide; update internal links | M |
+| `mixed_content` | Mixed content (HTTPS page loading HTTP resources) | High | Update resource URLs to HTTPS or //protocol-relative | S |
+| `hsts_missing` | Missing HSTS header | Medium | Add `Strict-Transport-Security` header | S |
+| `cert_expired` | Expired or self-signed certificate | Critical | Renew certificate via the CA | S |
+| `domain_mixed_case` | Mixed-case domain in canonical | Low | Normalise to lowercase | S |
+| `csp_missing` | Content-Security-Policy header absent | Medium | Define a CSP policy (start with report-only, then enforce) | M |
+| `xframe_missing` | X-Frame-Options header absent | Low | Add `X-Frame-Options: SAMEORIGIN` (informational; CSP `frame-ancestors` supersedes) | S |
+| `xcontent_missing` | X-Content-Type-Options not set to `nosniff` | Low | Add `X-Content-Type-Options: nosniff` | S |
+| `referrer_policy_missing` | Referrer-Policy header absent | Low | Add `Referrer-Policy: strict-origin-when-cross-origin` (or stricter) | S |
+| `hsts_no_preload` | HSTS present but `preload` directive absent and domain not on Chromium HSTS preload list | Low | Add `preload` directive (`max-age≥31536000; includeSubDomains; preload`) and submit to hstspreload.org | S |
 
 ### Mobile
 
@@ -95,11 +102,32 @@ Maps SE Ranking's audit issue codes (and common issue names) to severity, sugges
 | Uncompressed images | Medium | Compress and convert to WebP/AVIF | M |
 | Missing caching headers | Low | Add `Cache-Control` to static assets | S |
 
+### JS Rendering (Dec-2025 risks)
+
+Per Google's December 2025 JavaScript SEO guidance update — four risks the SE Ranking crawler can't see (it doesn't execute JS). Detected via Firecrawl in step 8 of `SKILL.md` by comparing initial HTML against the JS-rendered DOM.
+
+| Issue code | Issue | Severity | Fix | Effort |
+|---|---|---|---|---|
+| `js_render_budget` | Rendering-budget cut: rendered HTML <50% of initial HTML size after JS execution (Google may stop rendering before main content loads) | High | Server-side render or pre-render critical content; reduce JS bundle so first paint contains the indexable content | L |
+| `js_canonical_mismatch` | Hydration mismatch: `metadata.canonical` after JS-render differs from initial-HTML canonical (Google may use either; canonical decisions become non-deterministic) | High | Identical canonical in initial HTML and post-hydration DOM; never inject canonical client-side | M |
+| `js_csr_meta_drift` | CSR pitfall: rendered title / H1 / meta description differ from initial HTML (these don't get indexed reliably; Google may use the empty initial values) | High | Serve final title / H1 / meta description in the initial server-rendered HTML rather than via JS injection | L |
+| `js_soft_404` | Soft-404 from JS errors: rendered body content <500 chars but HTTP status is 200 (likely JS failed to render and Google sees an empty page treated as soft-404) | Critical | Return real 404 status when content is missing; add SSR fallback so failed JS doesn't strand the page on a 200 with no body | M |
+
+### IndexNow
+
+Bing/Yandex/Naver-only signal — Google does not honour IndexNow. Low-severity by default (Bing-only benefit), but configuration mismatches are a Medium issue because they advertise the wrong key to crawlers.
+
+| Issue code | Issue | Severity | Fix | Effort |
+|---|---|---|---|---|
+| `indexnow_no_key` | Site doesn't ship `/<key>.txt` (no IndexNow key file detected at root) | Low | Generate an IndexNow key, host it at `/<key>.txt`, and reference it in submissions (Bing-only benefit; informational for Google-focused sites) | S |
+| `indexnow_key_mismatch` | `/<key>.txt` content ≠ host header API key (the served key file disagrees with the key advertised in the `x-indexnow-key` header / robots.txt hint) | Medium | Sync the file content with the advertised key; rotate if compromised | S |
+| `indexnow_not_submitted_recently` | Site has key but no recent submissions detected (key file present but URLs not pushed to IndexNow endpoints) | Low | Wire up automated submission on publish/update (informational — confirms the integration is live) | S |
+
 ## Priority scoring
 
 `priority_score = severity_weight × affected_pages / effort_weight`
 
-- severity_weight: Critical=4, High=3, Medium=2, Low=1
+- severity_weight: Critical=5, High=3, Medium=1, Low=0.5
 - effort_weight: S=1, M=3, L=5
 
 Top-10 fixes are the highest priority_score across all categories.

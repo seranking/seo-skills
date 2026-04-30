@@ -1,5 +1,7 @@
 # E-E-A-T scoring rubric (60 items)
 
+> **Sept-2025 QRG generalisation.** Updated for the September 2025 Quality Rater Guidelines and December 2025 core update — E-E-A-T applies broadly, not only to YMYL topics. The dimension definitions below, the 4 vetoes, and the AI-content-markers checklist are framed as defaults across all topics; the YMYL-specific calibrations are called out where they differ.
+
 15 items per dimension × 4 dimensions = 60 total. Score each: ✓ (full credit), ~ (partial), ✗ (fail). Dimension score = ✓ ÷ 15 × 100%. E-E-A-T composite = average of dimension scores.
 
 ## Veto items (any one triggers automatic NO PUBLISH)
@@ -19,7 +21,7 @@ First-hand engagement with the topic. Did the author actually do this?
 2. The piece includes original photos, screenshots, or video the author captured.
 3. Original data the author collected (survey, A/B test, log analysis) is presented.
 4. Specific, verifiable details only an experienced practitioner would know (numbers, edge cases, quirks).
-5. Process documentation (step-by-step accounts) reflects real execution, not hypothetical steps.
+5. Process documentation (step-by-step accounts) reflects real execution, not hypothetical steps. (see Word-count floors by page type — automatic ✗ if materially below floor without explicit auditor justification)
 6. Comparative observations across multiple instances (e.g., "across 12 client engagements, 8 saw…").
 7. The piece acknowledges trade-offs and failure modes the author encountered.
 8. Specific dates, locations, or contexts ground the experience claims.
@@ -43,7 +45,7 @@ Author's qualifications and depth on the topic.
 6. Citations to authoritative primary sources (peer-reviewed papers, government data, original research).
 7. Industry-specific terminology used correctly and consistently.
 8. Counter-arguments addressed and engaged, not strawmanned.
-9. Methodology section if the piece presents data or analysis.
+9. Methodology section if the piece presents data or analysis. (see Word-count floors by page type — automatic ✗ if materially below floor without explicit auditor justification)
 10. Disclosure of limitations of the analysis or recommendations.
 11. Up-to-date with current developments in the field (recent references, current best practices).
 12. Distinguishes correlation from causation when discussing data.
@@ -95,18 +97,36 @@ Signals that the page and publisher are honest, accurate, and accountable.
 
 ## AI-content markers (8 items — feeds veto #4)
 
-A 2025-09 Search Quality Rater Guidelines update made "low-effort AI-generated content" an explicit demotion signal. These markers don't ban AI use — they identify pieces where AI was clearly the *only* hand on the page. Count how many fire and combine with the YMYL + human-review-credit check in veto #4.
+A 2025-09 Search Quality Rater Guidelines update made "low-effort AI-generated content" an explicit demotion signal. These markers don't ban AI use — they identify pieces where AI was clearly the *only* hand on the page. Score each marker as **fired** or **not-fired** during the audit (record the decision and the evidence in `03-eeat-scoring.md`); count how many fire and combine with the YMYL + human-review-credit check in veto #4.
 
-1. **Generic LLM phrasing.** Multiple instances of "in today's world", "it's important to note that", "let's dive in", "navigating the landscape of", "in conclusion". Three or more on a single page = signal.
-2. **Repetitive structural template across the site.** Five+ recently published pieces on the same domain share the identical H2 → H2 → H2 → H2 → FAQ structure with similar word counts. Smells like a single prompt template.
-3. **No original insight or first-hand evidence.** Every claim paraphrases something already on the SERP top-10. Score 0/15 on Experience dimension is a strong corroborator.
-4. **Em-dash density + bolded-phrase peppering.** Heavy use of em-dashes mid-sentence + every 2–3 paragraphs has a bolded summary phrase. Common output of GPT-4-class models.
-5. **Hallucinated or unverifiable citations.** Inline citations exist but the linked source doesn't contain the cited claim, or the URL 404s, or the cited "study" can't be located. Spot-check 3 random citations.
-6. **AI-shaped author byline.** Byline reads "Editorial Team", "Staff Writer", "{SiteName} Team" with no linked profile, OR the byline links to a profile with no other articles, no LinkedIn, no real-world footprint.
-7. **No "reviewed by" or "fact-checked on" credit.** Especially for YMYL topics, absence of any human-accountability surface is itself a signal — combined with markers 1–6, suggests AI-only authorship.
-8. **Suspiciously round publishing cadence.** Same site shipped 20+ pieces on different topics in a week with no obvious editorial arc. (Use site `:` site search or `seo-content-brief`-style topic clustering on the domain to corroborate.)
+1. **Generic LLM phrasing without specificity.** Multiple instances of formulaic transitions and filler. Examples: "in today's world", "it's important to note that", "let's dive in", "navigating the landscape of", "in conclusion", "when it comes to", "at the end of the day". Detection: keyword-search the body for the phrase set; **three or more matches = fired**.
+2. **Repetitive structural template across the site.** Five or more recently published pieces on the same domain share the identical H2 → H2 → H2 → H2 → FAQ structure with similar word counts and identical section labels (e.g., every post has "What is X?", "Benefits of X", "How to use X", "FAQ"). Smells like a single prompt template. Detection: spot-check 5 sibling posts via `WebFetch` or `seo-firecrawl` site map; **identical skeleton on ≥4 of 5 = fired**.
+3. **No original insight or first-hand evidence.** Every claim paraphrases something already on the SERP top-10; no original photo, no proprietary data, no specific anecdote. A 0/15 or 1/15 score on the Experience dimension is a strong corroborator. Detection: pick 3 non-trivial claims and check whether each appears (often verbatim or near-verbatim) in the SERP top-10 for the target keyword; **3/3 paraphrased without attribution = fired**.
+4. **Em-dash density + bolded-phrase peppering.** Heavy use of em-dashes mid-sentence + every 2–3 paragraphs has a bolded summary phrase. Common output of GPT-4-class models. Detection: count em-dashes per 1,000 words; **>15 em-dashes per 1,000 words combined with bolded-phrase pattern in ≥30% of paragraphs = fired**.
+5. **Hallucinated or unverifiable citations.** Inline citations exist but the linked source doesn't contain the cited claim, or the URL 404s, or the cited "study" can't be located via Google Scholar / publisher's site. Detection: spot-check 3 random inline citations; **≥1 of 3 fails verification = fired**.
+6. **AI-shaped author byline.** Byline reads "Editorial Team", "Staff Writer", "{SiteName} Team" with no linked profile; OR the byline links to a profile page with no other articles, no LinkedIn, no real-world footprint. Detection: click the byline; check for a real bio with linked social or LinkedIn profile; **generic-team byline OR ghost profile = fired**.
+7. **No "reviewed by" or "fact-checked on" credit.** Especially for YMYL topics, absence of any human-accountability surface is itself a signal — combined with markers 1–6, suggests AI-only authorship. Detection: search the page for "reviewed by", "fact-checked", "medically reviewed", "edited by", "last reviewed"; **none found = fired**.
+8. **Suspiciously round publishing cadence.** Same site shipped 20+ pieces on different topics in a week with no obvious editorial arc, or a brand-new domain published 50+ articles in its first month. Use `site:domain.com` search or `seo-content-brief`-style topic clustering on the domain to corroborate. Detection: list the most recent 30 published-date timestamps on the domain; **≥20 articles within a 7-day span across unrelated topics = fired**.
 
-**Counting rule:** mark each as fired/not-fired. ≥4 fired = AI-content suspected. Combine with veto #4's YMYL + missing-human-review check before triggering the veto.
+**Counting rule:** mark each marker as fired (1) or not-fired (0); record the evidence inline. **≥4 fired = AI-content suspected.** Combine with veto #4's YMYL + missing-human-review check before triggering the veto.
+
+---
+
+## Word-count floors by page type
+
+Detect the page type from URL pattern, H1 phrasing, and JSON-LD `@type`, then apply the floor below.
+
+| Page type | Floor | Rationale |
+|---|---|---|
+| Ultimate guide / pillar | 2,500 | Comprehensive coverage of a topic |
+| How-to | 1,200 | Step-by-step depth |
+| Listicle / best-of | 1,500 | Per-item description depth |
+| Comparison (X vs Y) | 1,800 | Feature matrix + verdict + rationale |
+| Explainer | 1,200 | Concept depth + examples |
+| Review (single product) | 1,500 | Pros / cons / verdict + evidence |
+| Landing page (commercial) | 600 | Conversion-led, less depth-driven |
+
+These are floors, not targets. A 1,000-word how-to that's deeply original outperforms a 2,000-word how-to padded with generic intro/conclusion. Use the floors as a thin-content tripwire — anything materially below the floor for its page type fails the "depth" E-E-A-T item by default unless the auditor explicitly justifies the exception.
 
 ---
 

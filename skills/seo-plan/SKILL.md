@@ -20,6 +20,21 @@ This is the "what should we work on next quarter" skill. It does not replace spe
 
 ## Process
 
+0. **Google data availability check (advisory, not blocking)**
+   - Run `python3 scripts/google_auth.py --check --json`. If `tier >= 0`, the downstream specialist skills (technical-audit, page, content-audit, drift) will enrich their outputs with real Google field data — and `seo-plan` ingests those richer outputs in step 4. The plan itself doesn't dispatch `seo-google` directly; it prints a one-line notice so the user knows the option is on the table:
+   ```
+   > Google APIs detected (tier {n}, available: {comma-list}). Downstream specialist
+   > skills (seo-technical-audit, seo-page, seo-content-audit, seo-drift) will enrich
+   > their outputs with real CrUX / GSC / GA4 / URL Inspection data automatically.
+   ```
+   - If creds are missing, the plan continues with SE Ranking-only data and prints:
+   ```
+   > Google APIs not configured. To enrich downstream phases with real CWV / GSC /
+   > GA4 / indexation data, run `bash extensions/google/install.sh`. Plan continues
+   > with SE Ranking data only.
+   ```
+   - This is the **lightest possible auto-spawn** — `seo-plan` doesn't run `seo-google` itself (transferring friction to a single command is theirs' anti-pattern we critiqued in `EVAL_RESULT_v2.md`); it surfaces the option so the user can opt in or out before specialist skills run. See `skills/seo-google/references/cross-skill-integration.md` § "seo-plan" for the full rationale.
+
 1. **Detect business type** `DATA_getDomainOverviewWorldwide`, plus a Firecrawl `scrape` of the homepage if available
    - Inspect title, H1, JSON-LD types, primary nav patterns.
    - Classify as one of: `saas`, `ecommerce`, `local`, `publisher`, `agency`, `b2b-services`, `marketplace`. If ambiguous, ask the user once.
@@ -34,13 +49,38 @@ This is the "what should we work on next quarter" skill. It does not replace spe
    - For each: organic keywords, traffic share, DA, top topical clusters they own.
    - Identifies who the user is *actually* competing with on the SERP (often different from who they think).
 
-4. **Pull specialist inputs in parallel** (do NOT re-run these inside `seo-plan` — invoke the specialist skills separately and ingest their outputs if already produced; if not produced, queue them as Phase 0)
-   - `seo-technical-audit` → site-wide technical debt list with severity.
-   - `seo-content-audit` (sampled across top 10 traffic pages) → E-E-A-T + CITE quality baseline.
-   - `seo-competitor-gap-analysis` → keyword gap buckets by intent + difficulty.
-   - `seo-ai-search-share-of-voice` → AI Search visibility vs competitors.
-   - `seo-backlinks-profile` → link health + toxic candidates.
-   - If any of these are missing, the plan opens with **Phase 0: Discovery** — running them is the first sprint's work.
+4. **Pull specialist inputs — confirm-then-dispatch pattern**
+   - **4a. Detect existing outputs.** In the current working directory, look for any folder matching the patterns below dated within the last 30 days (treat folders older than 30 days as stale and re-list them as missing):
+     - `seo-technical-audit-*`
+     - `seo-content-audit-*`
+     - `seo-competitor-gap-analysis-*`
+     - `seo-ai-search-share-of-voice-*`
+     - `seo-backlinks-profile-*`
+   - For each present folder, ingest its primary deliverable (`TECH-AUDIT.md`, `VERDICT.md` rollup, `GAPS.md`, `REPORT.md`, `PROFILE.md` respectively).
+   - **4b. Build the missing list.** For each prerequisite that did not have a fresh output, look up its credit-cost figure from the specialist's own SKILL.md (read those when forming the prompt — figures may drift):
+     - `seo-technical-audit` → varies by page count for a fresh audit; ~6 Firecrawl credits for the modern-signals step. Cite "varies; check page count" if no recent audit cached.
+     - `seo-content-audit` → ~10–15 SE Ranking credits + 1 Firecrawl credit per audited URL (default cap 50; for the seo-plan top-10-pages scope, expect ~10–15 SE Ranking + ~10 Firecrawl).
+     - `seo-competitor-gap-analysis` → ~30–80 credits for 10 seeds.
+     - `seo-ai-search-share-of-voice` → ~10–20 credits (leaderboard + ~20 prompts × N domains).
+     - `seo-backlinks-profile` → ~25–40 SE Ranking credits.
+   - **4c. Print the confirmation prompt** (single block, exactly this shape, with the missing-list filtered to only what is actually missing):
+   ```
+   To produce a defensible plan, seo-plan needs outputs from N specialists not yet
+   run for {domain}:
+   - seo-technical-audit (~{N} credits)
+   - seo-content-audit (~{N} credits)
+   - seo-competitor-gap-analysis (~{N} credits)
+   - seo-ai-search-share-of-voice (~{N} credits)
+   - seo-backlinks-profile (~{N} credits)
+   Total estimated cost: ~{N} credits.
+   Run them now in this session? (y/N — default N preserves the existing v2.6 behavior of asking the user to run them manually first)
+   ```
+   - **4d. If user answers `y`:** dispatch each missing specialist in this order, ingesting each primary deliverable as it completes:
+     - **Parallel batch (independent):** `seo-technical-audit`, `seo-competitor-gap-analysis`, `seo-ai-search-share-of-voice`, `seo-backlinks-profile`.
+     - **Sequential after the batch:** `seo-content-audit` — its top-10-pages scope depends on knowing the top traffic pages from `seo-competitor-gap-analysis` / `DATA_getDomainKeywords`, so it must run after the gap-analysis batch completes.
+     - Each specialist runs its own `DATA_getCreditBalance` preflight and surfaces cost before proceeding (their existing behaviour — `seo-plan` does not bypass it). If any specialist aborts on a credit-balance check, surface that abort to the user and let them decide whether to top up or skip.
+     - After every dispatch, ingest the new folder the same way step 4a does.
+   - **4e. If user answers `N` (or anything else — default `N`):** fall through to the existing v2.6 behaviour — the plan opens with **Phase 0: Discovery**, and running each missing specialist becomes the first sprint's work. This preserves the user's control over credit spend in environments where the specialists should be scheduled or batched separately.
 
 5. **Score the four pillars**
    - **Technical health** (0–100): from `seo-technical-audit` severity-weighted issue count.
@@ -82,16 +122,19 @@ Folder `seo-plan-{domain-slug}-{YYYYMMDD}/`:
 
 ```
 seo-plan-{domain-slug}-{YYYYMMDD}/
-├── 01-baseline.md                  (where you are now)
-├── 02-competitive-frame.md         (who you're actually competing with)
-├── 03-pillar-scores.md             (technical / content / topical / AI Search)
-├── 04-phase-1-foundations.md
-├── 05-phase-2-build.md
-├── 06-phase-3-compound.md
-├── 07-dependencies-and-critical-path.md
-├── 08-metrics.md
-└── PLAN.md                         (synthesis)
+├── PLAN.md                              (synthesis — primary deliverable; inlines 01-baseline, 02-competitive-frame, 07-dependencies, 08-metrics as sections)
+├── 04-phase-1-foundations.md            (load-bearing — owners share single phase files in standups)
+├── 05-phase-2-build.md                  (load-bearing — owners share single phase files)
+├── 06-phase-3-compound.md               (load-bearing — owners share single phase files)
+└── evidence/
+    ├── 01-baseline.md                   (where you are now — raw data inlined into PLAN.md)
+    ├── 02-competitive-frame.md          (who you're actually competing with — raw data inlined into PLAN.md)
+    ├── 03-pillar-scores.md              (technical / content / topical / AI Search — scoring math)
+    ├── 07-dependencies-and-critical-path.md  (dependency map — inlined as PLAN.md section)
+    └── 08-metrics.md                    (metric tables — inlined as PLAN.md section)
 ```
+
+Top-level: `PLAN.md` + the three phase files (`04`/`05`/`06`). Owners share single phase files in standups, so phase files stay top-level rather than collapsing into PLAN.md. The verbatim-duplicate sections (baseline, competitive frame, dependencies, metrics) are inlined into PLAN.md but the raw step files are preserved in `evidence/` along with the pillar-scoring math.
 
 `PLAN.md` follows this shape:
 
@@ -154,7 +197,9 @@ Run Phase 1 work items. After week 4, run `seo-drift compare` against the baseli
 
 ## Tips
 
-- **`seo-plan` does not run other skills' work** — it sequences them. If `seo-technical-audit` hasn't been run, Phase 0 of the plan is "run it." Don't silently re-execute specialist skills inside this one; you'll burn credits and produce stale duplicates.
+- **Default is "no auto-dispatch."** The confirm prompt in step 4c defaults to `N`. If the user just hits Enter (or answers anything other than an explicit `y`), `seo-plan` falls through to the v2.6 Phase-0 behaviour and lists the missing specialists as the first sprint's work. This preserves user control over credit spend — important when the user is on a tight SE Ranking budget or wants to schedule specialists separately.
+- **Auto-dispatch (the `y` path) is the convenience option.** When the user wants a finished plan in one session and is comfortable with the displayed credit estimate, the `y` path runs the missing specialists in the optimal parallel-then-sequential order described in step 4d, ingests their outputs, and proceeds straight into pillar scoring (step 5). No silent re-execution: every dispatch is gated by the single confirmation in step 4c.
+- **Auto-dispatch respects each specialist's own credit-balance preflight.** Each specialist already calls `DATA_getCreditBalance` at its first step and surfaces cost before consuming credits — `seo-plan` does not bypass that gate. If a specialist aborts on its preflight (insufficient credits, user declines its inner cost prompt), `seo-plan` surfaces the abort and lets the user choose to top up, skip that specialist (and let it remain a Phase-0 work item), or cancel the rest of the dispatch.
 - **Auto-detect business type cheaply.** Homepage `<title>`, schema `@type`, and top-nav anchors are usually enough. Ask the user only when truly ambiguous.
 - **The lead theme is the lowest pillar score.** Don't pick the pillar the user is most excited about — pick the one the data says is the constraint. Surface this gap explicitly if they conflict.
 - **Three phases, even for 30-day horizons.** Compress, don't drop. A 30-day plan is foundations (weeks 1–2), build (weeks 2–3), measure (week 4). The structure forces sequencing discipline.

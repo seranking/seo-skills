@@ -45,7 +45,7 @@ Produce conversion-tuned landing pages targeting comparative-intent keywords ("X
      - Schema types from `<script type="application/ld+json">` blocks (`Product` ×N, `BreadcrumbList`, `FAQPage`, `Review`, `AggregateRating`).
      - `og:title` / `og:description` / `og:image` / `twitter:card` from `metadata`.
      - `<title>` and meta description lengths from real HTML.
-   - **If Firecrawl unavailable:** WebFetch portion runs unchanged. The "schema types" line in `04-existing-pages-teardown.md` reads `(skipped — Firecrawl required for JSON-LD)`. Schema generation in step 8 falls back to a default `Product + BreadcrumbList + FAQPage` template instead of mirroring whatever the winners use.
+   - **If Firecrawl unavailable:** WebFetch portion runs unchanged. The "schema types" line in `evidence/04-existing-pages-teardown.md` reads `(skipped — Firecrawl required for JSON-LD)`. Schema generation in step 8 falls back to a default `Product + BreadcrumbList + FAQPage` template instead of mirroring whatever the winners use.
    - This anchors the draft in observed-rewarded-pattern.
 
 5b. **Bulk competitor scrape** `mcp__firecrawl-mcp__firecrawl_scrape` (optional, opt-in)
@@ -78,15 +78,18 @@ Create a folder `seo-competitor-pages-{target-slug}-{YYYYMMDD}/` with:
 
 ```
 seo-competitor-pages-{target-slug}-{YYYYMMDD}/
-├── 01-competitor-context.md      (DATA_getDomainCompetitors)
-├── 02-keyword-overlap.md         (DATA_getDomainKeywords for each brand)
-├── 03-comparative-serp.md        (top 10 + PAA for the target keyword)
-├── 04-existing-pages-teardown.md (top-3 SERP winners' structure + schema/og — Firecrawl-recovered)
-├── 05-feature-matrix.md          (inferred dimensions × brands)
-├── 05b-competitor-elements.csv   (only if --bulk-scrape ran: competitor URL × on-page-element grid)
-├── schema.jsonld                 (paste-ready Product + Breadcrumb + FAQ)
-└── COMPARISON.md                 (the page draft)
+├── COMPARISON.md                     (the page draft — primary deliverable)
+├── 05-feature-matrix.md              (inferred dimensions × brands — load-bearing reference for PMs/writers)
+├── schema.jsonld                     (paste-ready Product + Breadcrumb + FAQ — load-bearing artefact for engineering)
+├── 05b-competitor-elements.csv       (only if --bulk-scrape ran: competitor URL × on-page-element grid)
+└── evidence/
+    ├── 01-competitor-context.md      (DATA_getDomainCompetitors — raw step output)
+    ├── 02-keyword-overlap.md         (DATA_getDomainKeywords for each brand — raw step output)
+    ├── 03-comparative-serp.md        (top 10 + PAA for the target keyword — raw step output)
+    └── 04-existing-pages-teardown.md (top-3 SERP winners' structure + schema/og — Firecrawl-recovered)
 ```
+
+Top-level: `COMPARISON.md` + `05-feature-matrix.md` + `schema.jsonld`. The 01–04 step files preserve raw API/scrape outputs in `evidence/`. `05b-competitor-elements.csv` only appears when `--bulk-scrape` was passed.
 
 `COMPARISON.md` for an "X vs Y" page follows this shape:
 

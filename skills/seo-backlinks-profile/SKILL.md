@@ -26,10 +26,11 @@ If your workflow specifically *requires* multi-source blending (large agencies, 
 
 ## Process
 
-1. **Validate & preflight**
-   - Normalise domain.
-   - `DATA_getCreditBalance` — surface remaining credits. Profile run is moderate cost.
-   - **Firecrawl availability check.** If `mcp__firecrawl-mcp__firecrawl_scrape` is available, the optional step 8b (link-source verification) is offered — scrapes top-20 referring domains' linking pages to verify the link is still present and what `rel` attribute it carries (dofollow / nofollow / sponsored / UGC). Cost: 20 Firecrawl credits per run. Default off — opt in with `--verify-sources`. Pass `--no-firecrawl` to skip even if available.
+1. **Validate target & preflight.** See `skills/seo-firecrawl/references/preflight.md` for the canonical 3-stage preflight (credit balance, Firecrawl availability, Google APIs). Skill-specific notes:
+   - Normalise domain before continuing.
+   - Estimated SE Ranking cost for this skill: moderate (full-profile run; no per-keyword multiplier).
+   - Firecrawl: optional. When `--verify-sources` is passed, step 8b (link-source verification) scrapes top-20 referring domains' linking pages to verify each link is still present and what `rel` it carries (dofollow / nofollow / sponsored / UGC), ~20 Firecrawl credits per run. Default off; pass `--no-firecrawl` to skip even if available.
+   - Google APIs: not used.
 
 2. **Profile summary** `DATA_getBacklinksSummary`
    - Total backlinks, total referring domains, dofollow/nofollow ratio, link-type distribution (text / image / form / frame), growth velocity over the last 30/90 days.
@@ -62,7 +63,7 @@ If your workflow specifically *requires* multi-source blending (large agencies, 
    - Triggered only when `--verify-sources` is passed (default off — credit-conscious).
    - For the top 20 referring domains by authority (from step 3), pick the highest-authority linking page per domain. Scrape each (20 Firecrawl credits typical).
    - For each scrape, parse the returned `html` for `<a href>` matching the target domain. Capture: link still present (`true`/`false`/`page-404`), `rel` attribute (`dofollow` if absent or empty, else the literal value: `nofollow`, `ugc`, `sponsored`, or combinations), surrounding context (anchor text + 50 chars before/after).
-   - Surface mismatches against the SE Ranking-reported state in `08b-source-verification.md`:
+   - Surface mismatches against the SE Ranking-reported state in `evidence/08b-source-verification.md`:
      - Link gone — SE Ranking still reports it as live (lag/error).
      - `rel` attribute differs from what SE Ranking flagged.
      - Source page returns non-200.
@@ -82,17 +83,20 @@ Create a folder `seo-backlinks-profile-{target-slug}-{YYYYMMDD}/` with:
 
 ```
 seo-backlinks-profile-{target-slug}-{YYYYMMDD}/
-├── 01-summary.md              (DATA_getBacklinksSummary top-line)
-├── 02-referring-domains.md    (top N with authority)
-├── 03-anchors.md              (anchor distribution + classification)
-├── 04-authority-distribution.md (histogram)
-├── 05-diversity.md            (IPs + subnets + concentration)
-├── 06-trend.md                (last 6 months new/lost)
-├── 07-losses-sample.md        (recent lost backlinks)
-├── 08b-source-verification.md (only if --verify-sources ran: live link + rel attribute checks for top-20 sources)
-├── disavow-candidates.csv     (toxic-flagged rows for review)
-└── PROFILE.md                 (synthesised report)
+├── PROFILE.md                       (synthesised report — primary deliverable; inlines summary, authority distribution, diversity, trend)
+├── 02-referring-domains.md          (top N with authority — load-bearing reference for outreach/audit)
+├── 03-anchors.md                    (anchor distribution + classification — load-bearing reference)
+├── disavow-candidates.csv           (toxic-flagged rows for review — load-bearing CSV)
+└── evidence/
+    ├── 01-summary.md                (DATA_getBacklinksSummary top-line — raw step output)
+    ├── 04-authority-distribution.md (histogram — raw step output)
+    ├── 05-diversity.md              (IPs + subnets + concentration — raw step output)
+    ├── 06-trend.md                  (last 6 months new/lost — raw step output)
+    ├── 07-losses-sample.md          (recent lost backlinks)
+    └── 08b-source-verification.md   (only if --verify-sources ran: live link + rel attribute checks for top-20 sources)
 ```
+
+Step files 01, 04, 05, 06 are inlined as sections in `PROFILE.md`; the copies in `evidence/` preserve raw step output for reproducibility. `02-referring-domains.md`, `03-anchors.md`, and `disavow-candidates.csv` stay at top level — outreach/audit teams consult them directly.
 
 `PROFILE.md` follows this shape:
 

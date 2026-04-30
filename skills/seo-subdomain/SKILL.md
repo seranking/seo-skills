@@ -31,7 +31,7 @@ Map a domain's subdomain ecosystem. Which subdomains exist, what each ranks for,
 
 4. **Per-subdomain top keywords** `DATA_getDomainKeywords`
    - For each subdomain: top 100 organic keywords with positions, intent, traffic.
-   - Cluster keywords by topic (use semantic similarity + token overlap, same heuristic as `seo-keyword-cluster`).
+   - Cluster keywords by topic. This skill's grouping is a lightweight per-subdomain ownership map, not a content plan — token-grouping by head term + intent is sufficient here. (For full content-cluster planning use `seo-keyword-cluster`, which now clusters by SERP overlap, not text similarity.)
    - Each subdomain gets a list of "owned topics" (clusters where it dominates) and "minor topics".
 
 5. **Per-subdomain competitors** `DATA_getDomainCompetitors`
@@ -64,18 +64,21 @@ Create a folder `seo-subdomain-{target-slug}-{YYYYMMDD}/` with:
 
 ```
 seo-subdomain-{target-slug}-{YYYYMMDD}/
-├── 01-subdomains-list.md         (DATA_getDomainSubdomains)
-├── 02-overview-by-subdomain.md   (per-subdomain overview rows)
-├── 03-keywords-by-subdomain/
-│   ├── blog-example-com.md
-│   ├── docs-example-com.md
-│   └── ...                       (one per subdomain)
-├── 04-competitors-by-subdomain.md
-├── 05-backlinks-by-subdomain.md
-├── 06-topic-ownership-map.md     (cluster × subdomain matrix)
-├── 07-fragmentation-flags.md     (cannibalization detected)
-└── SUBDOMAINS.md                 (synthesised report + recommendations)
+├── SUBDOMAINS.md                       (synthesised report + recommendations — primary deliverable)
+├── 06-topic-ownership-map.md           (cluster × subdomain matrix — load-bearing reference content teams brief from)
+├── 07-fragmentation-flags.md           (cannibalization detected — load-bearing reference for consolidation decisions)
+└── evidence/
+    ├── 01-subdomains-list.md           (DATA_getDomainSubdomains — raw step output)
+    ├── 02-overview-by-subdomain.md     (per-subdomain overview rows)
+    ├── 03-keywords-by-subdomain/
+    │   ├── blog-example-com.md
+    │   ├── docs-example-com.md
+    │   └── ...                          (one per subdomain)
+    ├── 04-competitors-by-subdomain.md
+    └── 05-backlinks-by-subdomain.md
 ```
+
+Top-level: `SUBDOMAINS.md` + `06-topic-ownership-map.md` + `07-fragmentation-flags.md`. Content teams brief from the ownership map; consolidation decisions cite the fragmentation flags directly. The 01–05 step files preserve raw API outputs in `evidence/`.
 
 `SUBDOMAINS.md` follows this shape:
 
@@ -120,10 +123,10 @@ seo-subdomain-{target-slug}-{YYYYMMDD}/
 ## Risk notes
 
 - Subdomain consolidation requires careful 301 redirect mapping; track via `seo-drift` after the migration.
-- A subdomain with separate backlinks (per `05-backlinks-by-subdomain.md`) is harder to consolidate without losing link equity — plan accordingly.
+- A subdomain with separate backlinks (per `evidence/05-backlinks-by-subdomain.md`) is harder to consolidate without losing link equity — plan accordingly.
 
 ## Raw data
-- See per-subdomain files under `03-keywords-by-subdomain/`.
+- See per-subdomain files under `evidence/03-keywords-by-subdomain/`.
 - Topic ownership matrix: `06-topic-ownership-map.md`.
 ```
 

@@ -65,15 +65,18 @@ Create a folder `seo-ads-{target-slug}-{YYYYMMDD}/` with:
 
 ```
 seo-ads-{target-slug}-{YYYYMMDD}/
-├── 01-paid-footprint.md           (domain mode: brand's paid keywords)
-├── 02-bidding-landscape.md        (keyword mode: advertisers on the keyword)
-├── 03-question-variants.md        (DATA_getKeywordQuestions enrichment)
-├── 04-serp-ad-shopping-pack.md    (SERP feature inventory per keyword)
-├── 05-ad-copy-patterns.md         (clustered headline/description patterns)
-├── 06-paid-keyword-gap.md         (domain mode: type='adv' diff vs competitors)
-├── recommended-keywords.csv       (bid-keyword shortlist)
-└── ADS.md                         (synthesised brief)
+├── ADS.md                              (synthesised brief — primary deliverable; inlines paid footprint, bidding landscape, SERP ad/shopping pack, ad copy patterns, paid keyword gap)
+├── recommended-keywords.csv            (bid-keyword shortlist — load-bearing CSV the PPC team pastes into bid tooling)
+└── evidence/
+    ├── 01-paid-footprint.md           (domain mode: brand's paid keywords — raw step output)
+    ├── 02-bidding-landscape.md        (keyword mode: advertisers on the keyword — raw step output)
+    ├── 03-question-variants.md        (DATA_getKeywordQuestions enrichment)
+    ├── 04-serp-ad-shopping-pack.md    (SERP feature inventory per keyword)
+    ├── 05-ad-copy-patterns.md         (clustered headline/description patterns)
+    └── 06-paid-keyword-gap.md         (domain mode: type='adv' diff vs competitors)
 ```
+
+Step files 01, 02, 04, 05, 06 are inlined as sections in `ADS.md`; the copies in `evidence/` preserve the raw step outputs for reproducibility.
 
 `ADS.md` follows this shape:
 

@@ -49,6 +49,31 @@ These thresholds drive the red / yellow / green coding in `DRIFT-REPORT.md`. Tun
 | Loss of any DA-50+ referring domain | red regardless of count |
 | Net new backlinks > +20% | green |
 
+## Field-data drift (CrUX) — only when google-api.json is configured AND `--skip-cwv` not set
+
+| Metric | Yellow | Red |
+|---|---|---|
+| LCP p75 increase | ≥10% (and crosses 2500ms threshold) | ≥20% |
+| INP p75 increase | ≥10% (and crosses 200ms threshold) | ≥20% |
+| CLS p75 absolute increase | ≥0.025 | ≥0.05 |
+| FCP p75 increase | ≥20% | ≥30% |
+| TTFB p75 increase | ≥20% | ≥30% |
+| 25-week CrUX trend reversal (improving → degrading) | yellow | — |
+
+**Cross-reference:** when an LCP / INP / CLS field-data drift fires, deep-dive with `seo-google` directly: `python3 scripts/pagespeed_check.py {url} --json` (Lighthouse + CrUX combined view) for waterfall / opportunity-list context. Mirrors theirs at `seo-drift/references/comparison-rules.md:88`.
+
+## Indexation drift (GSC URL Inspection) — URL mode only, Tier 1+
+
+| Change | Severity |
+|---|---|
+| Inspection status changed from `INDEXED` to anything else | red |
+| `googleCanonical` changed (Google now picks a different canonical) | yellow |
+| `googleCanonical` no longer matches `userCanonical` | red |
+| `lastCrawlTime` >60 days old (Google hasn't visited recently) | yellow |
+| `coverageState` text changed (e.g. "Submitted and indexed" → "Crawled - currently not indexed") | red |
+
+**Cross-reference:** when indexation drift fires, deep-dive with `python3 scripts/gsc_inspect.py {url} --json` for Google's full verdict and any associated rich-result issues, then run `python3 scripts/gsc_query.py --property {property} --url {url} --json` to see whether the change correlates with impression / click drops over the same window.
+
 ## What to investigate first
 
 When `DRIFT-REPORT.md` shows multiple red findings, the recommended order:

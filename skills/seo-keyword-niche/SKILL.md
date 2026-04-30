@@ -77,16 +77,19 @@ Create a folder `seo-keyword-niche-{target-slug}-{YYYYMMDD}/` with:
 
 ```
 seo-keyword-niche-{target-slug}-{YYYYMMDD}/
-├── 01-seed-expansion.md         (raw expansion per seed)
-├── 02-question-keywords.md      (DATA_getKeywordQuestions)
-├── 03-filtered-keywords.md      (post min-vol / max-kd filter)
-├── 04-cluster-assignment.md     (every keyword and its cluster)
-├── 05-serp-samples.md           (top 10 for representative cluster keywords)
-├── 06-template-spec.md          (fields, URL pattern, sample pages)
-├── 07-quality-gates.md          (thin-content guardrails)
-├── keywords.csv                 (all enriched keywords with cluster + intent)
-└── KEYWORD-NICHE-PLAN.md        (synthesised plan)
+├── KEYWORD-NICHE-PLAN.md           (synthesised plan — primary deliverable)
+├── keywords.csv                    (all enriched keywords with cluster + intent — load-bearing CSV the publishing team paste into CMS/sheets)
+├── 06-template-spec.md             (fields, URL pattern, sample pages — load-bearing reference writers consult directly)
+├── 07-quality-gates.md             (thin-content guardrails — load-bearing reference release-gate readers consult directly)
+└── evidence/
+    ├── 01-seed-expansion.md        (raw expansion per seed — raw step output)
+    ├── 02-question-keywords.md     (DATA_getKeywordQuestions)
+    ├── 03-filtered-keywords.md     (post min-vol / max-kd filter)
+    ├── 04-cluster-assignment.md    (every keyword and its cluster)
+    └── 05-serp-samples.md          (top 10 for representative cluster keywords)
 ```
+
+Top-level: `KEYWORD-NICHE-PLAN.md` + `keywords.csv` + `06-template-spec.md` + `07-quality-gates.md`. Writers consult the template spec directly when authoring; release gates consult the quality gates directly. The 01–05 step files preserve raw API/clustering outputs in `evidence/`.
 
 `KEYWORD-NICHE-PLAN.md` shape:
 

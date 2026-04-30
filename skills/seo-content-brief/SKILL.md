@@ -44,7 +44,8 @@ Turn a domain plus a topic intent into a complete content editor brief: target k
      - From `metadata`: `<title>` length (the real string, not markdown's first heading), meta description length, `og:title`, `og:description`, `og:image`, `twitter:card`.
      - From the returned `html`: every `<script type="application/ld+json">` block. Parse and list `@type`s per winner (Article, FAQPage, BreadcrumbList, Product, etc.) — these become the "schema baseline" for the new article.
      - On-page signals: hero-image presence, byline structure (`<a rel="author">`, `<meta name="author">`), table count, code-block count.
-   - **If Firecrawl unavailable (or `--no-firecrawl` passed):** WebFetch portion runs unchanged. The brief's "Top 3 winners — on-page benchmark" subsection (see Output) emits `(skipped — Firecrawl required for schema/og:* on competitor pages)`.
+   - **Classify the brief's template** against the 8-template map in `references/intent-template-map.md`. Cross-reference: (a) the dominant page type across the SERP top-10 (use the heuristics in `skills/seo-sxo/references/page-type-patterns.md`), (b) PAA patterns from step 5, (c) the keyword's intent classification from `DATA_getRelatedKeywords`. Pick one of: `ultimate-guide` / `how-to` / `listicle` / `explainer` / `comparison` / `review` / `best-of` / `landing-page`. If the SERP is split across types, follow the MIXED rule (see Tips). The chosen template determines the recommended H1/H2 outline shape and word-count floor — record both the template and a one-sentence justification in `BRIEF.md`.
+   - **If Firecrawl unavailable (or `--no-firecrawl` passed):** WebFetch portion runs unchanged. The brief's "Top 3 winners — on-page benchmark" subsection (see Output) emits `(skipped — Firecrawl required for schema/og:* on competitor pages)`. Template classification still runs from WebFetch + SERP data.
 
 7. **Internal linking plan**
    - `DATA_getDomainKeywords` filtered to the target domain plus WebFetch of 5 high-ranking pages on topically adjacent queries.
@@ -54,23 +55,29 @@ Turn a domain plus a topic intent into a complete content editor brief: target k
 
 ## Output format
 
-Create a folder `seo-content-brief-{target-slug}-{YYYYMMDD}/` with one file per step plus the final `BRIEF.md`:
+Create a folder `seo-content-brief-{target-slug}-{YYYYMMDD}/` with the synthesised brief at the top level and step files in `evidence/`:
 
 ```
 seo-content-brief-{target-slug}-{YYYYMMDD}/
-├── 01-domain-overview.md
-├── 02-competitors.md
-├── 03-keyword-gaps.md
-├── 04-serp-and-keywords.md
-├── 05-content-analysis.md
-├── 06-internal-links.md
-└── BRIEF.md
+├── BRIEF.md                        (writer-ready synthesis — primary deliverable; inlines 01-domain-overview, 02-competitors, 06-internal-links into a "Context" section)
+└── evidence/
+    ├── 01-domain-overview.md       (DATA_getDomainOverviewWorldwide raw — preserved for reproducibility)
+    ├── 02-competitors.md           (DATA_getDomainCompetitors raw)
+    ├── 03-keyword-gaps.md          (DATA_getDomainKeywordsComparison filtered)
+    ├── 04-serp-and-keywords.md     (DATA_getSerpResults + related/question keywords)
+    ├── 05-content-analysis.md      (top-3 winners' H-spine + on-page benchmark)
+    └── 06-internal-links.md        (target domain pages + proposed anchors)
 ```
+
+Top-level: `BRIEF.md` only — a freelance writer should not need to open anything else. Step files preserve the raw API/scrape outputs in `evidence/` for reproducibility / to back up the editor brief.
 
 `BRIEF.md` follows this shape:
 
 ```markdown
 # Content Brief: {proposed title}
+
+**Template type:** {one of: ultimate-guide / how-to / listicle / explainer / comparison / review / best-of / landing-page / MIXED}
+**Why this template:** {one-sentence justification grounded in SERP top-10 page-type majority + PAA pattern + keyword intent}
 
 ## Target keyword
 - Primary: {kw} ({volume}/mo, KD {kd}, intent: informational)
@@ -133,12 +140,12 @@ Cite: {sources to link out to}
 - Target: ~{n}/mo at position 1-3
 
 ## Raw data references
-- 01-domain-overview.md
-- 02-competitors.md
-- 03-keyword-gaps.md
-- 04-serp-and-keywords.md
-- 05-content-analysis.md
-- 06-internal-links.md
+- evidence/01-domain-overview.md
+- evidence/02-competitors.md
+- evidence/03-keyword-gaps.md
+- evidence/04-serp-and-keywords.md
+- evidence/05-content-analysis.md
+- evidence/06-internal-links.md
 ```
 
 ## Tips
@@ -149,3 +156,4 @@ Cite: {sources to link out to}
 - Keep the brief self-contained. A freelance writer should not need to open the raw-data files unless they want to double-check something.
 - Do not hallucinate keyword difficulty or volume. If an endpoint returns null, mark the field unknown in the brief rather than guessing.
 - If the topic triggers AI Overviews, the AI Search angle section is mandatory, not optional. Growth in this era requires being citable by LLMs.
+- If the SERP top-10 has mixed page types (e.g. 4 listicles + 4 comparisons + 2 explainers), treat as MIXED and produce a hybrid brief that explains the consultant's chosen template + why; don't force-pick one when the SERP itself is split. Record `MIXED` in the `Template type` line and use the `Why this template` line to justify the hybrid choice (which template's outline shape you're inheriting and which secondary patterns you're folding in).

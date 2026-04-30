@@ -15,11 +15,11 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
 
 ## Process
 
-1. **Validate & preflight**
-   - Confirm the URL is fetchable; derive parent domain.
-   - `DATA_getCreditBalance` — surface remaining credits and the estimated cost (~10–15 credits typical).
-   - **Firecrawl availability check.** If `mcp__firecrawl-mcp__firecrawl_scrape` is available, step 6 recovers `og:*`, `twitter:*`, canonical, robots meta, JSON-LD types, and hreflang count from the raw `<head>` (1 Firecrawl credit). Without Firecrawl those fields can't be populated — WebFetch returns markdown only and strips them. The skill still runs; the affected lines emit `(skipped — Firecrawl not installed)` in `PAGE.md`. User may pass `--no-firecrawl` to skip Firecrawl even when available (treats it as "not installed" for credit conservation).
-   - If the user supplied a primary keyword, use it. Otherwise infer it in step 3.
+1. **Validate target & preflight.** See `skills/seo-firecrawl/references/preflight.md` for the canonical 3-stage preflight (credit balance, Firecrawl availability, Google APIs). Skill-specific notes:
+   - Confirm the URL is fetchable; derive parent domain. If the user supplied a primary keyword, use it; otherwise infer it in step 3.
+   - Estimated SE Ranking cost for this skill: ~10–15 credits typical (URL overview, ranking keywords, page authority, SERP context for top 3–5 keywords).
+   - Firecrawl: optional with WebFetch fallback, ~1 Firecrawl credit if available. When available, step 6 recovers `og:*`, `twitter:*`, canonical, robots meta, JSON-LD types, and hreflang count from raw `<head>` — WebFetch returns markdown only and strips those fields. Without Firecrawl, the affected lines in `PAGE.md` emit `(skipped — Firecrawl not installed)`. Pass `--no-firecrawl` to treat Firecrawl as unavailable even when installed (credit conservation).
+   - Google APIs: tier 1 (GSC available) unlocks step 4b (GSC URL performance + URL Inspection) after the page-authority step. See `skills/seo-google/references/cross-skill-integration.md` § "seo-page" for the full recipe.
 
 2. **URL-level overview** `DATA_getUrlOverviewWorldwide`
    - Pull keyword count, organic traffic estimate, paid keyword count, paid traffic estimate, top regions.
@@ -33,6 +33,17 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
 4. **Page authority** `DATA_getPageAuthority` + `DATA_getPageAuthorityHistory`
    - Current PA score and its 12-month trajectory.
    - Flag any drop > 5 points in the last 90 days.
+
+4b. **GSC URL performance + URL Inspection** *(only if google-api.json is present, tier ≥ 1)*
+   - Replaces the directional traffic estimate from step 2 with first-party Google data for the exact URL.
+   - Pull GSC search analytics for the URL (last 28 days, by query and page):
+     `python3 scripts/gsc_query.py --property "{config.default_property}" --url "{target_url}" --days 28 --json`
+   - Pull URL Inspection (real indexation status, canonical Google sees, last crawl date):
+     `python3 scripts/gsc_inspect.py "{target_url}" --site-url "{config.default_property}" --json`
+   - If the URL's domain isn't a verified GSC property: surface "GSC: {target_domain} not verified — add it in Search Console" and continue with SE Ranking data only.
+   - Surface in `PAGE.md` "## Snapshot": `GSC last 28d: {clicks}/{impressions}/{ctr}% CTR / pos {position}` and `Google sees: {INDEXED|EXCLUDED} · canonical {userCanonical} → {googleCanonical} · last crawled {date}`.
+   - **Feed into the verdict heuristic:** `INDEXED` + impressions > 100 + position 4–10 → harden REFRESH (clear quick-win). `EXCLUDED` (any reason) → harden KILL or CONSOLIDATE. `userCanonical ≠ googleCanonical` → flag as critical issue regardless of verdict.
+   - See `skills/seo-google/references/cross-skill-integration.md` § "seo-page" for the full recipe.
 
 5. **SERP context** `DATA_getSerpResults` and `DATA_getAiOverview`
    - For each of the 3–5 primary keywords:
@@ -70,15 +81,18 @@ Create a folder `seo-page-{target-slug}-{YYYYMMDD}/` with:
 
 ```
 seo-page-{target-slug}-{YYYYMMDD}/
-├── 01-url-overview.md       (raw DATA_getUrlOverviewWorldwide)
-├── 02-keywords.md           (raw DATA_getDomainKeywords filtered)
-├── 03-authority.md          (PA + history)
-├── 04-serp-context.md       (top 10 + AIO for top 3–5 keywords)
-├── 05-page-snapshot.md      (HTML extracts)
-├── 06-cannibalization.md    (peer pages on the same domain competing for the top-3 keywords)
-├── keywords.csv             (full keyword list with positions)
-└── PAGE.md                  (synthesised verdict + plan)
+├── PAGE.md                       (synthesised verdict + plan — primary deliverable)
+├── keywords.csv                  (full keyword list with positions — load-bearing CSV the auditor walks through row-by-row)
+├── 04-serp-context.md            (top 10 + AIO for top 3–5 keywords — load-bearing reference for SERP-driven REFRESH discussions)
+└── evidence/
+    ├── 01-url-overview.md        (raw DATA_getUrlOverviewWorldwide)
+    ├── 02-keywords.md             (raw DATA_getDomainKeywords filtered)
+    ├── 03-authority.md            (PA + history)
+    ├── 05-page-snapshot.md        (HTML extracts)
+    └── 06-cannibalization.md      (peer pages on the same domain competing for the top-3 keywords)
 ```
+
+Top-level: `PAGE.md` + `keywords.csv` + `04-serp-context.md`. The other step files preserve raw API/HTML extracts in `evidence/` for reproducibility — auditors lean on the CSV and SERP context, not the per-call dumps.
 
 `PAGE.md` follows this shape:
 
@@ -93,6 +107,8 @@ seo-page-{target-slug}-{YYYYMMDD}/
 - Page authority: {PA} ({↑/↓ trajectory over 90 days})
 - Primary topic: {topic}
 - AIO citations: {n} of {checked} primary-keyword AIOs cite this URL
+- GSC last 28d: {clicks} clicks / {impressions} impressions / {ctr}% CTR / avg position {n}  *(or `not configured` / `property not verified`)*
+- Google sees: {INDEXED|EXCLUDED|...} · canonical {userCanonical} {→ googleCanonical if differ} · last crawled {YYYY-MM-DD}
 
 ## Page basics
 - `<title>`: {value}
@@ -139,7 +155,7 @@ Reasoning: {1–2 sentences anchored in objective signals from above}.
 ## Raw data
 - keywords.csv — full enriched ranking-keyword list
 - 04-serp-context.md — per-keyword SERP top-10 with AIO
-- 05-page-snapshot.md — HTML extracts
+- evidence/05-page-snapshot.md — HTML extracts
 ```
 
 `keywords.csv` columns: `keyword,volume,kd,position,intent,traffic_estimate,url`
@@ -150,9 +166,10 @@ Reasoning: {1–2 sentences anchored in objective signals from above}.
 - Call `DATA_getCreditBalance` before running. ~10–15 credits is typical for one URL.
 - Verdict heuristic:
   - **KEEP**: PA stable or up; traffic stable or up; top 3 keywords held in their positions; AIO citations present where AIO appears.
-  - **REFRESH**: any of (PA dropped >5 in 90 days; traffic dropped >20%; a top-3 keyword fell to position 11+; AIO citations missing while competitors get cited).
+  - **REFRESH**: any of (PA dropped >5 in 90 days; traffic dropped >20%; a top-3 keyword fell to position 11+; AIO citations missing while competitors get cited). **Hardens** when GSC data (step 4b) shows `INDEXED` + impressions > 100 + average position 4–10 (clear quick-win territory).
   - **CONSOLIDATE**: cannibalization detected (step 8) — a peer URL on the same domain ranks ≤ 20 for one or more of the candidate's top-3 keywords. CONSOLIDATE harden when the peer outranks the candidate AND captures higher traffic; otherwise CONSOLIDATE recommendation is "merge into the candidate" rather than "kill the candidate."
-  - **KILL**: PA <10 AND traffic <50/mo AND no top-10 keyword AND no internal links pointing to it. **Hardens** when JSON-LD schema is also absent (Firecrawl detected zero blocks) — the page has no signals for any crawler, organic or AI.
+  - **KILL**: PA <10 AND traffic <50/mo AND no top-10 keyword AND no internal links pointing to it. **Hardens** when JSON-LD schema is also absent (Firecrawl detected zero blocks) — the page has no signals for any crawler, organic or AI. **Also hardens** when URL Inspection (step 4b) returns `EXCLUDED` for any reason.
+  - **GSC canonical mismatch (any verdict):** if step 4b detects `userCanonical ≠ googleCanonical`, flag this as a critical issue in `PAGE.md` regardless of the verdict — it points at indexing instability that the verdict on its own can't resolve.
 - Don't invent reasons. Anchor every claim in `PAGE.md` to a number from the raw data files.
 - When between KEEP and REFRESH, default to REFRESH — small refreshes compound.
 - The `keywords.csv` is the auditable trail. If a stakeholder questions the verdict, walk them through the CSV row by row.

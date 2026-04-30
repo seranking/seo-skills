@@ -16,13 +16,17 @@ Score an existing piece of content against modern E-E-A-T (Experience, Expertise
 ## Process
 
 1. **Fetch content** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
-   - **Cost note.** WebFetch is free; Firecrawl is 1 credit per URL audited (default cap 50 URLs, hard cap 200). Surface Firecrawl availability and the projected credit count before continuing. User may pass `--no-firecrawl` to force WebFetch-only inspection (lower-confidence veto checks; see step 4 caveat).
+   - **Validate target & preflight.** See `skills/seo-firecrawl/references/preflight.md` for the canonical 3-stage preflight (credit balance, Firecrawl availability, Google APIs). Skill-specific notes:
+     - Estimated SE Ranking cost for this skill: ~10–15 credits typical (AIO context + AIO prompt sampling for the target keyword + audited URL).
+     - Firecrawl: optional with WebFetch fallback, 1 Firecrawl credit per URL audited (default cap 50 URLs, hard cap 200). Surface the projected Firecrawl credit count before continuing. Pass `--no-firecrawl` to force WebFetch-only inspection (lower-confidence veto checks; see step 4 caveat).
+     - Google APIs: tier 2 (GA4 available) unlocks step 3b (GA4 organic traffic on the audited URL) after the AIO context step. See `skills/seo-google/references/cross-skill-integration.md` § "seo-content-audit" for the full recipe.
    - **WebFetch first** (free, instant): pull the markdown for word count, H-tag hierarchy, source citations (links to authorities, numbered references), images, tables, code blocks, comment thread.
+   - **Page-type detection.** From the URL pattern, H1 phrasing, and JSON-LD `@type`, classify the page as one of: ultimate guide / pillar, how-to, listicle / best-of, comparison (X vs Y), explainer, review (single product), landing page (commercial). Look up the corresponding word-count floor from `references/core-eeat.md` → "Word-count floors by page type". Surface the detected type, the applied floor, and the actual word count in `evidence/01-content-snapshot.md`. If the actual word count is materially below the floor, flag it for the depth E-E-A-T items (auto ✗ unless the auditor justifies the exception).
    - **Firecrawl second** — recovers what WebFetch's markdown loses:
      - From `metadata`: canonical URL, robots, lang, `og:title`.
      - From the returned `html`: every `<script type="application/ld+json">` block. Parse for `Article` / `BlogPosting` schema and extract `author` (name, `@type: Person`, optional `url` + `sameAs`), `datePublished` / `dateModified` (ISO 8601), `publisher`, `mainEntityOfPage`. Detect `Person` schema standalone if present.
      - DOM-level byline detection: locate the structural byline (`<a rel="author">`, `<meta name="author">`, `<span class="byline">`, `[itemprop="author"]`). Distinguish a real byline element from prose mentions ("Written by Jane in collaboration..." in body text is not a byline; `<a rel="author">Jane Doe</a>` is).
-   - **If Firecrawl unavailable:** WebFetch portion runs unchanged. Mark schema-type detection and structural byline detection as `(skipped — Firecrawl required)` in `01-content-snapshot.md`. Step 4's veto checks #1 and #4 fall back to prose-level inspection (less reliable) — surface that caveat in `VERDICT.md`.
+   - **If Firecrawl unavailable:** WebFetch portion runs unchanged. Mark schema-type detection and structural byline detection as `(skipped — Firecrawl required)` in `evidence/01-content-snapshot.md`. Step 4's veto checks #1 and #4 fall back to prose-level inspection (less reliable) — surface that caveat in `VERDICT.md`.
 
 2. **AIO context** `DATA_getAiOverview` and `DATA_getAiOverviewLeaderboard`
    - For the target keyword: is there an AIO?
@@ -33,6 +37,16 @@ Score an existing piece of content against modern E-E-A-T (Experience, Expertise
 3. **AIO prompt sampling** `DATA_getAiPromptsByTarget`
    - Sample LLM prompts where the target URL's domain appears as a source.
    - Cross-reference with the candidate URL — does it show up in any sampled prompts?
+
+3b. **GA4 organic traffic on the audited URL** *(only if google-api.json is present, tier ≥ 2)*
+   - Replaces the implicit traffic estimation with actual measured organic sessions for the audited URL.
+   - Pull the top organic landing pages (last 28 days):
+     `python3 scripts/ga4_report.py --report top-pages --days 28 --json`
+   - Filter the result client-side for the audited URL's path. Surface in `VERDICT.md` "## Snapshot" alongside the existing AIO citation cross-check:
+     - GA4 organic last 28d: `{sessions} sessions / {users} users / avg engagement {n}s`
+     - If the URL doesn't appear in the top-100 organic landing pages: "GA4: not in top-100 organic landing pages last 28d — low or zero traffic."
+   - **This is a signal, not a veto.** Low GA4 traffic on a YMYL page with high E-E-A-T is informative ("we're not earning the visibility our content quality should support") but doesn't change the publish decision.
+   - See `skills/seo-google/references/cross-skill-integration.md` § "seo-content-audit" for the full recipe.
 
 4. **Score E-E-A-T** using `references/core-eeat.md`
    - 60-item rubric across 4 dimensions (15 items each).
@@ -64,13 +78,16 @@ Create a folder `seo-content-audit-{target-slug}-{YYYYMMDD}/` with:
 
 ```
 seo-content-audit-{target-slug}-{YYYYMMDD}/
-├── 01-content-snapshot.md       (HTML extracts + page metadata)
-├── 02-aio-context.md            (AIO presence, citations, patterns)
-├── 03-eeat-scoring.md           (60-item rubric scored)
-├── 04-cite-scoring.md           (30-item rubric scored)
-├── 05-aio-winner-comparison.md  (gap vs cited sources)
-└── VERDICT.md                   (publish / publish-with-fixes / no-publish)
+├── VERDICT.md                       (publish / publish-with-fixes / no-publish — primary deliverable; inlines content snapshot + AIO context)
+├── 03-eeat-scoring.md               (60-item rubric scored — load-bearing reference an editor consults item-by-item)
+├── 04-cite-scoring.md               (30-item rubric scored — load-bearing reference)
+├── 05-aio-winner-comparison.md      (gap vs cited sources — must remain top-level; live AIO competitive evidence per EVAL_RESULT_v2.md §9)
+└── evidence/
+    ├── 01-content-snapshot.md       (HTML extracts + page metadata — raw step output)
+    └── 02-aio-context.md            (AIO presence, citations, patterns — raw step output)
 ```
+
+Step files 01 + 02 are inlined as a "Snapshot" / "AIO context" section in `VERDICT.md`; the copies in `evidence/` preserve raw step output. `03-eeat-scoring.md`, `04-cite-scoring.md`, and `05-aio-winner-comparison.md` stay at top level — editors consult the rubric scoring detail directly, and the AIO winner comparison is the live competitive evidence the rubric verdict rests on.
 
 `VERDICT.md` follows this shape (also see `templates/verdict.md`):
 
@@ -111,6 +128,9 @@ seo-content-audit-{target-slug}-{YYYYMMDD}/
 - Top citation patterns: {list}
 - Candidate URL cited in any sampled AIO: {yes/no}
 - Gap vs cited sources: {bulleted gaps}
+
+## Snapshot (measured)
+- GA4 organic last 28d: {sessions} sessions / {users} users / avg engagement {n}s  *(or `not in top-100` / `not configured (Tier 2 required)`)*
 
 ## Top 5 fixes
 

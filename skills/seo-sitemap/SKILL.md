@@ -58,16 +58,13 @@ Create a folder `seo-sitemap-{target-slug}-{YYYYMMDD}/` with:
 
 ```
 seo-sitemap-{target-slug}-{YYYYMMDD}/
-├── 01-sitemap-raw.md           (fetched sitemap content, URL list extracted — Mode-1)
-├── 01b-firecrawl-discovered.md (only if Mode-2 ran: URL list from firecrawl_map)
-├── 02-audit-pages.md           (audit's crawled-pages list, DATA_getCrawledPages)
-├── 03-missing-from-sitemap.md  (URLs found by crawler, not in sitemap)
-├── 04-orphans-from-sitemap.md  (URLs in sitemap, not found by crawler)
-├── 05-broken-entries.md        (sitemap URLs returning non-200)
-├── 06-lastmod-issues.md        (stale or uniform lastmod dates)
-├── recommended-sitemap-diff.md (proposed changes: add X, remove Y)
-└── SITEMAP.md                  (synthesised report)
+├── SITEMAP.md                       (synthesised report — primary deliverable)
+├── recommended-sitemap-diff.md      (proposed changes: add X, remove Y — load-bearing artefact engineering applies to sitemap.xml)
+└── evidence/
+    └── source-data.md               (consolidated raw step output: fetched sitemap content, Firecrawl-discovered URLs if Mode-2 ran, audit's crawled-pages list, the four diffs (missing/orphans/broken/lastmod-issues) — preserved for reproducibility)
 ```
+
+Top-level: `SITEMAP.md` + `recommended-sitemap-diff.md`. The seven raw step files (`01-sitemap-raw`, `01b-firecrawl-discovered`, `02-audit-pages`, `03-missing-from-sitemap`, `04-orphans-from-sitemap`, `05-broken-entries`, `06-lastmod-issues`) are consolidated into a single `evidence/source-data.md` document with the same per-step section headers — a reader who needs to replay the diff has all raw inputs in one file rather than seven.
 
 `SITEMAP.md` follows this shape:
 

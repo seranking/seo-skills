@@ -50,13 +50,16 @@ Create a folder `seo-competitor-gap-analysis-{target-slug}-{YYYYMMDD}/` with:
 
 ```
 seo-competitor-gap-analysis-{target-slug}-{YYYYMMDD}/
-├── 01-competitors.md
-├── 02-competitor-keywords-{domain}.md   # one per competitor
-├── 03-target-keywords.md
-├── 04-gap-raw.md
-├── gaps.csv
-└── REPORT.md
+├── REPORT.md                                (synthesised report — primary deliverable)
+├── gaps.csv                                 (full gap list — load-bearing CSV the writers/planners paste into briefs)
+└── evidence/
+    ├── 01-competitors.md                    (competitor list / discovery — raw step output)
+    ├── 02-competitor-keywords-{domain}.md   (one per competitor — raw step output)
+    ├── 03-target-keywords.md                (target's existing ranking set — raw step output)
+    └── 04-gap-raw.md                        (human-readable full gap list before filtering — raw step output)
 ```
+
+Top-level: `REPORT.md` + `gaps.csv`. The numbered step files preserve the raw API outputs in `evidence/` for reproducibility.
 
 `REPORT.md` follows this shape:
 
@@ -101,7 +104,7 @@ Keywords where competitors rank in positions 5 to 20 with thin content, low DT, 
 
 ## Files
 - gaps.csv: full gap list for spreadsheet analysis
-- 04-gap-raw.md: human-readable full gap list before filtering
+- evidence/04-gap-raw.md: human-readable full gap list before filtering
 ```
 
 `gaps.csv` columns:
