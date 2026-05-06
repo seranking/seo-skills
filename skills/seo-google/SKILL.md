@@ -42,7 +42,7 @@ If missing, read `references/auth-setup.md` and walk the user through setup.
 |------|-----------|-------------------|
 | **0** (API Key) | `api_key` present | `pagespeed`, `crux`, `crux-history`, `youtube`, `nlp`, `entity`, `safety` |
 | **1** (OAuth/SA) | + OAuth token or service account | Tier 0 + `gsc`, `inspect`, `sitemaps`, `index` |
-| **2** (Full) | + `ga4_property_id` configured | Tier 1 + `ga4`, `ga4-pages` |
+| **2** (Full) | + `ga4_property_id` configured | Tier 1 + `ga4`, `ga4-pages`, `ga4-referrals`, `ga4-channel-mix`, `ga4-properties` |
 | **3** (Ads) | + `ads_developer_token` + `ads_customer_id` | Tier 2 + `keywords`, `volume` |
 
 Always communicate the detected tier before running commands.
@@ -63,6 +63,9 @@ Always communicate the detected tier before running commands.
 | `index-batch <file>` | Batch submit up to 200 URLs | 1 |
 | `ga4 [property-id]` | GA4 organic traffic report | 2 |
 | `ga4-pages [property-id]` | Top organic landing pages | 2 |
+| `ga4-referrals [property-id]` | Referral sessions by source — AI assistants by default | 2 |
+| `ga4-channel-mix [property-id]` | Sessions split by channel group (Direct / Organic / Referral / Paid …) | 2 |
+| `ga4-properties` | List every GA4 account + property the service account can read | 2 |
 | `youtube <query>` | YouTube video search (views, likes, duration) | 0 |
 | `youtube-video <id>` | YouTube video details + top comments | 0 |
 | `nlp <url-or-text>` | NLP entity extraction + sentiment + classification | 0 |
@@ -117,6 +120,10 @@ Search Analytics: clicks, impressions, CTR, position for last 28 days.
 
 Includes quick-win detection: queries at position 4-10 with high impressions.
 
+**Filtering:** `--device {desktop,mobile,tablet}`, `--country <ISO3>`, `--page <url-or-substring>` (defaults to `contains` match; pass `--page-match equals` for exact-URL match). Combine for per-URL query analysis: `--page /blog/best-ai-seo-tools/ --dimensions query`.
+
+**AI Overview / AI Mode:** `--ai-overview` (or `--ai-mode`) filters results to queries where Google rendered an AI Overview / AI Mode SERP that included one of your URLs. This is Google's first-party answer to *"are we cited in AI Overview?"* — clicks, impressions, CTR, and avg position straight from GSC. Combine with `--dimensions query,page` to see which queries+pages earned AI Overview presence, or with `--page /post/` to scope to one URL. For other appearance types (`RICH_RESULT`, `REVIEW_SNIPPET`, etc.) use `--search-appearance <value>`.
+
 ### `inspect <url>`
 
 URL Inspection: real indexation status from Google.
@@ -160,19 +167,72 @@ Batch submit URLs from a file. Tracks quota usage.
 
 ## GA4 Traffic
 
+All GA4 reports accept an optional `--page <path-or-url>` flag to scope the report to a single landing page (EXACT match against GA4's `landingPage` dimension; full URLs are auto-stripped to path). Use it whenever the question is "how is *this* post performing?" rather than site-wide.
+
+`--report organic` and `--report top-pages` accept `--channel <name|all>`: defaults to `organic` (Organic Search), pass `all` to drop the channel filter (required for whole-page weekly trends across all traffic sources), or any GA4 default channel group verbatim — `Direct`, `Referral`, `Paid Search`, `Organic Social`, etc.
+
 ### `ga4 [property-id]`
 
-Organic traffic report: daily sessions, users, pageviews, bounce rate, engagement.
+Daily-time-series traffic report: sessions, users, pageviews, bounce rate, engagement.
 
 **Script:** `python scripts/ga4_report.py --property <id> --json`
 **Reference:** `references/ga4-data-api.md`
-**Default:** 28 days, filtered to Organic Search channel group.
+**Default:** 28 days, filtered to Organic Search channel group. Pass `--channel all` for unfiltered traffic.
+
+The all-channels variant is what answers "how is this post growing week over week?" when most of the traffic is Direct or Referral rather than Organic — the canonical case for AI-cited content. Example: `--report organic --page /blog/best-ai-seo-tools/ --channel all --days 99`.
 
 ### `ga4-pages [property-id]`
 
-Top organic landing pages ranked by sessions.
+Top landing pages ranked by sessions for the chosen channel (default Organic Search; use `--channel all` for site-wide top pages across every source).
 
 **Script:** `python scripts/ga4_report.py --property <id> --report top-pages --json`
+
+### `ga4-referrals [property-id]`
+
+Referral sessions broken down by `sessionSource`. Defaults to a curated AI-assistant
+hostname list — OpenAI (chatgpt.com, chat.openai.com), Anthropic (claude.ai), Google
+(gemini.google.com, bard.google.com), Microsoft (copilot.microsoft.com), Perplexity
+(perplexity.ai), Alibaba/Qwen (chat.qwen.ai, qwen.com, tongyi.aliyun.com), Mistral
+(chat.mistral.ai), DeepSeek (chat.deepseek.com), xAI/Grok (grok.com, x.ai), plus
+you.com / phind.com / poe.com — so the "how much traffic do AI assistants actually
+send us?" question is one command. Use this as a reality check against AI-visibility
+data from `seo-ai-search-share-of-voice` and `seo-geo` — referral volume measures
+users sharing your links in AI chats, not whether the AI proactively cites you.
+
+**Script:** `python scripts/ga4_report.py --property <id> --report referrals --json`
+
+**Source modes (`--sources`):**
+- `ai` (default) — curated AI-assistant hostname list
+- `all` — every source in the Referral channel group
+- `chatgpt.com,perplexity.ai,...` — explicit comma-separated list
+
+Combine with `--page` to answer "how much AI traffic did THIS specific post get?":
+`--report referrals --page /blog/best-ai-seo-tools/`.
+
+### `ga4-channel-mix [property-id]`
+
+Sessions broken down by `sessionDefaultChannelGroup` (Direct / Organic Search / Referral / Paid Search / Organic Social / …). No channel filter — this is the diagnostic view for "where does traffic to this page actually come from?". Each row includes a `share_of_sessions` percentage so the mix is visible at a glance.
+
+**Script:** `python scripts/ga4_report.py --property <id> --report channel-mix --json`
+
+This is the report that answers questions like *"is this post mostly winning on organic, or is the traffic coming from somewhere else?"*. AI-assistant traffic frequently lands in `Direct` (uncredited) rather than `Referral`, so a high Direct share on a recent content-heavy page is itself an AI-visibility signal — pair with `ga4-referrals` for a fuller picture.
+
+Per-page diagnosis: `--report channel-mix --page /blog/best-ai-seo-tools/ --days 90`.
+
+### `ga4-properties`
+
+Enumerates every GA4 account and property the service account can read. Use this
+*before* running `ga4` / `ga4-pages` / `ga4-referrals` / `ga4-channel-mix` when the
+client has multiple GA4 properties (typical: separate marketing-site and app
+properties, or per-region properties) and you need to know which property_id to
+query. Output groups properties by parent account; the `property_id` field is the
+numeric value to pass as `--property`.
+
+**Script:** `python scripts/ga4_admin.py properties --json`
+
+Requires the **Google Analytics Admin API** to be enabled in your Cloud project
+(separate from the Data API) and the service account to have Viewer access on at
+least one property.
 
 ---
 
@@ -302,7 +362,8 @@ Generate a professional PDF/HTML/XLSX report with charts and analytics.
 - **`seo-drift`** — adds `crux-history` (25-week trend) and GSC delta tracking to baseline/compare snapshots.
 - **`seo-sitemap`** — `sitemaps` command shows which sitemaps Google has actually consumed and their error/warning counts (vs SE Ranking's audit which only crawls).
 - **`seo-content-audit`** — `nlp` enhances E-E-A-T entity/sentiment scoring on the page being audited; `gsc` confirms whether the page is earning impressions for its target keywords.
-- **`seo-geo`** — GSC Search Analytics with `dimensions=searchAppearance` includes AI Overview impressions, complementing AIO citation tracking.
+- **`seo-geo`** — `gsc --ai-overview --page <url>` answers "did this URL appear in AI Overview, and what did it earn?" with Google's own data, complementing the SE Ranking AIO citation pull. Pair `gsc --ai-overview --dimensions query,page` with the GEO recommendations to confirm wins/losses URL-by-URL.
+- **`seo-ai-search-share-of-voice`** — pair `ga4-referrals` (downstream traffic from chatgpt.com/perplexity.ai/gemini.google.com etc.) with the SoV pull (upstream citation/brand mention presence) for a complete AI-visibility picture: SoV measures whether LLMs cite you, GA4 referrals measure whether their users actually click through.
 - **`seo-keyword-cluster`** / **`seo-keyword-niche`** — `volume` (Tier 3) replaces SE Ranking volume with Google Ads gold-standard volumes when available.
 - **`seo-plan`** — when GSC + GA4 are configured, the "Where you are" baseline uses real impressions/clicks/conversions instead of SE Ranking estimates.
 

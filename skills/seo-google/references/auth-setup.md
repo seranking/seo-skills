@@ -6,8 +6,9 @@ Three credential types serve different APIs:
 
 | Type | Used By | Cost |
 |------|---------|------|
-| **API Key** | PageSpeed Insights, CrUX, CrUX History, Knowledge Graph | Free |
+| **API Key** | PageSpeed Insights, CrUX, CrUX History, Knowledge Graph, YouTube, NLP, Web Risk | Free |
 | **Service Account** | Search Console, Indexing API, GA4 | Free |
+| **Google Ads developer token** | Keyword Planner (volumes / suggestions) | Free (token approval ~24h) |
 | **Both** | Full seo-google skill | Free |
 
 ## Step 1: Create a Google Cloud Project
@@ -28,13 +29,18 @@ Navigate to **APIs & Services > Library** and enable:
 | Chrome UX Report API | CrUX field data + History |
 | Web Search Indexing API | Indexing API v3 |
 | Google Analytics Data API | GA4 organic traffic |
-| Knowledge Graph Search API | Entity verification (optional) |
+| Google Analytics Admin API | `ga4-properties` (account/property discovery) |
+| Knowledge Graph Search API | Entity verification |
+| YouTube Data API v3 | `youtube` / `youtube-video` commands |
+| Cloud Natural Language API | `nlp` / `entities` commands |
+| Web Risk API | `safety` command (malware / social-engineering check) |
+| Google Ads API | `keywords` / `volume` commands (also requires a Google Ads developer token — see [`keyword-planner-api.md`](./keyword-planner-api.md)) |
 
 ## Step 3: Create an API Key
 
 1. **APIs & Services > Credentials > Create Credentials > API key**
 2. Click **Restrict key**:
-   - Under **API restrictions**, select: PageSpeed Insights API, Chrome UX Report API, Knowledge Graph Search API
+   - Under **API restrictions**, select: PageSpeed Insights API, Chrome UX Report API, Knowledge Graph Search API, YouTube Data API v3, Cloud Natural Language API, Web Risk API
 3. Copy the key (starts with `AIzaSy...`)
 
 ## Step 4: Create a Service Account

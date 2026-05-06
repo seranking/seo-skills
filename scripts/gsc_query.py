@@ -303,6 +303,43 @@ def main():
         help="Filter by device type",
     )
     parser.add_argument("--country", help="Filter by country (ISO 3166-1 alpha-3, e.g., USA)")
+    parser.add_argument(
+        "--page",
+        help=(
+            "Filter to a specific page URL. Substring match by default ('contains'); "
+            "use --page-match equals for exact-URL matching. Pass either a full URL "
+            "or a path fragment unique enough to disambiguate."
+        ),
+    )
+    parser.add_argument(
+        "--page-match",
+        choices=["contains", "equals"],
+        default="contains",
+        help="Match operator for --page (default: contains).",
+    )
+    parser.add_argument(
+        "--ai-overview",
+        action="store_true",
+        help=(
+            "Filter to results that appeared in Google's AI Overview. Adds a "
+            "searchAppearance=AI_OVERVIEW filter while keeping the requested "
+            "--dimensions, so you can see which queries/pages of yours got "
+            "AI Overview impressions and clicks."
+        ),
+    )
+    parser.add_argument(
+        "--ai-mode",
+        action="store_true",
+        help="Like --ai-overview but for AI Mode (the chat-style SERP).",
+    )
+    parser.add_argument(
+        "--search-appearance",
+        help=(
+            "Filter to a specific searchAppearance value (e.g. RICH_RESULT, "
+            "AMP_BLUE_LINK, REVIEW_SNIPPET). Use --ai-overview / --ai-mode for "
+            "the common AI cases."
+        ),
+    )
     parser.add_argument("--json", "-j", action="store_true", help="Output as JSON")
 
     args = parser.parse_args()
@@ -336,6 +373,30 @@ def main():
                 "dimension": "country",
                 "operator": "equals",
                 "expression": args.country.upper(),
+            })
+        if args.page:
+            filters.append({
+                "dimension": "page",
+                "operator": args.page_match,
+                "expression": args.page,
+            })
+        if args.ai_overview:
+            filters.append({
+                "dimension": "searchAppearance",
+                "operator": "equals",
+                "expression": "AI_OVERVIEW",
+            })
+        if args.ai_mode:
+            filters.append({
+                "dimension": "searchAppearance",
+                "operator": "equals",
+                "expression": "AI_MODE",
+            })
+        if args.search_appearance:
+            filters.append({
+                "dimension": "searchAppearance",
+                "operator": "equals",
+                "expression": args.search_appearance,
             })
         result = query_search_analytics(
             prop, start_date=start, end_date=end,

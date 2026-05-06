@@ -5,7 +5,8 @@
 #   1. Verify Python 3.10+ and pip.
 #   2. pip-install the Google API client libraries to user site-packages
 #      (google-api-python-client, google-auth, google-auth-oauthlib,
-#      google-auth-httplib2, google-analytics-data, requests, plus
+#      google-auth-httplib2, google-analytics-data, google-analytics-admin,
+#      requests, plus
 #      matplotlib/weasyprint/openpyxl for report generation).
 #   3. Create the config directory at ~/.config/seo-skills/.
 #   4. If config file is missing, write a stub the user can fill in.
@@ -59,6 +60,7 @@ CORE_PKGS=(
   "google-auth-oauthlib>=1.0.0,<2.0.0"
   "google-auth-httplib2>=0.2.0,<1.0.0"
   "google-analytics-data>=0.18.0,<1.0.0"
+  "google-analytics-admin>=0.22.0,<1.0.0"
   "requests>=2.32.4,<3.0.0"
 )
 
