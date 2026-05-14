@@ -1,0 +1,38 @@
+keyword,volume,kd,cpc,intent,cluster,role_in_cluster
+headless cms,33000,55,8.20,I,1,pillar-primary
+headless content management system,3600,50,7.10,I,1,pillar-secondary
+what is headless cms,2900,40,5.30,I,1,pillar-secondary
+headless cms vs traditional cms,1600,42,6.40,I,1,spoke-primary
+headless cms api,1100,38,5.80,I,1,spoke-primary
+headless cms meaning,720,42,4.20,I,1,pillar-secondary
+headless cms architecture,480,35,4.80,I,1,spoke-primary
+api-first cms,390,36,5.10,I,1,pillar-secondary
+decoupled cms vs headless,390,30,3.80,I,1,spoke-primary
+how does headless cms work,210,32,3.20,I,1,pillar-h2
+why use headless cms,110,28,3.10,I,1,pillar-h2
+best headless cms,5400,48,9.40,C,2,pillar-primary
+best headless cms 2026,2400,47,9.10,C,2,pillar-secondary
+top headless cms,1400,47,8.80,C,2,pillar-secondary
+headless cms platforms,1100,46,7.90,C,2,pillar-secondary
+headless cms comparison,880,44,7.40,C,2,pillar-secondary
+nextjs cms,1100,40,6.20,C,2,spoke-primary
+best headless cms for nextjs,720,35,5.80,C,2,spoke-primary
+open source headless cms,1600,40,6.10,C,2,spoke-primary
+best headless cms for startups,390,32,4.90,C,2,spoke-primary
+enterprise headless cms,210,35,8.20,C,2,spoke-primary
+self-hosted headless cms,320,38,5.40,C,2,spoke-secondary
+free headless cms,590,32,3.80,C,2,spoke-secondary
+headless commerce,6600,52,9.80,C,3,pillar-primary
+composable commerce,1100,45,7.20,I,3,spoke-primary
+headless ecommerce platforms,590,36,6.80,C,3,pillar-secondary
+headless cms for ecommerce,720,38,6.40,C,3,spoke-primary
+headless commerce vs traditional,210,30,4.40,I,3,spoke-primary
+headless cms for shopify,210,32,5.20,C,3,spoke-secondary
+strapi vs contentful,880,32,4.20,C,4,spoke-standalone
+sanity vs contentful,720,30,3.90,C,4,spoke-standalone
+sanity vs strapi,480,28,3.40,C,4,spoke-standalone
+contentful vs prismic,210,28,3.10,C,4,spoke-standalone
+storyblok vs contentful,170,28,3.40,C,4,spoke-standalone
+payload vs strapi,140,26,2.90,C,4,spoke-standalone
+headless cms pricing,390,28,4.10,T,5,spoke-standalone
+best free headless cms,320,30,3.40,C,5,spoke-standalone
