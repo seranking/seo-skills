@@ -1,7 +1,8 @@
 # Sitemap Analysis: notion.so (canonical: notion.com)
 
-> Sitemap pulled 2026-05-14 · Audit reference: SE Ranking audit not available in this worktree (auth-gated). This run analyses the sitemap stand-alone and surfaces issues that don't require an audit cross-reference.
 > Snapshot dated 2026-05-14 · scope: sitemap + sub-sitemap structural review · Numbers will drift — re-run the skill for current data.
+
+(Sitemap pulled 2026-05-14. SE Ranking audit reference: not available in this worktree — auth-gated. This run analyses the sitemap stand-alone and surfaces issues that don't require an audit cross-reference.)
 
 ## Headline
 

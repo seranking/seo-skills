@@ -1,7 +1,6 @@
 # GEO Analysis: notion.com/help/public-pages-and-web-publishing
 
-> Snapshot dated 2026-05-14 · Country: US · Keywords analysed: 1 representative AIO query (target re-scoped — see "Target swap" below)
-> Numbers will drift — re-run the skill for current data.
+> Snapshot dated 2026-05-14 · Country: US · Keywords analysed: 1 representative AIO query (target re-scoped — see "Target swap" below) · Numbers will drift — re-run the skill for current data.
 
 ## Target swap
 
