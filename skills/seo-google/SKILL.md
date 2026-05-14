@@ -3,6 +3,8 @@ name: seo-google
 description: Direct access to Google's own SEO data via Search Console (Search Analytics, URL Inspection, Sitemaps), PageSpeed Insights v5, CrUX field data with 25-week history, Indexing API v3, GA4 organic traffic, YouTube video search, Google NLP entity/sentiment analysis, Knowledge Graph entity verification, Web Risk safety, and Google Ads Keyword Planner. Bridges crawl-based analysis (the rest of this catalogue) with Google's real-time field data — actual Chrome user metrics, real indexation status, real search performance, real organic traffic. Use when the user asks "search console", "GSC", "PageSpeed", "CrUX", "field data", "indexing API", "GA4 organic", "URL inspection", "google api setup", "real CWV data", "impressions", "clicks", "CTR", "position data", "LCP", "INP", "CLS", "FCP", "TTFB", "Lighthouse scores", "youtube SEO", "knowledge graph", "keyword planner", or "real google data".
 ---
 
+> Example output: [examples/seo-google-quickstart-20260514/README.md](../../examples/seo-google-quickstart-20260514/README.md)
+
 # Google SEO APIs
 
 Direct access to Google's own SEO data. Bridges the gap between crawl-based analysis (the rest of the catalogue) and Google's real-time field data: actual Chrome user metrics, real indexation status, search performance, and organic traffic.
