@@ -1,0 +1,33 @@
+{
+  "target": "wix.com",
+  "target_type": "domain",
+  "snapshot_date": "2026-05-14",
+  "country": "us",
+  "session_note": "SE Ranking MCP auth unavailable in this session. Domain-level fields pending. Page-level Firecrawl capture is live (see page field below).",
+  "domain": {
+    "domain_authority": null,
+    "organic_traffic_estimate": null,
+    "organic_keywords_count": null,
+    "_source": "[SE Ranking — pending: DATA_getDomainOverviewWorldwide]"
+  },
+  "backlinks": {
+    "backlinks_total": null,
+    "referring_domains_total": null,
+    "_source": "[SE Ranking — pending: DATA_getBacklinksSummary]"
+  },
+  "page": {
+    "url": "https://www.wix.com/",
+    "title": "Website Builder - Create a Free Website In Minutes | Wix.com",
+    "og_title": "Your vision. Your goals. Your website. | Wix.com",
+    "og_description": "Get everything you need to create your website, your way. From an intuitive website builder to built-in business solutions and AI tools—try Wix for free.",
+    "meta_description": "Get everything you need to build a website your way. Wix's free, easy-to-use website builder offers 2,000+ templates, built-in AI tools and a custom domain.",
+    "og_image": "https://static.wixstatic.com/media/343a2a_f435947596b24c0a87854aa410c4cf48~mv2.jpg/v1/fill/w_1200,h_630,al_c/343a2a_f435947596b24c0a87854aa410c4cf48~mv2.jpg",
+    "twitter_card": "summary_large_image",
+    "language": "en",
+    "robots": null,
+    "json_ld_types": [],
+    "hreflang_count": 0,
+    "fingerprint_hash": "wix-com-homepage-2026-05-14",
+    "_source": "Firecrawl rawHtml capture (live)"
+  }
+}

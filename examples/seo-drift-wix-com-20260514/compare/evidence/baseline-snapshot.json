@@ -1,0 +1,21 @@
+{
+  "target": "wix.com",
+  "target_type": "domain",
+  "snapshot_date": "2026-02-13",
+  "country": "us",
+  "session_note": "Historical-compare placeholder. The seo-drift skill normally loads this from a prior /seo-drift baseline run's snapshot.json. For this example the data point ~90 days ago was supposed to come from DATA_getDomainOverviewHistory, but SE Ranking auth was unavailable in this session. Re-run /seo-drift compare wix.com with auth to populate.",
+  "domain": {
+    "domain_authority": null,
+    "organic_traffic_estimate": null,
+    "organic_keywords_count": null,
+    "_source": "[SE Ranking — pending: DATA_getDomainOverviewHistory at date=2026-02-13]"
+  },
+  "backlinks": {
+    "backlinks_total": null,
+    "referring_domains_total": null,
+    "_source": "[SE Ranking — pending: backlink history endpoint at date=2026-02-13]"
+  },
+  "page": {
+    "_note": "No page-level fingerprint exists from 2026-02-13 because no /seo-drift baseline was run at that date. Page-fingerprint comparisons start from today's capture forward."
+  }
+}
