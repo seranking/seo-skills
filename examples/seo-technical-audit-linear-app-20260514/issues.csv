@@ -1,0 +1,16 @@
+category,issue_code,issue_name,severity,affected_pages,suggested_fix,effort,priority_score
+structured-data,jsonld_missing,No JSON-LD structured data anywhere on the marketing site,critical,896,Add Organization + SoftwareApplication schema on /; Article + Person on /blog/*; Article on /customers/*; BreadcrumbList site-wide,M,98
+content,sitemap_stale_lastmod,Sitemap entries with lastmod older than 2024-01-01,high,196,Refresh or archive (move out of sitemap) changelog entries older than 2024-01-01,M,72
+security,hsts_no_preload,HSTS missing preload directive,high,896,Add preload to Strict-Transport-Security header then submit to hstspreload.org,S,65
+content,description_short,Meta description on homepage is 61 chars,high,1,Rewrite homepage description to 140-155 chars,S,60
+modern,ai_bots_unspecified,No AI-crawler rules in robots.txt,high,1,Add explicit allow or disallow for GPTBot ClaudeBot PerplexityBot Google-Extended,S,55
+structured-data,og_image_dimensions_missing,og:image lacks width/height meta,medium,896,Add og:image:width and og:image:height meta tags,S,42
+crawlability,sitemap_no_lastmod,Sitemap entries without lastmod tag,medium,44,Add lastmod to all sitemap entries,S,38
+security,csp_frame_src_wildcard,CSP frame-src * wildcard,medium,896,Tighten frame-src to explicit allow-list,M,36
+content,title_short,Title below 60 chars target on homepage,medium,1,Lengthen homepage title to 55-60 chars,S,35
+indexability,hreflang_missing,No hreflang or x-default declared,medium,896,Add hreflang tags if planning internationalisation,S,30
+crawlability,blog_307_redirect,/blog returns 307 on first hop,medium,1,List canonical blog landing URL in sitemap to avoid redirect hop,S,28
+content,duplicate_h1,Homepage renders duplicate H1 in initial HTML,medium,1,Audit responsive markup to ensure one H1 per render,S,25
+modern,indexnow_no_key,No IndexNow key advertised,low,1,Optional: configure IndexNow for Bing-only faster crawl notifications,S,15
+crawlability,robots_disallow_correct,robots.txt disallow /api/ and /cdn-cgi/ — correct,low,2,No action required,S,5
+indexability,canonical_self_match,Canonical present and self-referencing on sampled pages,low,8,No action required,S,5
