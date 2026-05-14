@@ -1,0 +1,113 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Product",
+      "@id": "https://linear.app/#product",
+      "name": "Linear",
+      "url": "https://linear.app/",
+      "description": "Purpose-built project management system for product teams and AI agents. Issues, projects, cycles, roadmaps, and AI-native workflow tooling.",
+      "brand": {
+        "@type": "Brand",
+        "name": "Linear"
+      },
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "USD",
+        "lowPrice": "0",
+        "highPrice": "16",
+        "offerCount": "4"
+      },
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web, macOS, iOS, Android"
+    },
+    {
+      "@type": "Product",
+      "@id": "https://www.atlassian.com/software/jira#product",
+      "name": "Jira",
+      "url": "https://www.atlassian.com/software/jira",
+      "description": "Project management and issue tracking for software teams. Sprints, custom workflows, 3,000+ integrations, and Rovo AI across the Atlassian ecosystem.",
+      "brand": {
+        "@type": "Brand",
+        "name": "Atlassian"
+      },
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "USD",
+        "lowPrice": "0",
+        "highPrice": "13.53",
+        "offerCount": "4"
+      },
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web, macOS, Windows, iOS, Android"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://linear.app/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Compare",
+          "item": "https://linear.app/vs"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Linear vs Jira",
+          "item": "https://linear.app/vs/jira"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is Linear easier to use than Jira?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, by design. Linear is opinionated about workflow (issues, cycles, projects, roadmap), so there is less to configure. Jira's strength, customisation, is also its learning-curve cost. Most teams say Linear took them under a day to set up and Jira took weeks."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I migrate from Jira to Linear?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Linear has a Jira import that maps issues, projects, and basic workflow state. Custom fields and custom issue types from Jira often need manual mapping. Linear publishes a migration guide; mid-size migrations of 500 to 5,000 issues typically take 1 to 3 days."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Jira have an AI agent like Linear Agent?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Rovo. Rovo is Atlassian's AI layer across Jira, Confluence, and Bitbucket. It is a separate add-on with an additional per-user fee on most plans. Linear Agent is included in paid Linear tiers."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Jira's free tier better than Linear's?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It depends on team size. Jira's free tier supports up to 10 users, fine for tiny teams. Linear's free tier has unlimited members but caps issues at 250 and teams at 2. For an under-10-user team that does not have heavy issue volume yet, both are workable; for a fast-growing team, Linear's seat-unlimited free tier is the stronger gateway."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which is better for cross-functional teams that include marketing and engineering?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Jira is the broader fit. Linear is primarily designed for product, engineering, and design teams; marketing and operations users sometimes find the issue-cycle vocabulary unfamiliar. Jira's flexibility absorbs non-engineering teams better, especially with Jira Work Management for non-software work."
+          }
+        }
+      ]
+    }
+  ]
+}
