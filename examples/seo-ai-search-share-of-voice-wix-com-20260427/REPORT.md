@@ -74,11 +74,11 @@ Bold row = primary target. Bold cells = engine winner.
 
 ## Files
 
-- [`01-leaderboard.md`](./01-leaderboard.md) — raw leaderboard, all 5 engines × 5 domains.
 - [`02-heatmap.md`](./02-heatmap.md) — engine × domain brand-presence + link-presence tables.
-- [`03-prompts-wix-com.md`](./03-prompts-wix-com.md) — 10 sampled brand prompts + 10 sampled link prompts on AI Overview, plus 5 ChatGPT brand prompts for cross-engine comparison.
-- [`03-prompts-squarespace-com.md`](./03-prompts-squarespace-com.md) — 5 sampled brand prompts on AI Overview (closest design-led competitor).
 - [`04-topic-clusters.md`](./04-topic-clusters.md) — cluster assignment, ownership grid, full reasoning.
+- [`evidence/01-leaderboard.md`](./evidence/01-leaderboard.md) — raw leaderboard, all 5 engines × 5 domains.
+- [`evidence/03-prompts-wix-com.md`](./evidence/03-prompts-wix-com.md) — 10 sampled brand prompts + 10 sampled link prompts on AI Overview, plus 5 ChatGPT brand prompts for cross-engine comparison.
+- [`evidence/03-prompts-squarespace-com.md`](./evidence/03-prompts-squarespace-com.md) — 5 sampled brand prompts on AI Overview (closest design-led competitor).
 
 ## Methodology notes
 

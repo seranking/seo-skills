@@ -3,6 +3,8 @@ name: seo-ai-search-share-of-voice
 description: Measure AI Search share of voice for a target domain versus competitors across ChatGPT, Perplexity, Gemini, Google AI Overview, and AI Mode. Pulls the AIO leaderboard, then samples prompts where each domain appears as a source or brand mention, and analyses topic clusters each brand owns. Use when the user asks for AI Search share of voice, LLM visibility tracking, AEO/GEO analysis, AI Overview competitive analysis, or wants to know which brands LLMs cite in their category.
 ---
 
+> Example output: [examples/seo-ai-search-share-of-voice-wix-com-20260427/REPORT.md](../../examples/seo-ai-search-share-of-voice-wix-com-20260427/REPORT.md)
+
 # AI Search Share of Voice
 
 Compare AI-search visibility for a target brand against competitors across every major LLM engine, then analyse the topic clusters each brand owns and where gaps exist.
