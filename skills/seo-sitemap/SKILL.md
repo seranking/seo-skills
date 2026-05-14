@@ -2,6 +2,7 @@
 name: seo-sitemap
 description: Pull a domain's XML sitemap (and sitemap-of-sitemaps), then compare against the most recent SE Ranking website audit. Surfaces (a) sitemap entries the crawler couldn't find (orphans from the sitemap), (b) audit pages missing from the sitemap (probably an oversight), (c) sitemap entries that are now 404, (d) lastmod inconsistencies. Use when the user asks for "sitemap analysis", "check my sitemap", "sitemap vs audit", "missing pages", "orphan pages", or "sitemap health".
 ---
+> Example output: [examples/seo-sitemap-notion-so-20260514/SITEMAP.md](../../examples/seo-sitemap-notion-so-20260514/SITEMAP.md)
 
 # Sitemap Analysis
 
