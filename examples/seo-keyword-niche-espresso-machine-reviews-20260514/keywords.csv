@@ -1,0 +1,53 @@
+keyword,volume,kd,cpc,intent,cluster,role_in_cluster,dominant_page_type,unique_attributes_estimate
+# THIS FILE IS A STRUCTURAL EXAMPLE. Live keyword data requires SE Ranking auth.
+# Below: ~25 representative qualitative anchors per cluster to show the kind of keywords production would mine.
+# Production run populates with volume / KD / CPC from DATA_getLongTailKeywords + DATA_getKeywordQuestions + DATA_getRelatedKeywords.
+#
+# === Cluster 1: best espresso machine by price band ===
+best espresso machine under 200,(pending),(pending),(pending),C,price-band,head,listicle,7
+best espresso machine under 300,(pending),(pending),(pending),C,price-band,head,listicle,7
+best espresso machine under 500,(pending),(pending),(pending),C,price-band,head,listicle,7
+best espresso machine under 1000,(pending),(pending),(pending),C,price-band,head,listicle,7
+best espresso machine under 2000,(pending),(pending),(pending),C,price-band,head,listicle,7
+#
+# === Cluster 2: best by use case ===
+best espresso machine for beginners,(pending),(pending),(pending),C,use-case,head,listicle,6
+best espresso machine for home use,(pending),(pending),(pending),C,use-case,head,listicle,6
+best espresso machine for office,(pending),(pending),(pending),C,use-case,head,listicle,6
+best espresso machine for small kitchen,(pending),(pending),(pending),C,use-case,head,listicle,6
+best espresso machine for latte art,(pending),(pending),(pending),C,use-case,head,listicle,6
+#
+# === Cluster 3: single-product reviews ===
+breville barista express review,(pending),(pending),(pending),C,single-product-review,head,review,8
+breville barista touch review,(pending),(pending),(pending),C,single-product-review,head,review,8
+breville bambino plus review,(pending),(pending),(pending),C,single-product-review,head,review,8
+rocket appartamento review,(pending),(pending),(pending),C,single-product-review,head,review,8
+rancilio silvia review,(pending),(pending),(pending),C,single-product-review,head,review,8
+de'longhi la specialista review,(pending),(pending),(pending),C,single-product-review,head,review,8
+gaggia classic pro review,(pending),(pending),(pending),C,single-product-review,head,review,8
+#
+# === Cluster 4: by feature ===
+best espresso machine with grinder,(pending),(pending),(pending),C,by-feature,head,listicle,6
+best dual boiler espresso machine,(pending),(pending),(pending),C,by-feature,head,listicle,6
+best espresso machine with milk frother,(pending),(pending),(pending),C,by-feature,head,listicle,6
+#
+# === Cluster 5: comparison pages ===
+breville barista express vs touch,(pending),(pending),(pending),C,comparison,head,comparison,7
+rancilio silvia vs gaggia classic,(pending),(pending),(pending),C,comparison,head,comparison,7
+breville vs de'longhi,(pending),(pending),(pending),C,comparison,head,comparison,7
+#
+# === Cluster 6: espresso style ===
+best espresso machine for cappuccino,(pending),(pending),(pending),C,style,head,listicle,5
+best manual espresso machine,(pending),(pending),(pending),C,style,head,listicle,5
+#
+# === Cluster 7: buyer guides ===
+how to choose an espresso machine,(pending),(pending),(pending),I,buyer-guide,head,guide,n/a
+manual vs automatic espresso machine,(pending),(pending),(pending),I,buyer-guide,head,guide,n/a
+#
+# === Cluster 8: maintenance & troubleshooting ===
+how to descale breville espresso machine,(pending),(pending),(pending),I,maintenance,head,howto,n/a
+why is my espresso machine leaking,(pending),(pending),(pending),I,troubleshooting,head,howto,n/a
+how to clean group head,(pending),(pending),(pending),I,maintenance,head,howto,n/a
+#
+# Volume / KD / CPC populated on re-run with SE Ranking auth.
+# Intent codes: C=Commercial, T=Transactional, I=Informational, N=Navigational.
