@@ -1,0 +1,12 @@
+host,count,share_pct
+stripe.com,203,74.9
+docs.stripe.com,29,10.7
+dashboard.stripe.com,19,7.0
+support.stripe.com,12,4.4
+marketplace.stripe.com,1,0.4
+github.com,1,0.4
+stripe.dev,1,0.4
+status.stripe.com,1,0.4
+press.stripe.com,1,0.4
+frontierclimate.com,1,0.4
+TOTAL,271,100.0
