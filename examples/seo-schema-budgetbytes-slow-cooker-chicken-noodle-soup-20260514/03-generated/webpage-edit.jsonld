@@ -1,0 +1,7 @@
+{
+  "_comment": "PATCH — apply this field-level edit to the existing WebPage entity in the page's @graph. Replace {REPLACE: recipe-@id} with the actual @id of the Recipe entity already present in the graph (e.g. https://www.budgetbytes.com/slow-cooker-chicken-noodle-soup/#recipe).",
+  "@type": "WebPage",
+  "mainEntity": {
+    "@id": "{REPLACE: recipe-@id from existing graph}"
+  }
+}

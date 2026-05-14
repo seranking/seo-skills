@@ -1,0 +1,9 @@
+{
+  "_comment": "PATCH — apply these field-level edits to the existing Recipe entity in the page's @graph. Do NOT add a second <script> block. Locate the Recipe item inside the existing @graph and merge these fields in.",
+  "@type": "Recipe",
+  "dateModified": "2025-09-06T00:44:55+00:00",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [".wprm-recipe-summary"]
+  }
+}

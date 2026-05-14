@@ -2,6 +2,7 @@
 name: seo-schema
 description: Detect existing JSON-LD structured data on a page, validate against Google's rich-result requirements, and generate missing schema markup (Article, Product, LocalBusiness, FAQPage, BreadcrumbList). Produces paste-ready `<script type="application/ld+json">` blocks. Use when the user asks for "schema markup", "structured data", "JSON-LD", "rich results", "schema validation", or "fix the schema on this page".
 ---
+> Example output: [examples/seo-schema-budgetbytes-slow-cooker-chicken-noodle-soup-20260514/SCHEMA.md](../../examples/seo-schema-budgetbytes-slow-cooker-chicken-noodle-soup-20260514/SCHEMA.md)
 
 # Schema Markup
 
