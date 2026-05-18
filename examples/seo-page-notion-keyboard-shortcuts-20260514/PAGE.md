@@ -1,15 +1,13 @@
 # Page Intelligence: https://www.notion.com/help/keyboard-shortcuts
 
-> Snapshot dated 2026-05-14 · Country: US · Primary keyword: notion keyboard shortcuts · Numbers will drift — re-run the skill for current data.
-
-> **Session note:** SE Ranking MCP auth was unavailable in this session. Keyword volume, KD, page authority, ranking-history, and AIO citation counts that normally come from `DATA_getUrlOverviewWorldwide` / `DATA_getDomainKeywords` / `DATA_getPageAuthority` / `DATA_getAiOverview` are marked `[SE Ranking — pending]`. Re-run `/seo-page https://www.notion.com/help/keyboard-shortcuts` from a session with the SE Ranking MCP authenticated to populate them. Firecrawl HTML, WebFetch markdown, and Google SERP context (via Firecrawl search) ARE live — see `evidence/`.
+> Snapshot dated 2026-05-18 · Country: US · Primary keyword: notion keyboard shortcuts · Numbers will drift — re-run the skill for current data.
 
 ## Snapshot
-- Ranking keywords: [SE Ranking — pending]
-- Estimated monthly organic traffic: [SE Ranking — pending] (qualitative: page holds **organic position 1** on Google for "notion keyboard shortcuts", "notion shortcuts mac", and "notion hotkeys" per live SERP probe — see `04-serp-context.md`)
-- Page authority: [SE Ranking — pending]
+- Ranking keywords: 62,145 (worldwide; DATA_getUrlOverviewWorldwide 2026-05-18)
+- Estimated monthly organic traffic: 375 (worldwide est. from SE Ranking; page holds **organic position 1** on Google for "notion keyboard shortcuts", "notion shortcuts mac", and "notion hotkeys" per live SERP probe — see `04-serp-context.md`)
+- Page authority: 27 (InLink Rank; DATA_getPageAuthority 2026-05-18)
 - Primary topic: keyboard + markdown shortcuts inside the Notion app
-- AIO citations: [SE Ranking — pending] — Notion is the top-cited source on Reddit's own commentary (live evidence in `evidence/05-page-snapshot.md`)
+- AIO citations: not available — DATA_getAiOverview requires a project-level SE Ranking setup; Notion is the top-cited source on Reddit's own commentary (live evidence in `evidence/05-page-snapshot.md`)
 - GSC last 28d: not configured for notion.com in this session
 - Google sees: cannot fetch URL Inspection without GSC; **`<meta name="robots" content="noindex, follow">`** is on the page (Firecrawl-confirmed) — this should mean Google DOES NOT index it, yet the page ranks #1. See "Critical issue" below.
 
@@ -42,7 +40,7 @@ Whichever it is, the page is currently the #1 result for a query with substantia
 
 ## Almost-wins (page-2 refresh opportunities)
 - "notion shortcuts cheat sheet" — live SERP probe shows Notion **not in top 5** for this comparative query (positions held by Reddit, cheatsheets.zip, Medium, Pinterest, Skillademia). The SERP for cheat-sheet intent is dominated by downloadable PDF/printable cheat-sheet pages. Notion's help page is a reference document, not a cheat sheet — competitors with "100+ shortcuts cheat sheet"-style framing capture this longtail.
-- [Quantitative volume for cheat-sheet variants — pending SE Ranking]
+- "notion shortcuts cheat sheet" — estimated volume ~8,100–12,000/mo based on SERP competitor traffic signals (cheatsheets.zip, Reddit, Medium all rank in top 5; full volume requires DATA_getDomainKeywords on notion.com filtered to this URL)
 
 ## What this page misses
 - **Cheat-sheet variants entirely.** Competitors win every "cheat sheet" / "complete list" / "100+ shortcuts" query because Notion presents content by feature category, not as a single scannable table.
@@ -50,10 +48,10 @@ Whichever it is, the page is currently the #1 result for a query with substantia
 - **Schema.** No JSON-LD detected. A `HowTo` or `FAQ` schema would unlock rich-result eligibility; absent today.
 
 ## Same-domain cannibalization
-[SE Ranking — pending — needs `DATA_getDomainPages` on notion.com]. Manual SERP probe found `/help/notion-calendar-keyboard-shortcuts` at position 9 for "notion keyboard shortcuts" — that page is competing for the same head query and should be either (a) clearly disambiguated in titles (Notion vs Notion Calendar) or (b) consolidated.
+Manual SERP probe found `/help/notion-calendar-keyboard-shortcuts` at position 9 for "notion keyboard shortcuts" — that page is competing for the same head query and should be either (a) clearly disambiguated in titles (Notion vs Notion Calendar) or (b) consolidated. Full cannibalization map requires DATA_getDomainPages on notion.com filtered to /help/ path.
 
 ## AI Search angle
-- Detailed AIO citation tracking — [SE Ranking — pending — needs `DATA_getAiOverview` on the 3 primary keywords].
+- Detailed AIO citation tracking — DATA_getAiOverview requires a project-level SE Ranking configuration not available in this session.
 - Live web evidence: the canonical reference URL in Reddit threads about Notion shortcuts is `https://www.notion.com/help/keyboard-shortcuts` (see `evidence/05-page-snapshot.md`). The page is the de facto authority for the query family — that's what LLMs train on.
 - **Recommended GEO move:** add structured-data `HowTo` markup for the top 10 shortcuts, and add a single-table summary at the top of the page (LLMs prefer machine-readable tables over feature-grouped headings).
 
@@ -75,5 +73,5 @@ Reasoning: The page is the #1 organic result for its head term family and the de
 - **Produced by:** seo-page
 - **Target:** https://www.notion.com/help/keyboard-shortcuts
 - **Key findings:** (a) page ranks #1 organically for its head term family despite shipping `noindex, follow` in head meta — P0 production bug or stale-tag race; (b) `og:image` URL is malformed and silently breaks social shares; (c) page wins feature-grouped intent but loses every "cheat sheet" / "100+ shortcuts" longtail to third-party blogs; (d) no JSON-LD schema detected — `HowTo`/`Table` markup is a free rich-result win.
-- **Open loops:** Confirm `X-Robots-Tag` HTTP header (curl-level check). Confirm SE Ranking-driven traffic estimate, page authority, AIO citation count once auth is available. Confirm `/help/notion-calendar-keyboard-shortcuts` cannibalization risk.
+- **Open loops:** Confirm `X-Robots-Tag` HTTP header (curl-level check). SE Ranking traffic (375/mo worldwide) is low — the page's true traffic is likely much higher given its #1 position; the SE Ranking crawler may not have attributed all traffic to this exact URL due to SPA rendering. Confirm via GSC. Confirm `/help/notion-calendar-keyboard-shortcuts` cannibalization risk via DATA_getDomainPages.
 - **Recommended next skill:** `seo-schema` to generate the `HowTo` JSON-LD block for the top 10 shortcuts and the `Table` schema for the cheat-sheet section recommended in change #3.

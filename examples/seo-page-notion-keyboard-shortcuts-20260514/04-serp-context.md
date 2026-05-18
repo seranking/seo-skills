@@ -1,6 +1,6 @@
 # SERP context — top 10 + AIO for the page's top 3 keywords
 
-Tool: `mcp__firecrawl-mcp__firecrawl_search` (live Google SERP probe, US, 2026-05-14). The SE Ranking equivalent (`DATA_getSerpResults`, `DATA_getAiOverview`) was unavailable in this session — AIO citation tracking is `[pending]`. Position numbers below are real and verified live.
+Tool: `mcp__firecrawl-mcp__firecrawl_search` (live Google SERP probe, US, 2026-05-14). SE Ranking DATA_getAiOverview requires a project-level setup not available in this session — AIO citation tracking not populated. Position numbers below are real and verified live.
 
 ## "notion keyboard shortcuts" (head term)
 
@@ -17,7 +17,7 @@ Tool: `mcp__firecrawl-mcp__firecrawl_search` (live Google SERP probe, US, 2026-0
 | 9 | https://www.notion.com/help/notion-calendar-keyboard-shortcuts | Notion Calendar keyboard shortcuts – Notion Help Center |
 | 10 | https://thomasfrank.notion.site/10-Notion-Keyboard-Shortcuts-You-Need-to-Know-... | 10 Notion Keyboard Shortcuts You Need to Know |
 
-SERP features visible in the probe: YouTube video carousel (2 results), Reddit thread cluster. AI Overview presence: [pending — needs `DATA_getAiOverview`].
+SERP features visible in the probe: YouTube video carousel (2 results), Reddit thread cluster. AI Overview presence: not tracked in this session (DATA_getAiOverview requires project-level configuration).
 
 **Cannibalization signal:** position 9 is `notion.com/help/notion-calendar-keyboard-shortcuts` — a peer URL on the same domain ranking for the same head query. Disambiguate titles or consolidate.
 
@@ -58,5 +58,5 @@ SERP features visible in the probe: YouTube video carousel (2 results), Reddit t
 Notion's help page is **not in the top 5**. Every winner is a scannable cheat-sheet format. Notion's feature-grouped reference doesn't match this query's intent. See PAGE.md change #3.
 
 ## Recommended `seo-page` follow-ups
-- Re-run with SE Ranking auth for: `DATA_getUrlOverviewWorldwide`, `DATA_getDomainKeywords --url`, `DATA_getPageAuthority`/`History`, `DATA_getSerpResults` (for SERP-feature inventory), `DATA_getAiOverview` (for AIO citation tracking on each of the 4 queries above).
+- URL overview and page authority are now populated (see evidence/01-url-overview.md). Remaining open: `DATA_getDomainKeywords --url` (full ranked-keyword list for this URL), `DATA_getSerpResults` (structured SERP-feature inventory), `DATA_getAiOverview` (AIO citation tracking — requires project setup).
 - Run `seo-schema` next to generate `HowTo` + `Table` JSON-LD blocks per PAGE.md change #3.
