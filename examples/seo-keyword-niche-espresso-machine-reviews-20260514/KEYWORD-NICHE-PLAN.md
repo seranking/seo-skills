@@ -1,19 +1,19 @@
 # Keyword Niche Plan: espresso machine reviews
 
 > Generated 2026-05-14 · Country: US · Seeds: ["espresso machine reviews"]
-> Snapshot dated 2026-05-14 · Numbers will drift — re-run the skill for current data.
+> Snapshot dated 2026-05-18 · Numbers will drift — re-run the skill for current data.
 
 ## Verdict
 
 **Espresso machine reviews is a content-mining-rich niche dominated by two SERP shapes: (a) "best X for Y" multi-product listicles, and (b) single-product review pages.** A new entrant cannot out-rank Wirecutter / Serious Eats / Sweethome on the head terms ("best espresso machine") but **can** capture meaningful long-tail traffic via 12 distinct cluster veins: by price band, by feature, by use case, by skill level, by espresso style, by maker, by maintenance question, by comparison, by accessory, by "vs" comparison, by troubleshooting, by buyer guide. The recommended tier produces an estimated 180–250 pages over a 6-month build using a hybrid template (review schema + comparison-table component + persona-driven buyer-guide intro) — but **this niche is high-thin-content-risk** and the programmatic-publishing quality gates in `07-quality-gates.md` are non-negotiable.
 
-## Inventory (structure ready, real keyword counts pending SE Ranking auth)
+## Inventory
 
-- Longtail keywords mined: (pending — typical 800–1,500 for a niche of this scope)
-- Question keywords: (pending — typical 200–400)
-- After filter (min-vol 50, max-kd 40): (pending — typical 400–700)
+- Longtail keywords mined: 439 (DATA_getLongTailKeywords, seed "espresso machine reviews", US)
+- Question keywords: 454 (DATA_getKeywordQuestions, seed "espresso machine", US, intents I+C)
+- After filter (min-vol 50, max-KD 40): 185 question keywords pass; longtail endpoint returns strings only (no vol/KD in this call)
 - Clusters formed: 12 (see "Cluster build order" below)
-- Estimated combined monthly volume: (pending; mid-five-digit total likely)
+- Estimated combined monthly volume (filtered question keywords only): 36,780/mo; full niche with longtail variants is mid-to-high five-digit
 
 ## Recommended content tier
 

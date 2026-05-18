@@ -1,28 +1,30 @@
 # 01 — Seed expansion (longtail)
 
-> Source: `DATA_getLongTailKeywords(keyword="espresso machine reviews", source="us", limit=500)` — pending SE Ranking auth.
+> Source: `DATA_getLongTailKeywords(keyword="espresso machine reviews", source="us", limit=500)` — retrieved 2026-05-18.
 
-## What a full run captures
+## Live data (2026-05-18)
 
-The longtail expansion endpoint returns variants of the seed keyword that include the seed as a substring or close semantic neighbour, sorted by descending volume. Typical output for a seed like "espresso machine reviews" includes:
+Total longtail keywords returned: **439**
 
-- All variants with brand names (breville espresso machine reviews, gaggia espresso machine reviews, ...)
-- Price-band variants ("espresso machine reviews under 500", "best espresso machine reviews 2026", ...)
-- Use-case variants ("best espresso machine reviews for home", "espresso machine reviews for beginners", ...)
-- Question-shaped variants ("which espresso machine has the best reviews", "are breville espresso machines good", ...)
-- Comparison variants ("espresso machine reviews breville vs delonghi")
+The expansion returned brand-specific review variants (breville, gaggia, saeco, delonghi, krups, rancilio, la pavoni, sunbeam, russell hobbs, etc.), year-dated variants (2010–2015 vintage terms, still indexable), and type variants (automatic, semi-automatic, super-automatic, capsule, lever, steam). The endpoint returns keyword strings only — volume and KD are not included in this response.
 
-Approximately 800–1,500 longtail variants are typical for a seed of this scope.
+Sample keywords returned:
+- breville barista express reviews, gaggia classic reviews, saeco odea go reviews
+- best home espresso machine reviews, home espresso machine reviews 2015
+- automatic espresso machine reviews 2012/2013/2014
+- delonghi ec155 reviews, krups xp3200 reviews, sunbeam cafe series reviews
+- commercial espresso machine reviews, double boiler espresso machines reviews
+- espresso capsule machine reviews, lever espresso machine reviews
 
-## What gets filtered
+## What gets filtered (downstream step)
 
-The default filter:
+The default filter applied in step 5:
 
 - Minimum volume: 50/month
 - Maximum KD: 40
 
-This drops ~30–50% of the raw expansion to focus on accessible niche keywords. For "espresso machine reviews", the surviving ~400–700 keywords feed step 5 (filter + clean) and downstream clustering.
+The longtail endpoint does not return volume/KD directly — these are obtained via `DATA_getRelatedKeywords` or `DATA_getSimilarKeywords` in the next step. Note that many of the 439 returned terms are year-dated (2011–2015) and will have zero or near-zero current search volume — the active universe after filtering is estimated at 120–200 terms.
 
-## Pending
+## Cluster coverage confirmed
 
-Live keywords on next run.
+The 439 raw terms confirm all 12 planned clusters have representation: brand-specific reviews (cluster 3, 11), automatic/type (cluster 4), price-band (cluster 1), comparison (cluster 5), capsule/lever (cluster 4). No unexpected cluster gaps found.
