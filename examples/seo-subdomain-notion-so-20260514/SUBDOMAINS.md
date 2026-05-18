@@ -1,6 +1,6 @@
 # Subdomain Analysis: notion.so / notion.com
 
-> Snapshot dated 2026-05-14 · Subdomains analysed: 5 first-party + 1 user-workspace pattern (limit: top 10 by discovered URL count via Firecrawl)
+> Snapshot dated 2026-05-18 · Subdomains analysed: 5 first-party + 1 user-workspace pattern (limit: top 10 by discovered URL count via Firecrawl)
 > Numbers will drift — re-run the skill for current data.
 
 ## Verdict
@@ -11,16 +11,16 @@
 
 ## Subdomain inventory
 
-| Subdomain | Role | Keywords | Traffic est. | Backlinks | DA | Top topics owned |
+| Subdomain | Role | Keywords | Traffic est./mo | Backlinks (ref-domains) | DA | Top topics owned |
 |---|---|---|---|---|---|---|
-| **www.notion.com** | Marketing apex (post-migration) | (pending SE Ranking auth) | (pending) | (pending) | (pending) | "notion app", "notion templates", "workspace tool", "ai meeting notes", help articles |
-| **www.notion.so** | Legacy apex (301 → www.notion.com) | (declining; serves redirects) | (pending) | (pending) | (pending) | User-workspace public pages (`{workspace}.notion.so/{slug}`) — see "User-workspace pattern" below |
-| **developers.notion.com** | API/SDK + connection docs | (pending) | (pending) | (pending) | (pending) | "notion api", "notion sdk", "notion integration", "notion connections", "webhooks" |
+| **www.notion.com** | Marketing apex (post-migration) | 534,477 (US: 325,324 traffic) | 4,204,160 (worldwide) | 31,085 ref-domains | 90 | "notion app", "notion templates", "workspace tool", "ai meeting notes", help articles |
+| **www.notion.so** | Legacy apex (301 → www.notion.com) | 44,310 (worldwide, declining) | 193,765 (worldwide) | 184,877 ref-domains | 96 | Legacy marketing + user-workspace public pages (`{workspace}.notion.so/{slug}`) — DA 96 reflects accumulated link equity pre-migration |
+| **developers.notion.com** | API/SDK + connection docs | 6,320 (US) | 2,383 (US) | 2,706 ref-domains | 90 | "notion api", "notion sdk", "notion integration", "notion connections", "webhooks" |
 | **sitemaps.notion.com** | Operational — sitemap hosting | n/a (not an SEO surface) | n/a | n/a | n/a | Category/collection sitemaps for crawler consumption |
-| **app.notion.com** | Operational — workspace runtime (paths like `/p/{workspace}/{slug}`) | n/a (typically noindex) | n/a | n/a | n/a | (none — operational, not a marketing surface) |
+| **app.notion.com** | Operational — workspace runtime | n/a (typically noindex) | n/a | n/a | n/a | (none — operational, not a marketing surface) |
 | **{workspace}.notion.so** (pattern) | User-workspace public pages | n/a per workspace | varies wildly | varies | varies | User-generated public content — Notion does not control topics |
 
-**(pending SE Ranking auth)** = these cells would be populated by `DATA_getDomainSubdomains` + `DATA_getDomainOverviewWorldwide` calls. The structure above is correct; only the metric cells are gated.
+Data sources: `DATA_getDomainSubdomains` (notion.com base_domain, notion.so base_domain, US, 2026-05-18) + `DATA_getDomainOverviewWorldwide` + `DATA_getDomainAuthority` + `DATA_getBacklinksSummary`.
 
 ## Topic ownership map
 
