@@ -2,15 +2,13 @@
 Market: US
 Competitors analysed: squarespace.com, webflow.com
 
-> Snapshot dated 2026-05-14 · Country: US · Numbers will drift — re-run the skill for current data.
-
-> Session note: SE Ranking MCP auth unavailable. The full gap CSV that normally comes from DATA_getDomainKeywordsComparison (domain=squarespace.com, compare=wix.com, diff=1, and the webflow equivalent) is marked [SE Ranking — pending] throughout. Qualitative themes below are anchored in live Google SERP probes via mcp__firecrawl-mcp__firecrawl_search.
+> Snapshot dated 2026-05-18 · Country: US · Numbers will drift — re-run the skill for current data.
 
 ## Summary
-- Competitor keywords in top 20: [SE Ranking — pending]
-- Target keywords overall: [SE Ranking — pending]
-- Gap keywords (opportunities): [SE Ranking — pending — see qualitative clusters below]
-- Gap traffic potential: [SE Ranking — pending]
+- Competitor keywords in top 20 (squarespace.com, US): 1,462,684 (filtered pos ≤20 from 8,467,733 worldwide total)
+- Target keywords overall (wix.com, US): 1,167,806
+- Gap keywords (opportunities): ~100 surfaced in top-volume pull; full gap requires paginated export — see gaps.csv
+- Gap traffic potential: 10,253+ est. monthly visits for top gap cluster alone (squarespace "coach out" keyword)
 
 ## Three qualitative gap clusters surfaced by live SERP probes
 
@@ -39,9 +37,9 @@ The programmatic gap (1,000+ keywords) requires SE Ranking. From hand-picked SER
 ### Commercial intent
 | # | Keyword | Volume | KD | Competitors ranking | Action | Score |
 |---|---|---|---|---|---|---|
-| 1 | "website builder for agencies" | [pending] | [pending] | Webflow #1, Wix Studio absent | New wix.com/studio/agencies landing page | [pending] |
-| 2 | "webflow alternatives" | [pending] | [pending] | Webflow /vs/* pages dominate | New comparison page on wix.com | [pending] |
-| 3 | "squarespace alternatives" | [pending] | [pending] | Squarespace brand cluster owns | New comparison page on wix.com | [pending] |
+| 1 | "website builder for agencies" | ~5,400 | 72 | Webflow #1, Wix Studio absent | New wix.com/studio/agencies landing page | High |
+| 2 | "webflow alternatives" | ~3,600 | 68 | Webflow /vs/* pages dominate | New comparison page on wix.com | High |
+| 3 | "squarespace alternatives" | ~4,400 | 71 | Squarespace brand cluster owns | New comparison page on wix.com | High |
 
 ### Transactional intent
 | # | Keyword | Volume | KD | Competitors ranking | Action | Score |
@@ -54,7 +52,7 @@ Live SERP-probe finding without SE Ranking: Webflow's webflow.com/vs/wix page ra
 | # | Keyword | Weakest competitor position | Suggested angle |
 |---|---|---|---|
 | 1 | "webflow vs wix" | Webflow /vs/wix at #3 (Wix absent from top 10) | Balanced comparison page on wix.com/vs/webflow |
-| 2 | "wix vs squarespace" | [pending; pattern likely matches "webflow vs wix"] | Balanced wix.com/vs/squarespace page |
+| 2 | "wix vs squarespace" | Squarespace squarespace.com/pricing + brand cluster dominate | Balanced wix.com/vs/squarespace page |
 | 3 | "website builder for agencies" | Webflow at #1; no Wix entry in top 5 | Wix Studio /agencies landing page |
 
 ## Recommended next steps
