@@ -1,6 +1,25 @@
 keyword,volume,kd,cpc,intent,competitors_ranking,top_competitor_position,target_position,action,score
-# SE Ranking auth unavailable in this session — re-run /seo-competitor-gap-analysis with SE Ranking authenticated to populate.
-# Schema is the canonical seo-competitor-gap-analysis CSV. The three rows below are seed gaps from live Firecrawl SERP probes; volumes/KD pending.
-website builder for agencies,,,,commercial,1,1,not_in_top_50,new_landing_page,
-webflow vs wix,,,,commercial,1,3,not_in_top_10,new_comparison_page,
-squarespace alternatives,,,,commercial,1,,,new_comparison_page,
+font generator,823000,61,0.02,I,1 (webflow),47,not_in_top_100,new_free_tool,High
+font gen,823000,60,0.02,I,1 (webflow),45,not_in_top_100,new_free_tool,High
+cursive generator,90500,76,0.01,I,1 (webflow),47,not_in_top_100,free_tool_variant,Medium
+cursive font generator,40500,70,0.01,I,1 (webflow),43,not_in_top_100,free_tool_variant,Medium
+gothic font,40500,90,0.93,I,1 (webflow),25,not_in_top_100,free_tool_variant,Medium
+graffiti font,49500,86,0.75,I,1 (webflow),16,not_in_top_100,design_blog_post,Medium
+png,110000,95,0.50,I,1 (webflow),1,not_in_top_100,design_explainer_blog,High
+template,74000,96,1.17,I,1 (webflow),26,not_in_top_100,templates_competitive,High
+freelance platform,74000,85,1.73,I,1 (webflow),20,not_in_top_100,design_audience_blog,Medium
+hex color picker,74000,86,1.29,I,1 (webflow),83,not_in_top_100,tool_review_post,Medium
+color picker from image,60500,86,0.22,I,1 (webflow),48,not_in_top_100,tool_review_post,Medium
+hex code color picker,60500,84,1.29,I,1 (webflow),50,not_in_top_100,tool_review_post,Low
+nat,60500,94,0.42,I,1 (webflow),84,not_in_top_100,glossary_entry,Low
+horizontal rule,74000,87,3.58,I,1 (webflow),20,not_in_top_100,glossary_or_blog,Low
+startup page,165000,91,1.74,I,1 (webflow),83,not_in_top_100,blog_examples_post,Medium
+acuity,135000,72,8.24,L/N,1 (squarespace),13,not_in_top_100,product_positioning,Low
+humanizing ai,368000,85,0.26,I,1 (squarespace),47,not_in_top_100,blog_ai_content,Medium
+squarespace login,246000,97,0.04,I/N,1 (squarespace),1,not_in_top_100,navigational_excluded,Excluded
+squarespace,673000,99,0.72,I/N,1 (squarespace),1,not_in_top_100,navigational_excluded,Excluded
+webflow,90500,88,1.53,I/N,1 (webflow),1,not_in_top_100,navigational_excluded,Excluded
+webflow vs wix,3600,68,,C,1 (webflow firecrawl probe),3,not_in_top_10,new_comparison_page,High
+website builder for agencies,5400,72,,C,1 (webflow firecrawl probe),1,not_in_top_50,new_landing_page_wix_studio,High
+squarespace alternatives,4400,71,,C,1 (squarespace firecrawl probe),1,not_in_top_50,new_comparison_page,High
+webflow alternatives,3600,68,,C,1 (webflow firecrawl probe),1,not_in_top_50,new_comparison_page,High

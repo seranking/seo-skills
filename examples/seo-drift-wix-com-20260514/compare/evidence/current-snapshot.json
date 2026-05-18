@@ -1,33 +1,37 @@
 {
   "target": "wix.com",
   "target_type": "domain",
-  "snapshot_date": "2026-05-14",
+  "snapshot_date": "2026-05-18",
   "country": "us",
-  "session_note": "SE Ranking MCP auth unavailable in this session. Domain-level fields pending. Page-level Firecrawl capture is live (see page field below).",
   "domain": {
-    "domain_authority": null,
-    "organic_traffic_estimate": null,
-    "organic_keywords_count": null,
-    "_source": "[SE Ranking — pending: DATA_getDomainOverviewWorldwide]"
+    "domain_authority": 100,
+    "organic_traffic_estimate": 1417427,
+    "organic_keywords_count": 1167806,
+    "paid_keywords_count": 1915,
+    "top_1_5_keywords_count": 417935,
+    "top_6_10_keywords_count": 179954,
+    "top_11_20_keywords_count": 251656,
+    "top_21_50_keywords_count": 549495,
+    "top_51_100_keywords_count": 557273,
+    "price_sum": 3462694.56,
+    "_source": "mcp__plugin_seo-skills_se-ranking__DATA_getDomainOverviewWorldwide(domain=wix.com, show_zones_list=1) US zone + DATA_getDomainOverviewHistory(domain=wix.com, source=us) latest entry 2026-05"
   },
   "backlinks": {
-    "backlinks_total": null,
-    "referring_domains_total": null,
-    "_source": "[SE Ranking — pending: DATA_getBacklinksSummary]"
+    "backlinks_total": 94220625,
+    "referring_domains_total": 3356565,
+    "subnets": 876034,
+    "unique_ips": 1005591,
+    "dofollow_backlinks": 73080077,
+    "nofollow_backlinks": 21140548,
+    "_source": "mcp__plugin_seo-skills_se-ranking__DATA_getBacklinksSummary(target=wix.com, mode=domain)"
   },
   "page": {
     "url": "https://www.wix.com/",
     "title": "Website Builder - Create a Free Website In Minutes | Wix.com",
     "og_title": "Your vision. Your goals. Your website. | Wix.com",
-    "og_description": "Get everything you need to create your website, your way. From an intuitive website builder to built-in business solutions and AI tools—try Wix for free.",
     "meta_description": "Get everything you need to build a website your way. Wix's free, easy-to-use website builder offers 2,000+ templates, built-in AI tools and a custom domain.",
-    "og_image": "https://static.wixstatic.com/media/343a2a_f435947596b24c0a87854aa410c4cf48~mv2.jpg/v1/fill/w_1200,h_630,al_c/343a2a_f435947596b24c0a87854aa410c4cf48~mv2.jpg",
-    "twitter_card": "summary_large_image",
     "language": "en",
-    "robots": null,
-    "json_ld_types": [],
-    "hreflang_count": 0,
     "fingerprint_hash": "wix-com-homepage-2026-05-14",
-    "_source": "Firecrawl rawHtml capture (live)"
+    "_source": "Firecrawl scrape rawHtml captured 2026-05-14 (page metadata is structural and remains valid against 2026-05-18 SE Ranking numbers)"
   }
 }

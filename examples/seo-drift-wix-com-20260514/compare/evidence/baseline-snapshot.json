@@ -1,21 +1,28 @@
 {
   "target": "wix.com",
   "target_type": "domain",
-  "snapshot_date": "2026-02-13",
+  "snapshot_date": "2026-02-01",
   "country": "us",
-  "session_note": "Historical-compare placeholder. The seo-drift skill normally loads this from a prior /seo-drift baseline run's snapshot.json. For this example the data point ~90 days ago was supposed to come from DATA_getDomainOverviewHistory, but SE Ranking auth was unavailable in this session. Re-run /seo-drift compare wix.com with auth to populate.",
+  "snapshot_method": "historical (pulled via DATA_getDomainOverviewHistory entry for 2026-02)",
   "domain": {
-    "domain_authority": null,
-    "organic_traffic_estimate": null,
-    "organic_keywords_count": null,
-    "_source": "[SE Ranking — pending: DATA_getDomainOverviewHistory at date=2026-02-13]"
+    "domain_authority": 100,
+    "organic_traffic_estimate": 1417131,
+    "organic_keywords_count": 1390318,
+    "top_1_5_keywords_count": 392543,
+    "top_6_10_keywords_count": 173433,
+    "top_11_20_keywords_count": 261384,
+    "top_21_50_keywords_count": 607357,
+    "top_51_100_keywords_count": 749914,
+    "price_sum": 3034061.73,
+    "_source": "mcp__plugin_seo-skills_se-ranking__DATA_getDomainOverviewHistory(domain=wix.com, source=us, type=organic) entry year=2026 month=2"
   },
   "backlinks": {
     "backlinks_total": null,
     "referring_domains_total": null,
-    "_source": "[SE Ranking — pending: backlink history endpoint at date=2026-02-13]"
+    "_source": "Backlinks API does not expose historical-date snapshots via getBacklinksSummary; only current state is queryable. Delta against this baseline is not computable for backlinks in a historical-compare scenario — see DRIFT-REPORT.md."
   },
   "page": {
-    "_note": "No page-level fingerprint exists from 2026-02-13 because no /seo-drift baseline was run at that date. Page-fingerprint comparisons start from today's capture forward."
+    "url": "https://www.wix.com/",
+    "_source": "Historical page fingerprint not available — page-level diff is first-capture-only for this historical-compare scenario. See DRIFT-REPORT.md."
   }
 }

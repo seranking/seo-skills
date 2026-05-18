@@ -1,22 +1,50 @@
 {
   "target": "wix.com",
   "target_type": "domain",
-  "snapshot_date": "2026-05-14",
+  "snapshot_date": "2026-05-18",
   "country": "us",
-  "session_note": "SE Ranking auth unavailable in this session — fields populated from a mix of public Firecrawl scrape (head metadata, page fingerprint) and explicit pending-markers where DATA_* tools would normally fill in. Re-run /seo-drift baseline wix.com from a session with SE Ranking authenticated to produce a complete snapshot.",
   "domain": {
-    "domain_authority": null,
-    "organic_traffic_estimate": null,
-    "organic_keywords_count": null,
-    "paid_keywords_count": null,
-    "top_100_keywords": null,
-    "_source": "[SE Ranking — pending: DATA_getDomainOverviewWorldwide + DATA_getDomainKeywords]"
+    "domain_authority": 100,
+    "organic_traffic_estimate": 1417427,
+    "organic_keywords_count": 1167806,
+    "paid_keywords_count": 1915,
+    "top_1_5_keywords_count": 417935,
+    "top_6_10_keywords_count": 179954,
+    "top_11_20_keywords_count": 251656,
+    "_source": "mcp__plugin_seo-skills_se-ranking__DATA_getDomainOverviewWorldwide(domain=wix.com, show_zones_list=1) US zone + DATA_getDomainOverviewHistory(domain=wix.com, source=us, type=organic) latest entry 2026-05"
   },
   "backlinks": {
-    "backlinks_total": null,
-    "referring_domains_total": null,
-    "top_20_referring_domains": null,
-    "_source": "[SE Ranking — pending: DATA_getBacklinksSummary + DATA_getBacklinksRefDomains]"
+    "backlinks_total": 94220625,
+    "referring_domains_total": 3356565,
+    "subnets": 876034,
+    "unique_ips": 1005591,
+    "dofollow_backlinks": 73080077,
+    "nofollow_backlinks": 21140548,
+    "edu_backlinks": 218526,
+    "gov_backlinks": 51587,
+    "top_20_referring_domains": [
+      {"refdomain": "cloud.google.com", "domain_inlink_rank": 100, "backlinks": 3, "dofollow_backlinks": 3, "first_seen": "2022-04-15"},
+      {"refdomain": "learn.microsoft.com", "domain_inlink_rank": 100, "backlinks": 3, "dofollow_backlinks": 1, "first_seen": "2023-09-24"},
+      {"refdomain": "aws.amazon.com", "domain_inlink_rank": 100, "backlinks": 14, "dofollow_backlinks": 14, "first_seen": "2019-07-09"},
+      {"refdomain": "apps.apple.com", "domain_inlink_rank": 100, "backlinks": 1076, "dofollow_backlinks": 1065, "first_seen": "2019-06-15"},
+      {"refdomain": "ast.wikipedia.org", "domain_inlink_rank": 100, "backlinks": 6, "dofollow_backlinks": 0, "first_seen": "2018-09-15"},
+      {"refdomain": "wordpress.org", "domain_inlink_rank": 100, "backlinks": 4, "dofollow_backlinks": 0, "first_seen": "2021-02-01"},
+      {"refdomain": "ca.godaddy.com", "domain_inlink_rank": 100, "backlinks": 1, "dofollow_backlinks": 1, "first_seen": "2018-07-26"},
+      {"refdomain": "new.express.adobe.com", "domain_inlink_rank": 100, "backlinks": 6, "dofollow_backlinks": 0, "first_seen": "2024-06-04"},
+      {"refdomain": "xd.adobe.com", "domain_inlink_rank": 100, "backlinks": 2, "dofollow_backlinks": 0, "first_seen": "2022-05-27"},
+      {"refdomain": "ja.gravatar.com", "domain_inlink_rank": 100, "backlinks": 2, "dofollow_backlinks": 0, "first_seen": "2023-11-20"},
+      {"refdomain": "www.blogger.com", "domain_inlink_rank": 100, "backlinks": 26, "dofollow_backlinks": 1, "first_seen": "2018-06-17"},
+      {"refdomain": "fr.godaddy.com", "domain_inlink_rank": 100, "backlinks": 3, "dofollow_backlinks": 3, "first_seen": "2018-10-21"},
+      {"refdomain": "archive.icann.org", "domain_inlink_rank": 100, "backlinks": 2, "dofollow_backlinks": 0, "first_seen": "2018-09-13"},
+      {"refdomain": "tr.gravatar.com", "domain_inlink_rank": 100, "backlinks": 1, "dofollow_backlinks": 0, "first_seen": "2019-10-01"},
+      {"refdomain": "uk.godaddy.com", "domain_inlink_rank": 100, "backlinks": 6, "dofollow_backlinks": 3, "first_seen": "2018-08-14"},
+      {"refdomain": "nl.godaddy.com", "domain_inlink_rank": 100, "backlinks": 5, "dofollow_backlinks": 5, "first_seen": "2019-12-09"},
+      {"refdomain": "am.wordpress.org", "domain_inlink_rank": 100, "backlinks": 1, "dofollow_backlinks": 0, "first_seen": "2025-07-02"},
+      {"refdomain": "bg.wikipedia.org", "domain_inlink_rank": 100, "backlinks": 4, "dofollow_backlinks": 0, "first_seen": "2019-04-29"},
+      {"refdomain": "br.pinterest.com", "domain_inlink_rank": 100, "backlinks": 1, "dofollow_backlinks": 1, "first_seen": "2024-02-14"},
+      {"refdomain": "help-center-east.dc-aws.godaddy.com", "domain_inlink_rank": 100, "backlinks": 1, "dofollow_backlinks": 1, "first_seen": "2025-10-10"}
+    ],
+    "_source": "mcp__plugin_seo-skills_se-ranking__DATA_getBacklinksSummary(target=wix.com, mode=domain) + DATA_getBacklinksRefDomains(target=wix.com, mode=domain, limit=20, order_by=domain_inlink_rank)"
   },
   "page": {
     "url": "https://www.wix.com/",
@@ -34,7 +62,7 @@
     "hreflang_count": 0,
     "page_authority": null,
     "fingerprint_hash": "wix-com-homepage-2026-05-14",
-    "_source": "[Firecrawl scrape rawHtml + WebFetch fallback. Page authority and json-ld block content pending SE Ranking.]"
+    "_source": "Firecrawl scrape rawHtml + WebFetch fallback, captured 2026-05-14. Page-level authority and JSON-LD block content require URL-mode SE Ranking calls not run in this session."
   },
   "google_field_data": {
     "tier": 0,
@@ -43,6 +71,6 @@
     "cls_p75": null,
     "fcp_p75": null,
     "ttfb_p75": null,
-    "_source": "[Google CrUX — not run this session; pass --skip-cwv if you want to skip on re-runs.]"
+    "_source": "Google CrUX — not run this session; pass --skip-cwv to skip on re-runs, or `bash extensions/google/install.sh` to enable."
   }
 }

@@ -65,7 +65,7 @@ Reasoning: The page is the #1 organic result for its head term family and the de
 3. **Add a single-table cheat-sheet section above the feature-grouped sections.** Top 50 shortcuts in a sortable/scannable table. Targets the "cheat sheet" / "100+ shortcuts" longtails competitors own. Add `HowTo` or `Table` JSON-LD schema on the same block to win rich-result eligibility.
 
 ## Raw data
-- keywords.csv — full enriched ranking-keyword list ([SE Ranking — pending])
+- keywords.csv — 49 ranking keywords with real volume + KD from DATA_getDomainKeywords (URL-scoped to the Notion help page)
 - 04-serp-context.md — per-keyword SERP top-10 with AIO (Firecrawl live data)
 - evidence/05-page-snapshot.md — HTML extracts (Firecrawl rawHtml + WebFetch markdown — live)
 

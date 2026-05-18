@@ -1,7 +1,51 @@
 keyword,volume,kd,position,intent,traffic_estimate,url
-# SE Ranking auth unavailable in this session — re-run /seo-page with SE Ranking authenticated to populate this CSV.
-# Schema is the canonical seo-page CSV. The three keywords below were verified live via Firecrawl SERP probes on 2026-05-14 (positions only — no volume/KD numbers without SE Ranking).
-notion keyboard shortcuts,,,1,informational,,https://www.notion.com/help/keyboard-shortcuts
-notion shortcuts mac,,,1,informational,,https://www.notion.com/help/keyboard-shortcuts
-notion hotkeys,,,1,informational,,https://www.notion.com/help/keyboard-shortcuts
-notion shortcuts cheat sheet,,,11+,informational,,https://www.notion.com/help/keyboard-shortcuts
+notion shortcut,590,19,2,I,38,https://www.notion.com/help/keyboard-shortcuts
+notion shortcut,590,19,1,I,25,https://www.notion.com/help/keyboard-shortcuts
+toggle notion,480,23,2,I,9,https://www.notion.com/help/keyboard-shortcuts
+notion tab,390,7,22,I,7,https://www.notion.com/help/keyboard-shortcuts
+notion markdown,590,17,1,I,4,https://www.notion.com/help/keyboard-shortcuts
+shortcuts notion,20,21,1,I/N,4,https://www.notion.com/help/keyboard-shortcuts
+toggle notion,480,23,1,I,3,https://www.notion.com/help/keyboard-shortcuts
+toggle notion,480,23,7,I,2,https://www.notion.com/help/keyboard-shortcuts
+markdown notion,260,17,1,I,2,https://www.notion.com/help/keyboard-shortcuts
+type shortcut,260,25,26,I,1,https://www.notion.com/help/keyboard-shortcuts
+arrows up and down,30,31,64,I,0,https://www.notion.com/help/keyboard-shortcuts
+block icon,30,7,84,I,0,https://www.notion.com/help/keyboard-shortcuts
+block symbol,30,25,46,I,0,https://www.notion.com/help/keyboard-shortcuts
+book symbol text,30,9,67,I,0,https://www.notion.com/help/keyboard-shortcuts
+cool emoji tricks,30,18,73,I,0,https://www.notion.com/help/keyboard-shortcuts
+hand emoticon,30,25,99,I,0,https://www.notion.com/help/keyboard-shortcuts
+cell phone with qwerty keyboard,50,22,58,C,0,https://www.notion.com/help/keyboard-shortcuts
+going forward quotes,50,17,84,I,0,https://www.notion.com/help/keyboard-shortcuts
+cross out word,20,37,88,I,0,https://www.notion.com/help/keyboard-shortcuts
+f emoticon,20,14,59,I,0,https://www.notion.com/help/keyboard-shortcuts
+fast delete,20,10,65,I,0,https://www.notion.com/help/keyboard-shortcuts
+how to remove shortcut arrow,20,7,56,I,0,https://www.notion.com/help/keyboard-shortcuts
+android drop down menu,10,23,60,I,0,https://www.notion.com/help/keyboard-shortcuts
+another word for database,10,11,93,I,0,https://www.notion.com/help/keyboard-shortcuts
+apple shortcut keys,10,20,34,I/N,0,https://www.notion.com/help/keyboard-shortcuts
+block letter t,10,7,61,I,0,https://www.notion.com/help/keyboard-shortcuts
+cmd commands list,10,45,79,I,0,https://www.notion.com/help/keyboard-shortcuts
+command block commands list,10,47,51,I,0,https://www.notion.com/help/keyboard-shortcuts
+computer black screen with cursor,10,8,72,I,0,https://www.notion.com/help/keyboard-shortcuts
+create checklist in word,10,12,96,I,0,https://www.notion.com/help/keyboard-shortcuts
+ctrl lock,10,7,25,I,0,https://www.notion.com/help/keyboard-shortcuts
+cursor jumps around windows 7,10,7,99,I,0,https://www.notion.com/help/keyboard-shortcuts
+data entry keystrokes,10,8,97,I,0,https://www.notion.com/help/keyboard-shortcuts
+different words for hot,10,18,66,I,0,https://www.notion.com/help/keyboard-shortcuts
+do you remember quotes,10,9,65,I,0,https://www.notion.com/help/keyboard-shortcuts
+dos date command,10,21,49,I,0,https://www.notion.com/help/keyboard-shortcuts
+emoji 2 keyboard,10,22,68,I,0,https://www.notion.com/help/keyboard-shortcuts
+emoticon 1,10,27,80,I,0,https://www.notion.com/help/keyboard-shortcuts
+emoticon keystrokes,10,50,59,I,0,https://www.notion.com/help/keyboard-shortcuts
+enter network lock control key,10,11,66,I,0,https://www.notion.com/help/keyboard-shortcuts
+enter search text,10,13,95,I,0,https://www.notion.com/help/keyboard-shortcuts
+first in math cheat codes,10,13,76,I,0,https://www.notion.com/help/keyboard-shortcuts
+french quote marks,10,23,84,I,0,https://www.notion.com/help/keyboard-shortcuts
+h2 zoom,10,20,66,C,0,https://www.notion.com/help/keyboard-shortcuts
+hot off the press templates,10,6,58,C,0,https://www.notion.com/help/keyboard-shortcuts
+how to do shorthand,10,25,94,I,0,https://www.notion.com/help/keyboard-shortcuts
+how to draw a block letter s,10,7,64,I,0,https://www.notion.com/help/keyboard-shortcuts
+how to make symbol,10,37,55,I,0,https://www.notion.com/help/keyboard-shortcuts
+how to use a computer without a mouse,10,19,56,I,0,https://www.notion.com/help/keyboard-shortcuts
+custom bullets,0,16,94,I,0,https://www.notion.com/help/keyboard-shortcuts
