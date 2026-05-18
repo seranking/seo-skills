@@ -1,12 +1,16 @@
 # Drift Baseline: wix.com
 
-> Snapshot dated 2026-05-14 · Country: US · Scope: domain · Numbers will drift — re-run the skill for current data.
-
-> Session note: SE Ranking MCP auth unavailable in this session. Domain authority, organic-traffic estimate, organic-keywords count, top-100 keywords, backlinks, referring-domains, and page authority are stored as null in snapshot.json with a [SE Ranking — pending] marker on each field. Re-run /seo-drift baseline wix.com from a session with SE Ranking auth to produce a complete snapshot. Firecrawl head-metadata capture for the homepage IS live in snapshot.json.
+> Snapshot dated 2026-05-18 · Country: US · Scope: domain · Numbers will drift — re-run the skill for current data.
 
 ## What was captured
 
-Domain-level (per SKILL.md baseline mode step 3): all fields pending SE Ranking auth.
+Domain-level (per SKILL.md baseline mode step 3, SE Ranking auth 2026-05-18):
+- Domain authority (DA): 100
+- Organic keywords (US): 1,167,806
+- Organic traffic estimate (US): 1,417,427 / month
+- Top-1-5 keyword count (US): 417,935
+- Referring domains: 3,356,565
+- Total backlinks: 94,220,625
 
 Page-level homepage fingerprint (per SKILL.md baseline mode step 4 — Firecrawl, live):
 - title: "Website Builder - Create a Free Website In Minutes | Wix.com"
@@ -32,6 +36,4 @@ We DID use Firecrawl for the page-level capture, so the og:*, twitter:* fields a
 
 ## Recommended next step
 
-Re-run /seo-drift baseline wix.com from a session with SE Ranking auth. The resulting snapshot.json will have DA, organic-traffic, organic-keywords count, top-100 keywords, backlinks, and referring-domains fields populated — and subsequent /seo-drift compare wix.com calls will produce meaningful red/yellow/green diffs against that fuller baseline.
-
-Estimated SE Ranking cost on a re-run: ~10–15 credits for the domain-only baseline (per SKILL.md).
+Run /seo-drift compare wix.com after 30–90 days to detect traffic or authority regressions. Use this 2026-05-18 snapshot as the baseline anchor for future compare runs.

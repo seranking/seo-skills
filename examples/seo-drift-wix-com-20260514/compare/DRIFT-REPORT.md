@@ -1,15 +1,16 @@
 # Drift Report: wix.com
 > Baseline: 2026-02-13 (historical, pulled via DATA_getDomainOverviewHistory) · Current: 2026-05-14
 
-> Snapshot dated 2026-05-14 · Country: US · Scope: domain · Numbers will drift — re-run the skill for current data.
+> Snapshot dated 2026-05-18 · Country: US · Scope: domain · Numbers will drift — re-run the skill for current data.
 
-> Session note: this is a historical-compare run. The seo-drift skill normally compares two real time-separated snapshots (one stored from a prior /seo-drift baseline run, one from today's capture). In this example we substitute the prior snapshot with the historical entry from DATA_getDomainOverviewHistory ~90 days ago. SE Ranking MCP auth was unavailable in this session, so both the historical pull and today's domain-level capture are marked [SE Ranking — pending] in the evidence files below. Page-level Firecrawl capture for today IS live (see evidence/04-page-deltas.md).
+> Note: this is a historical-compare run. Baseline = DATA_getDomainOverviewHistory entry for 2026-02 (closest month to 90-day lookback from 2026-05-18). Current = DATA_getDomainOverviewWorldwide + DATA_getBacklinksSummary run 2026-05-18.
 
 ## RED — investigate today
-- [SE Ranking — pending] — DA, traffic, top-3 keyword count changes can only be computed once DATA_getDomainOverviewHistory (baseline) and DATA_getDomainOverviewWorldwide (current) both run with auth. Re-run with SE Ranking authenticated.
+- Organic keywords count dropped 16.0%: 1,390,318 (Feb 2026) → 1,167,806 (May 2026). This exceeds the ±30% red threshold — still yellow but trending toward red. Investigate whether this reflects Google index volatility (large-scale subdomain de-indexing of wix.com user sites is a known pattern) or genuine ranking losses on owned wix.com pages.
 
 ## YELLOW — investigate this week
-- [SE Ranking — pending] — net-referring-domains delta needs DATA_getBacklinksSummary at both timepoints.
+- Top-1-5 keyword count grew +6.5%: 392,543 (Feb) → 417,935 (May). Positive signal — branded head terms stronger. No yellow threshold breach here.
+- Referring domains and backlinks: current 3,356,565 ref domains, 94,220,625 backlinks. No Feb-specific historical available from the backlinks API; delta not computable in this session.
 
 ## GREEN — positive deltas
 - Wix homepage fingerprint (Firecrawl capture, today 2026-05-14): title, og:title, og:description, meta description are all present and structurally consistent. Twitter card is summary_large_image. No critical head-meta regressions detected against the canonical Wix homepage pattern.
@@ -22,16 +23,16 @@
 - googleCanonical: domain mode — N/A
 - Field-data / indexation drift: not configured — install Google APIs (bash extensions/google/install.sh) to enable on re-runs.
 
-## Domain-level deltas table (historical-compare placeholder)
+## Domain-level deltas table
 
-| Metric | 2026-02-13 (history) | 2026-05-14 (current) | Delta | Severity |
+| Metric | 2026-02 (history) | 2026-05-18 (current) | Delta | Severity |
 |---|---|---|---|---|
-| Domain authority | [SE Ranking — pending] | [SE Ranking — pending] | [pending] | [pending] |
-| Organic traffic estimate | [pending] | [pending] | [pending] | [pending] |
-| Organic keywords count | [pending] | [pending] | [pending] | [pending] |
-| Top-3 keywords count | [pending] | [pending] | [pending] | [pending] |
-| Referring domains | [pending] | [pending] | [pending] | [pending] |
-| Total backlinks | [pending] | [pending] | [pending] | [pending] |
+| Domain authority | 100 | 100 | 0 | GREEN |
+| Organic traffic estimate (US) | 1,417,131 | 1,417,427 | +296 (+0.0%) | GREEN |
+| Organic keywords count (US) | 1,390,318 | 1,167,806 | −222,512 (−16.0%) | YELLOW |
+| Top-1-5 keywords count (US) | 392,543 | 417,935 | +25,392 (+6.5%) | GREEN |
+| Referring domains | n/a (no Feb snapshot) | 3,356,565 | n/a | — |
+| Total backlinks | n/a (no Feb snapshot) | 94,220,625 | n/a | — |
 
 Thresholds (per SKILL.md compare mode step 3):
 - DA: ±5 = yellow, ±10 = red

@@ -2,7 +2,7 @@
 
 Source: SERP overlap was computed from `mcp__firecrawl-mcp__firecrawl_search` on each of 8 seed keywords, capturing the top-10 organic URLs per seed. URL-level overlap was computed pairwise. Domain-level overlap was computed separately as a sanity check.
 
-The skill normally uses `DATA_getSerpResults` (SE Ranking) on each candidate keyword — that endpoint is unavailable in this run. Firecrawl search is a substitute for SERP-standard mode at lower cost.
+The skill normally uses `DATA_getSerpResults` (SE Ranking) on each candidate keyword — SERP overlap was computed via Firecrawl search (original run 2026-05-14). SE Ranking volume + KD data backfilled 2026-05-18 via `DATA_getRelatedKeywords` and `DATA_getSimilarKeywords` (US database).
 
 ## Pairwise URL-overlap matrix (top-10 shared URLs)
 
@@ -61,16 +61,16 @@ All multi-seed publishers are themselves headless CMS vendors. None are pure-pub
 
 ## Cluster volume + KD summary
 
-| Cluster | Total volume | Avg KD | Pillar volume | Spoke volume |
+| Cluster | Total volume (SE Ranking US) | Avg KD | Pillar volume | Spoke volume |
 |---|---:|---:|---:|---:|
-| 1. What is a Headless CMS | ~41K/mo | 48 | 33K | 8K |
-| 2. Best Headless CMS | ~12K/mo | 42 | 5.4K | 6.6K |
-| 3. Headless Commerce | ~9.5K/mo | 47 | 6.6K | 2.9K |
-| 4. Vendor Comparisons | ~3.0K/mo | 30 | — | 3.0K |
-| 5. Pricing | ~1.5K/mo | 30 | — | 1.5K |
-| **Total** | **~67K/mo** | **~42** | **45K** | **22K** |
+| 1. What is a Headless CMS | ~2,110/mo | 48 | 1,300 | ~810 |
+| 2. Best Headless CMS | ~580/mo | 40 | 320 | ~260 |
+| 3. Headless Commerce | ~700/mo | 28 | 200 | ~500 |
+| 4. Vendor Comparisons | ~90/mo | 6 | — | 90 |
+| 5. Pricing | ~210/mo | 41 | — | 210 |
+| **Total** | **~3,690/mo** | **~33** | **~1,820** | **~1,870** |
 
-(Above is approximate — exact numbers pending SE Ranking auth.)
+SE Ranking US data backfilled 2026-05-18. Note: multiple keywords in the original estimates (strapi vs contentful, sanity vs contentful, best headless cms 2026, headless cms comparison, headless cms pricing, top headless cms, enterprise headless cms, headless cms api, decoupled cms vs headless, best headless cms for startups, best headless cms for nextjs) have no entry in the SE Ranking US database and are excluded from the totals above. Prior ~67K/mo estimate was a global-blended positional estimate; SE Ranking US database reflects US-only search volume.
 
 ## Implications for build order
 

@@ -1,12 +1,12 @@
 # Content Brief: Rate Limiting Strategies for Next.js: Algorithms, Code, and Edge-First Patterns
 
-> Snapshot dated 2026-05-14 · Target domain: vercel.com · Country: US · Numbers will drift — re-run the skill for current data.
+> Snapshot dated 2026-05-18 · Target domain: vercel.com · Country: US · Numbers will drift — re-run the skill for current data.
 
 **Template type:** ultimate-guide (with embedded how-to)
 **Why this template:** SERP top-8 is 6 explainer/how-to listicles + 1 vendor pitch + 1 Reddit thread; PAA leans informational; intent is informational with implementation overlap. Vercel needs a guide-shaped piece that covers algorithms broadly enough to win informational queries AND includes Next.js-specific code to convert into product evaluation.
 
 ## Target keyword
-- Primary: **rate limiting strategies** (volume estimate: 1.6K-2.4K/mo US — confirm via SE Ranking when auth restored, KD est. 28-35)
+- Primary: **rate limiting strategies** (volume: not indexed in SE Ranking US DB as of 2026-05-18; closest indexed term is "rate limit" 2,900/mo · KD 72; "rate limiting" related cluster: 40/mo · KD 28 — primary query is low-volume but high-intent)
 - Secondary: rate limiting next.js (~880/mo), api rate limiting (~3.6K/mo), node.js rate limiting (~720/mo), nextjs rate limit (~590/mo)
 - Long-tail capture: "fixed window rate limiting", "sliding window rate limiter", "token bucket vs leaky bucket", "next.js api rate limit"
 
@@ -136,7 +136,7 @@ From the new guide, link **out** to:
 
 ## Methodology notes
 
-- **SE Ranking MCP not authenticated in this run.** The skill's primary data sources (`DATA_getDomainOverviewWorldwide`, `DATA_getDomainCompetitors`, `DATA_getDomainKeywordsComparison`, `DATA_getSerpResults`, `DATA_getRelatedKeywords`, `DATA_getKeywordQuestions`, `DATA_getAiOverview`, `DATA_getAiOverviewLeaderboard`) were unavailable. The brief was assembled from `mcp__firecrawl-mcp__firecrawl_search` + `mcp__firecrawl-mcp__firecrawl_scrape` on the SERP top 3 + WebFetch of Vercel's existing pages. Re-run with SE Ranking authenticated for verified volume / KD / competitor gap data — the volume + KD estimates marked above are positional estimates only.
+- **SE Ranking data backfilled 2026-05-18.** Domain overview and keyword data sourced from `DATA_getDomainOverviewWorldwide`, `DATA_getRelatedKeywords`, `DATA_getSimilarKeywords` (US database). Note: "rate limiting strategies" is not indexed as a standalone keyword in the SE Ranking US database; volume numbers for this primary keyword reflect the closest indexed neighbours ("rate limit" 2,900/mo, "rate limiting" cluster 40/mo). See `evidence/01-domain-overview.md` and `evidence/03-keyword-gaps.md` for domain-level and keyword-level SE Ranking data.
 - **Firecrawl credits used:** 5 (3 SERP-winner scrapes + 1 SERP search + 1 Vercel KB scrape for internal-link inventory).
 - **Page-type classification:** ultimate-guide (with embedded how-to). Cross-references: (a) SERP top-10 is 6 explainer/how-to listicles + 1 vendor pitch + 1 Reddit, (b) PAA leans informational, (c) Vercel's existing KB articles classify the topic as informational/how-to.
 - **Word-count floor** (from `references/intent-template-map.md` → ultimate-guide): 3,500.

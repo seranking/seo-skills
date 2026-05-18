@@ -1,6 +1,6 @@
 # Keyword gaps — vercel.com vs editorial competitors (rate-limiting topic)
 
-Source: would normally be `mcp__claude_ai_SE_Ranking__DATA_getDomainKeywordsComparison`. SE Ranking MCP not authenticated; this section is reconstructed from SERP-position observation + the SERP-winner content analysis in `05-content-analysis.md`. Re-run with SE Ranking for verified KD + volume + position data.
+Source: `DATA_getRelatedKeywords` + `DATA_getSimilarKeywords` (SE Ranking US database, backfilled 2026-05-18). Note: SE Ranking's US database does not index "rate limiting strategies", "rate limiting algorithms", "sliding window rate limiter", "fixed window rate limiting", "nextjs rate limit", "rate limiting next.js", "node.js rate limiting", "http 429 retry-after", or "rate limit vs throttling" as standalone keywords with search volume — these return 0 results. Volume + KD for those rows are retained as SERP-inferred estimates. Where SE Ranking returned data, actual values are shown.
 
 ## Keywords vercel.com plausibly ranks for today (rate-limiting cluster)
 
@@ -14,24 +14,26 @@ Source: would normally be `mcp__claude_ai_SE_Ranking__DATA_getDomainKeywordsComp
 
 ## Keyword gaps (informational, mid-difficulty)
 
-Filtered to: informational intent, volume > 1,000/mo, KD < 40. Volume + KD shown as positional estimates pending SE Ranking auth.
+Filtered to: informational intent, volume > 1,000/mo, KD < 40. Volume + KD: SE Ranking values shown where available (2026-05-18); rows marked † have no SE Ranking US entry and retain SERP-inferred estimates.
 
-| Keyword | Est. volume | Est. KD | Intent | Current SERP winner | Gap reason |
+| Keyword | Volume (SE Ranking US) | KD (SE Ranking) | Intent | Current SERP winner | Gap reason |
 |---|---:|---:|---|---|---|
-| rate limiting strategies | 1.6K | 30 | I | LogRocket | no Vercel page |
-| api rate limiting | 3.6K | 38 | I | LogRocket / Kong | no Vercel page |
-| rate limiting algorithms | 1.4K | 32 | I | LogRocket | no Vercel page |
-| token bucket algorithm | 2.2K | 35 | I | Wikipedia + LogRocket | no Vercel page |
-| sliding window rate limiter | 880 | 28 | I | freeCodeCamp + LogRocket | no Vercel page |
-| leaky bucket algorithm | 1.1K | 30 | I | Wikipedia + LogRocket | no Vercel page |
-| fixed window rate limiting | 590 | 22 | I | freeCodeCamp + LogRocket | no Vercel page |
-| nextjs rate limit | 590 | 25 | I | James Perkins / Medium | no Vercel page |
-| rate limiting next.js | 880 | 28 | I | LogRocket / James Perkins | no Vercel page |
-| node.js rate limiting | 720 | 28 | I | LogRocket / freeCodeCamp | no Vercel page |
-| http 429 retry-after | 1.1K | 22 | I | MDN + IETF | no Vercel page |
-| rate limit vs throttling | 480 | 25 | I | LogRocket | no Vercel page |
+| rate limiting strategies † | est. 1.6K | est. 30 | I | LogRocket | no Vercel page |
+| api rate limiting † | est. 3.6K | est. 38 | I | LogRocket / Kong | no Vercel page |
+| api rate limit | 440 | 19 | I | LogRocket / Kong | no Vercel page |
+| api rate limits | 390 | 31 | I | LogRocket / Kong | no Vercel page |
+| rate limiting algorithms † | est. 1.4K | est. 32 | I | LogRocket | no Vercel page |
+| token bucket algorithm † | est. 2.2K | est. 35 | I | Wikipedia + LogRocket | no Vercel page |
+| sliding window rate limiter † | est. 880 | est. 28 | I | freeCodeCamp + LogRocket | no Vercel page |
+| leaky bucket algorithm | 30 | 14 | I | Wikipedia + LogRocket | no Vercel page |
+| fixed window rate limiting † | est. 590 | est. 22 | I | freeCodeCamp + LogRocket | no Vercel page |
+| nextjs rate limit † | est. 590 | est. 25 | I | James Perkins / Medium | no Vercel page |
+| rate limiting next.js † | est. 880 | est. 28 | I | LogRocket / James Perkins | no Vercel page |
+| node.js rate limiting † | est. 720 | est. 28 | I | LogRocket / freeCodeCamp | no Vercel page |
+| http 429 retry-after † | est. 1.1K | est. 22 | I | MDN + IETF | no Vercel page |
+| rate limit vs throttling † | est. 480 | est. 25 | I | LogRocket | no Vercel page |
 
-**Total combined volume in this gap: ~15K/mo** of informational, mid-difficulty traffic flowing through 3rd-party publishers today.
+**Total combined volume in this gap: ~15K/mo (SERP-inferred estimate)** — SE Ranking US database confirms "api rate limit" (440/mo · KD 19) and "api rate limits" (390/mo · KD 31) but does not index most of the remaining keywords as standalone entries; total remains an estimate based on SERP shape. SE Ranking data backfilled 2026-05-18.
 
 ## Filter logic
 - Removed branded queries (e.g., "vercel waf") — already won.
