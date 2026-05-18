@@ -1,8 +1,6 @@
 # SEO Plan: wix.com
 
-> Plan dated 2026-05-14 · Horizon: 90 days · Business type: saas (website-builder PLG) · Country: US · Numbers will drift — re-run the skill for current data.
-
-> Session note: SE Ranking MCP auth unavailable this session. Wix-specific quantitative anchors (DA, organic-keywords count, traffic estimate) come from the existing /examples/seo-ai-search-share-of-voice-wix-com-20260427 example (committed, real-data) and are marked [SoV-2026-04-27] where reused; new-this-session numbers are marked [SE Ranking — pending]. This plan synthesises across three sibling examples — see "Inputs ingested" below.
+> Plan dated 2026-05-18 · Horizon: 90 days · Business type: saas (website-builder PLG) · Country: US · Numbers will drift — re-run the skill for current data.
 
 ## Inputs ingested
 
@@ -17,10 +15,10 @@ What is NOT yet ingested (per SKILL.md step 4a, would normally be ingested if pr
 
 (Anchored in the share-of-voice example's competitive frame plus today's Firecrawl capture of wix.com)
 
-- Organic keywords: [SE Ranking — pending DATA_getDomainOverviewWorldwide]
-- Organic traffic estimate: [SE Ranking — pending]
-- Domain authority: [SE Ranking — pending]
-- Referring domains: [SE Ranking — pending]
+- Organic keywords (US): 1,167,806
+- Organic traffic estimate (US): 1,417,427 / month
+- Domain authority: 100
+- Referring domains: 3,356,565
 - AI Search share of voice: 36.1% combined across 5 engines, #1 of 5 competitors [SoV-2026-04-27]
 - Pillar scores: Technical [pending audit] / Content [pending audit] / Topical 90/100 [SoV-derived, qualitative — Wix dominates 6 of 9 clusters] / AI Search 95/100 [SoV-derived]
 
@@ -36,10 +34,10 @@ The Wix gap analysis (sibling example) surfaces the single highest-leverage miss
 
 | Domain | DA | Organic kw | Top cluster they own |
 |---|---|---|---|
-| weebly.com | [pending] | [pending] | Free-builder secondary brand (acquired by Square, declining) [SoV] |
-| squarespace.com | [pending] | [pending] | Design-led / portfolio / professional templates [SoV] |
-| hostinger.com | [pending] | [pending] | Hosting-first; bundled builder is secondary [SoV] |
-| webflow.com | [pending] | [pending] | Designer / agency / Wix Studio's direct competition [SoV + gap analysis] |
+| weebly.com | 88 | 28,783,430 (WW, incl. user subdomains) | Free-builder secondary brand (acquired by Square, declining) [SoV] |
+| squarespace.com | 97 | 8,467,733 (WW) | Design-led / portfolio / professional templates [SoV] |
+| hostinger.com | 96 | 4,179,209 (WW) | Hosting-first; bundled builder is secondary [SoV] |
+| webflow.com | 95 | 2,971,221 (WW) | Designer / agency / Wix Studio's direct competition [SoV + gap analysis] |
 | (5th slot variable; auto-discover with DATA_getDomainCompetitors) | | | |
 
 ## Phase 1 — Foundations (weeks 1–4)
@@ -99,17 +97,17 @@ In order (anything off this list is moveable):
 
 | Metric | Type | Current | Phase 1 target | Phase 2 target | Phase 3 target |
 |---|---|---|---|---|---|
-| Organic traffic | Lagging | [pending] | hold at baseline | +5% from Phase 1 | +10% from Phase 1 |
+| Organic traffic | Lagging | 1,417,427/mo (US) | hold at baseline | +5% from Phase 1 | +10% from Phase 1 |
 | Pages with E-E-A-T ≥ 70 | Leading | [pending audit] | populate audit | maintain or grow | maintain or grow |
 | Technical issue count | Leading | [pending audit] | reduce ≥25% | reduce ≥40% | reduce ≥50% |
 | AI Search SoV (combined) | Lagging | 36.1% [SoV-2026-04-27] | hold ≥34% | hold ≥34% | hold ≥34% + grow on agency cluster |
-| Referring domains | Leading | [pending] | hold at baseline | grow with /vs/* outreach | +50 from outreach |
+| Referring domains | Leading | 3,356,565 | hold at baseline | grow with /vs/* outreach | +50 from outreach |
 
 Targets are defensible because: (a) "hold at baseline" is the lowest credible bar for a category leader of Wix's size; (b) +5% traffic in 60 days is conservative for a site shipping 3 new high-leverage pages; (c) AI Search SoV holds because we don't ship enough new pages to swing the share materially — we just don't lose it.
 
 ## Constraints / caveats
 
-- SE Ranking auth was unavailable in this session. All pillar scores marked [pending] must be populated by the Phase 1 specialist runs before the plan can be defended quantitatively to a stakeholder.
+- SE Ranking domain-level metrics are now populated (DA, traffic, referring domains, organic keyword count). Pillar scores for Technical and Content still require the Phase 1 specialist runs (seo-technical-audit, seo-content-audit) before the plan can be fully defended to a stakeholder.
 - The /vs/* comparison-page strategy depends on Wix being willing to publish balanced comparison content that mentions competitors by name. If brand wants only Wix-only marketing pages, drop Phase 2.1, 2.2, 2.6 and pivot to a Wix-Studio-only narrative.
 - "Hold AI Search SoV at 34%" is a no-loss target. If the team wants to grow SoV, that requires sustained content investment beyond the 90-day horizon — flag as a Q3+ initiative.
 
