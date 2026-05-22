@@ -177,27 +177,20 @@ Fix paths:
 
 ## Per-endpoint cost cheat-sheet
 
-The skill should never hardcode these — they're authoritative on the live MCP tool descriptions and the canonical table at <https://seranking.com/api/data/getting-started/#unit-costs>. Common ones for quick recall:
+Credit costs are **not** carried in the MCP tool descriptions — the canonical source is the per-endpoint pages on `seranking.com/api/data/*` and the unit-costs table at <https://seranking.com/api/data/getting-started/#unit-costs>. Always confirm there before a large run; SE Ranking updates costs periodically.
+
+**Verified against the docs (2026-05-22):**
 
 | Endpoint | MCP tool | Cost |
 |---|---|---|
 | Account subscription | `DATA_getSubscription` | 0 |
 | Credit balance | `DATA_getCreditBalance` | 0 |
-| Backlinks summary | `GetBacklinksSummary` | 100/record |
-| Backlinks export (task) | `ExportBacklinksData` | 1/record |
-| Backlinks export status | `GetBacklinksExportStatus` | 0/request |
-| Domain overview | `GetDomainOverviewWorldwide` / `GetDomainOverviewDatabases` | 100/record |
-| Domain keywords | `GetDomainKeywords` | 1/keyword |
-| Domain competitors | `GetDomainCompetitors` | 1/competitor |
-| Keyword research | `DATA_getRelatedKeywords` / `DATA_getSimilarKeywords` | varies (often 1/keyword) |
-| Keyword overview | `DATA_getKeywordOverview` | 100/keyword |
-| SERP task creation | `DATA_createSerpTask` | 1/keyword |
-| SERP task results | `DATA_getSerpTaskResults` | 0 (already paid at task creation) |
-| Website audit creation | `DATA_createStandardAudit` | varies by site size |
-| Website audit report | `DATA_getAuditReport` | 0 |
-| AI Search overview | `DATA_getAiSearchOverview` | varies |
+| Domain overview (worldwide) | `DATA_getDomainOverviewWorldwide` | 100 / request |
+| Domain overview (regional) | `DATA_getDomainOverviewDatabases` | 100 / request |
+| Domain competitors | `DATA_getDomainCompetitors` | 100 / request (flat — *not* per-competitor) |
+| Backlinks summary | `DATA_getBacklinksSummary` | 100 / target |
 
-**Always defer to the live tool description for the canonical figure.** SE Ranking updates costs periodically; the in-tool figure is the source of truth.
+For any endpoint not in this table, read the **"Cost:"** line on its docs page before forecasting — do not guess a figure. Apply the two billing models described above: **per request** (flat fee per call — most overview / summary / competitor endpoints) and **per record** (one charge per row — list and export endpoints; e.g. `DATA_exportBacklinksData` charges per backlink record, `DATA_getDomainKeywords` per keyword returned). When unsure, run the smallest possible request first and read the actual charge against the docs.
 
 ## Combined rate-limit + credit safety pattern
 

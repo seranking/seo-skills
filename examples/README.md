@@ -9,6 +9,7 @@ Real, end-to-end runs of every skill in this plugin against publicly observable 
 | [`seo-ads`](./seo-ads-hostinger-com-20260514/) | hostinger.com vs Bluehost / GoDaddy / SiteGround | [ADS.md](./seo-ads-hostinger-com-20260514/ADS.md) |
 | [`seo-agency-landing-page`](./seo-agency-landing-page-saas-founders-20260514/) | B2B SaaS SEO agency, "SaaS founders, US, 50–500" niche | [copy.md](./seo-agency-landing-page-saas-founders-20260514/copy.md) + [index.html](./seo-agency-landing-page-saas-founders-20260514/index.html) |
 | [`seo-ai-search-share-of-voice`](./seo-ai-search-share-of-voice-wix-com-20260427/) | wix.com vs Weebly / Hostinger / Squarespace / Webflow | [REPORT.md](./seo-ai-search-share-of-voice-wix-com-20260427/REPORT.md) |
+| [`seo-api`](./seo-api-seranking-com-20260522/) | seranking.com — domain-intelligence integration (Data API) | [RECIPE.md](./seo-api-seranking-com-20260522/RECIPE.md) |
 | [`seo-backlink-gap`](./seo-backlink-gap-linear-app-20260514/) | linear.app vs Jira / Asana / Monday / ClickUp | [REPORT.md](./seo-backlink-gap-linear-app-20260514/REPORT.md) |
 | [`seo-backlinks-profile`](./seo-backlinks-profile-stripe-com-20260514/) | stripe.com (99.9M backlinks, 592K ref domains) | [PROFILE.md](./seo-backlinks-profile-stripe-com-20260514/PROFILE.md) |
 | [`seo-competitor-gap-analysis`](./seo-competitor-gap-analysis-wix-com-20260514/) | wix.com vs squarespace.com + webflow.com | [REPORT.md](./seo-competitor-gap-analysis-wix-com-20260514/REPORT.md) |
@@ -31,7 +32,7 @@ Real, end-to-end runs of every skill in this plugin against publicly observable 
 | [`seo-sxo`](./seo-sxo-bigin-com-20260514/) | bigin.com on "best CRM for small business" | [SXO-REPORT.md](./seo-sxo-bigin-com-20260514/SXO-REPORT.md) |
 | [`seo-technical-audit`](./seo-technical-audit-linear-app-20260514/) | linear.app (issue-coded fix list) | [TECH-AUDIT.md](./seo-technical-audit-linear-app-20260514/TECH-AUDIT.md) |
 
-24 examples across 24 skills.
+25 examples across 26 skills.
 
 ## How to read an example
 

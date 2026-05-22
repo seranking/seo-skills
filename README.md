@@ -73,13 +73,13 @@ Then run `/mcp` and complete OAuth. (User-scope registrations [outrank plugin-bu
 
 ## What you get
 
-24 finished example outputs — one per skill — live in [`examples/`](examples/). Each is a real run against a publicly observable target. Three flagship examples to skim before installing:
+25 finished example outputs — covering 25 of the 26 skills — live in [`examples/`](examples/). Each is a real run against a publicly observable target. Three flagship examples to skim before installing:
 
 - **[`seo-plan` for wix.com (90-day plan)](examples/seo-plan-wix-com-20260514/PLAN.md)** — phased SEO roadmap that composes outputs from `seo-ai-search-share-of-voice`, `seo-competitor-gap-analysis`, and `seo-drift` into a 90-day plan with owners, success metrics, and a critical path. Demonstrates skill composition.
 - **[`seo-technical-audit` for linear.app](examples/seo-technical-audit-linear-app-20260514/TECH-AUDIT.md)** — top-10 priority fix list ranked by `severity × affected_pages / effort`, plus `issues.csv` for the engineering team and a per-key-page issue digest.
 - **[`seo-ai-search-share-of-voice` for wix.com](examples/seo-ai-search-share-of-voice-wix-com-20260427/REPORT.md)** — 36.1% combined share of voice across 5 LLM engines (AI Overview / ChatGPT / Perplexity / Gemini / AI Mode), heatmap, topic-cluster ownership grid, and 5 prioritised gap-closing actions.
 
-Full index of all 24 examples: [`examples/README.md`](examples/README.md). Every example is dated and snapshot-disclaimed — re-run the skill for fresh numbers.
+Full index of all 25 examples: [`examples/README.md`](examples/README.md). Every example is dated and snapshot-disclaimed — re-run the skill for fresh numbers.
 
 ## Skills
 

@@ -39,6 +39,8 @@ Read keyword / traffic / competitor / ad profile of any domain.
 - **Ads:** `DATA_getDomainAdsByDomain`, `DATA_getDomainAdsByKeyword`.
 - **URL-level overview:** `DATA_getUrlOverviewWorldwide`.
 
+> **`DATA_getDomainCompetitors` 60KB overflow.** For popular domains the response (up to 500 rows) exceeds the MCP client's inline token limit and is auto-saved to a file rather than returned inline. Recover it with a `jq` slice on the saved file — e.g. `jq -r '.data[:15][] | [.domain, .common_keywords] | @tsv' <saved-file>`. This is an MCP-transport limit only; the raw REST endpoint `GET /v1/domain/competitors` returns the full JSON uncapped. The same overflow can hit other large list endpoints — `DATA_getDomainKeywords`, `DATA_getAllBacklinks` — on big domains.
+
 ### Keyword research (~7 tools)
 
 - `DATA_getRelatedKeywords`, `DATA_getSimilarKeywords`, `DATA_getLongTailKeywords`, `DATA_getKeywordQuestions`.
@@ -74,8 +76,8 @@ LLM-engine visibility data.
 
 ### Account & system (~4 tools)
 
-- `DATA_getSubscription` — plan info + `units_left`.
-- `DATA_getCreditBalance` — alias.
+- `DATA_getSubscription` — plan info. Returns `{ subscription_info: { status, units_limit, units_left, start_date, expiraton_date } }`. **`units_left` is the figure to forecast against** — it matches the official credit-system docs.
+- `DATA_getCreditBalance` — returns `{ limit, used }`. **Not an alias of `getSubscription`:** the two report different remaining-credit figures that do not reconcile against `limit` (an ~8.6M gap observed in testing). Use it as a secondary view only; forecast from `getSubscription.units_left`.
 - `DATA_getUserProfile` — user identity + workspace.
 
 ## Project API surfaces

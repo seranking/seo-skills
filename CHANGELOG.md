@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.10.1] — 2026-05-22
+
+Patch release. Smoke-tested `seo-api` against the live SE Ranking MCP (a read-only domain-intelligence integration for seranking.com) and corrected three inaccuracies the test exposed in the v2.10.0 skill text.
+
+### Fixed
+- **`seo-api` — `DATA_getCreditBalance` was wrongly described as an alias of `DATA_getSubscription`.** The two return different shapes (`{ limit, used }` vs `{ subscription_info: { units_limit, units_left, … } }`) and their remaining-credit figures do not reconcile (an ~8.6M gap observed live). `SKILL.md` step 1 and `references/api-surface-map.md` now state this and direct forecasting to `getSubscription.units_left`.
+- **`seo-api` — `DATA_getDomainCompetitors` credit cost was wrong.** `references/rate-limits-and-credits.md` listed "1/competitor"; the actual cost is a flat 100 credits/request, verified against `seranking.com/api/data/domain-analysis`. The cost cheat-sheet was rebuilt to a docs-verified table and trimmed of rows naming tools whose existence could not be confirmed.
+- **`seo-api` — skill instructed itself to read credit costs from MCP tool `description` fields.** Tool descriptions carry input schemas and usage notes but not credit costs; `SKILL.md` and `references/rate-limits-and-credits.md` now point to the public per-endpoint docs as the only cost source.
+
+### Added
+- **`examples/seo-api-seranking-com-20260522/`** — the first `seo-api` example: a read-only domain-intelligence integration for seranking.com (`RECIPE.md` + `code/` in cURL / Python / TypeScript / MCP-call form + `evidence/`). Produced by the smoke-test run; catalogue example coverage 24 → 25.
+
+### Changed
+- `seo-api` `SKILL.md` + `references/api-surface-map.md`: documented the `DATA_getDomainCompetitors` 60KB MCP-transport overflow (response auto-saved to a file; recover via a `jq` slice or the raw REST endpoint, which has no size cap) and clarified that `evidence/03-ids-resolved.md` and `04-execution-log.md` are conditional output files.
+- `examples/README.md` and root `README.md`: example count 24 → 25.
+
 ## [2.10.0] — 2026-05-22
 
 This release ships two new skills — `seo-images` (image SEO audit) and `seo-api` (SE Ranking API integration architect) — taking the catalogue from 24 to 26 skills. `seo-api` is the first skill to operate on the Project API and to wire up account state; the long-standing Data-API-only scope restriction is lifted, with mutating calls gated behind explicit per-call user confirmation.

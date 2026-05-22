@@ -22,7 +22,7 @@ Help developers ship real integrations against the SE Ranking SEO Data API and P
      claude mcp add --transport http se-ranking https://api.seranking.com/mcp
      ```
      and stop. See `references/auth-and-keys.md` for OAuth vs. `X-Api-Key` header tradeoffs and headless / CI patterns.
-   - Call `DATA_getCreditBalance` and `DATA_getSubscription` (both 0 credits). Record `units_left`, plan status, expiration. These get printed in the cost forecast in step 5.
+   - Call `DATA_getSubscription` (0 credits). Record `units_left`, plan status, expiration — `units_left` is the figure to forecast against, and it gets printed in the cost forecast in step 5. Optionally also call `DATA_getCreditBalance` for its `{ limit, used }` view — but the two are **not** aliases: they report different remaining-credit numbers that do not reconcile (an ~8.6M gap is normal), so treat `getSubscription.units_left` as the source of truth.
 
 2. **Clarify the goal.** Ask 1–3 questions only if the goal is ambiguous. Skip when the user already spelled it out. Useful follow-ups:
    - "Is this a one-off run, a recurring job (daily/weekly), or a long-lived integration in your product?"
@@ -37,7 +37,7 @@ Help developers ship real integrations against the SE Ranking SEO Data API and P
 4. **Map to tools / endpoints.** For every step in the integration, name:
    - The MCP tool: `` `DATA_getDomainKeywords` `` or `` `PROJECT_addKeywords` ``.
    - The underlying REST endpoint + HTTP verb (e.g., `GET /v1/domain/keywords`).
-   - The credit cost (Data API) or limit consumed (Project API). Pull the canonical cost table from `references/rate-limits-and-credits.md` or from each tool's own `description` field.
+   - The credit cost (Data API) or limit consumed (Project API). Source costs from `references/rate-limits-and-credits.md` and the per-endpoint pages at `seranking.com/api/data/*` — MCP tool `description` fields carry input schemas and usage notes but **not** credit costs.
    - If a tool needs an ID the user didn't supply (project ID, search engine ID, geo region name, language code), insert the prerequisite `*list*` or `*available*` call before it. See `references/api-surface-map.md` § "ID resolution".
 
 5. **Forecast cost.** Sum credit cost across all Data API calls. For Project API calls, surface plan-limit impact (e.g., "this consumes 1 Site + 50 Keywords + ~500 Audit Pages from your plan"). Compare against:
@@ -75,11 +75,11 @@ seo-api-{slug}-{YYYYMMDD}/
 └── evidence/
     ├── 01-preflight.md             (credit balance, subscription status, MCP connectivity check)
     ├── 02-cost-forecast.md         (per-call cost breakdown, plan-limit deltas, total)
-    ├── 03-ids-resolved.md          (any project IDs, search engine IDs, geo codes resolved upfront)
-    └── 04-execution-log.md         (live mode only — every MCP call with timestamp, args, status)
+    ├── 03-ids-resolved.md          (Project API / search-engine IDs, geo codes resolved upfront — omit if none needed)
+    └── 04-execution-log.md         (every MCP call executed, with args + status — omit in pure code mode where nothing ran)
 ```
 
-Top-level: `RECIPE.md` + `code/`. The `evidence/` folder preserves the reasoning trail; auditors lean on `02-cost-forecast.md` and `03-ids-resolved.md` when reviewing.
+Top-level: `RECIPE.md` + `code/`. The `evidence/` folder preserves the reasoning trail; auditors lean on `02-cost-forecast.md` and the execution log. `03` and `04` are conditional — a run with no ID lookups and no executed calls (pure code-mode advice) ships just `01` + `02`.
 
 `RECIPE.md` follows this shape:
 
@@ -168,7 +168,8 @@ Top-level: `RECIPE.md` + `code/`. The `evidence/` folder preserves the reasoning
   - Languages → `PROJECT_getGoogleLanguages`.
   - Regions for local rank tracking → `PROJECT_getAvailableRegions` (use the verbatim `name` field; abbreviations are rejected).
 - **For exports, poll the status endpoint.** Async endpoints (`/backlinks/export`, `/keywords/export`) return a task ID; subsequent polls of `*ExportStatus` count against the rate limit but cost 0 credits. Start with a 5s poll interval; exponential backoff if the task is large.
-- **Don't fetch what's already in the MCP tool description.** Every MCP tool exposes its full input schema via the protocol. Before reaching for `WebFetch` on the public docs, check the tool's own description — input shape, defaults, and most usage notes are there.
+- **Check the MCP tool description before WebFetching docs.** Every MCP tool exposes its full input schema, defaults, and usage notes via the protocol — e.g. `DATA_getDomainCompetitors` documents its own ~60KB response cap. One thing the descriptions do *not* carry: credit costs — for those, use `references/rate-limits-and-credits.md` and the public per-endpoint pages.
+- **Large list endpoints can overflow the MCP transport.** `DATA_getDomainCompetitors` on a popular domain — and `DATA_getDomainKeywords` / `DATA_getAllBacklinks` on big domains — return responses past the MCP client's inline token limit; the result is auto-saved to a file instead. Recover it with a `jq` slice on the saved file, or call the REST endpoint directly (raw REST has no size cap). See `references/api-surface-map.md`.
 - **For "show me Swagger / OpenAPI for the MCP"** — point the developer at MCP Inspector (`npx @modelcontextprotocol/inspector https://api.seranking.com/mcp`) or `mcp-scan`. Both walk the live tool/prompt/resource catalogue. A canonical MCP→OpenAPI converter is on the roadmap; for now the inspector output is the source of truth.
 
 ## Works well with
