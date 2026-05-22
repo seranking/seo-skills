@@ -87,7 +87,7 @@ In order:
 
 ## Heavy-content rule
 
-Keep `SKILL.md` ≤ 300 lines. If a skill needs a long rubric, schema template, or severity map, put it in a `references/` or `templates/` subfolder under the skill's directory and reference it from `SKILL.md`. This is the [progressive disclosure](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview#how-skills-work) pattern.
+Keep `SKILL.md` ≤ 400 lines. If a skill needs a long rubric, schema template, or severity map, put it in a `references/` or `templates/` subfolder under the skill's directory and reference it from `SKILL.md`. This is the [progressive disclosure](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview#how-skills-work) pattern.
 
 Examples in this repo:
 - `skills/seo-content-audit/references/core-eeat.md` — 60-item rubric.
@@ -103,9 +103,9 @@ When you reference an SE Ranking MCP tool in `SKILL.md`, use the documented pref
 SE Ranking has read-only tools (`DATA_get*`, `DATA_list*`, `PROJECT_get*`, `PROJECT_list*`) and mutating tools (`DATA_createStandardAudit`, `PROJECT_create*`, `PROJECT_add*`, `PROJECT_delete*`, etc.).
 
 - **Read-only tools:** safe to call freely. Document them in the Process section.
-- **Mutating tools:** **always confirm with the user before invoking.** The skill body should print a summary (what will change, how many records, credit cost) before the call. Never auto-write to user state.
+- **Mutating tools:** **always confirm with the user before invoking.** The skill body should print a summary (what will change, how many records, credit cost or plan-limit cost) before the call. Never auto-write to user state.
 
-This plugin is currently DATA-API-only by scope decision; PROJECT_* tools and other mutating tools are out of scope unless a future skill explicitly opts in.
+Both Data API and Project API tools are in scope for skills in this plugin. Earlier versions restricted skills to Data-API-only; that restriction was lifted with `seo-api` in v2.10.0. Most skills still stick to read-only `DATA_*` and `PROJECT_get*` / `PROJECT_list*` because they produce analysis deliverables, not state changes — `seo-api` is the only skill today that wires up Project API state, and even then only with explicit per-call user confirmation.
 
 ## Output folder convention
 
@@ -119,7 +119,7 @@ Before opening a PR:
 - [ ] Frontmatter has `name` (matching folder) and `description`.
 - [ ] All MCP tools referenced are in the [SE Ranking MCP server](https://seranking.com/api/integrations/mcp). Don't reference tools that don't exist.
 - [ ] If the skill has supporting files, they're under `references/` or `templates/`.
-- [ ] `SKILL.md` ≤ 300 lines.
+- [ ] `SKILL.md` ≤ 400 lines.
 - [ ] README skills table updated (new row if a new skill).
 - [ ] CHANGELOG entry added under the next planned version.
 - [ ] Tested end-to-end against a public target. Surface real, redacted-if-needed output in the PR description.

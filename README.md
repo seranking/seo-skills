@@ -32,7 +32,7 @@ Trigger skills with `/seo-content-brief`, `/seo-page`, etc. — no `seo-skills:`
 
 ### 3. Manual install (only if you want `seo-google` or the optional extensions)
 
-Options 1 and 2 cover **24 of 25 skills**. The 25th — `seo-google` — ships Python scripts that need a local clone. The optional Firecrawl + Google extensions also need this. **If neither matters to you, skip this option.**
+Options 1 and 2 cover **25 of 26 skills**. The 26th — `seo-google` — ships Python scripts that need a local clone. The optional Firecrawl + Google extensions also need this. **If neither matters to you, skip this option.**
 
 ```bash
 git clone --depth 1 https://github.com/seranking/seo-skills.git
@@ -110,6 +110,7 @@ Full index of all 24 examples: [`examples/README.md`](examples/README.md). Every
 | [`seo-firecrawl`](skills/seo-firecrawl/SKILL.md) | Ad-hoc web scraping, site mapping, full-site crawling, and within-domain search via Firecrawl. Returns raw HTML, JSON-LD, og:* / twitter:* metadata, JS-rendered DOM, and screenshots that WebFetch can't *(requires the [Firecrawl extension](#firecrawl-raw-html-json-ld-js-rendering-site-crawl))* | "scrape this page", "crawl this site", "map this site", "get the OG tags", "render this JS-heavy page" |
 | [`seo-plan`](skills/seo-plan/SKILL.md) | Phased SEO roadmap for a domain — quarter-by-quarter, tied to competitive position, content gaps, technical debt, and AI Search readiness. Sequences specialist-skill outputs into one site-level plan with owners, metrics, and a critical path | "SEO plan", "SEO strategy", "SEO roadmap", "90-day plan", "where do we focus next" |
 | [`seo-google`](skills/seo-google/SKILL.md) | Google's own SEO data: GSC Search Analytics + URL Inspection + Sitemaps, PageSpeed Insights, CrUX field data + 25-week history, Indexing API, GA4 organic, YouTube, NLP, Knowledge Graph, Web Risk, Keyword Planner. 4 credential tiers; lower tiers are useful on their own *(requires the [Google APIs extension](#google-apis-real-cwv-gsc-ga4-youtube-keyword-planner))* | "search console", "GSC", "PageSpeed", "CrUX", "URL inspection", "real CWV data", "GA4 organic", "google api setup" |
+| [`seo-api`](skills/seo-api/SKILL.md) | SE Ranking API integration architect — covers the entire 195-tool surface (Data API + Project API), forecasts credit and plan-limit cost, emits ready-to-paste cURL / Python / TypeScript / MCP-tool-call recipes, and (with explicit confirmation) wires up Project API state (projects, keywords, search engines, audits, AIRT prompts, backlink groups) | "how do I use SE Ranking API to do X", "what endpoint gives me Y", "credit cost of workflow Z", "build a rank tracker", "set up an audit", "Postman / cURL / Python / TypeScript for SE Ranking", "rate limit for X", "integrate SE Ranking with Looker / n8n / Make" |
 
 ## Optional extensions
 
@@ -220,10 +221,13 @@ seo-skills/
 │   │   └── SKILL.md
 │   ├── seo-plan/
 │   │   └── SKILL.md
-│   └── seo-google/                     # Google APIs skill (extension required)
+│   ├── seo-google/                     # Google APIs skill (extension required)
+│   │   ├── SKILL.md
+│   │   ├── assets/templates/           # 3 report templates (cwv-audit, gsc-performance, indexation)
+│   │   └── references/                 # 10 API reference docs (auth, GSC, PSI, CrUX, GA4, etc.)
+│   └── seo-api/                        # SE Ranking API integration architect
 │       ├── SKILL.md
-│       ├── assets/templates/           # 3 report templates (cwv-audit, gsc-performance, indexation)
-│       └── references/                 # 10 API reference docs (auth, GSC, PSI, CrUX, GA4, etc.)
+│       └── references/                 # auth-and-keys, rate-limits-and-credits, api-surface-map, integration-patterns
 ├── scripts/                            # Python scripts called by seo-google (forked from AgriciDaniel/claude-seo, MIT)
 │   ├── google_auth.py
 │   ├── pagespeed_check.py

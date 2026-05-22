@@ -2,20 +2,26 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
-## [Unreleased]
+## [2.10.0] — 2026-05-22
 
-Catalogue grows from 24 to 25 skills.
+This release ships two new skills — `seo-images` (image SEO audit) and `seo-api` (SE Ranking API integration architect) — taking the catalogue from 24 to 26 skills. `seo-api` is the first skill to operate on the Project API and to wire up account state; the long-standing Data-API-only scope restriction is lifted, with mutating calls gated behind explicit per-call user confirmation.
 
 ### Added (new skill — MIT-attributed fork)
 - **`seo-images`** (249-line SKILL.md + `references/image-checks.md` + `references/lazy-loaders.md` + `templates/image-object.json` + `templates/picture-element.html`) — image SEO audit for a URL or sampled domain. Inventory via Firecrawl (`firecrawl_scrape` for URL mode, `firecrawl_map` + sampled `firecrawl_scrape` for domain mode). Per-image audit covers alt-text quality (presence, generic-text patterns, length window, keyword stuffing, identical-alt templating bugs), modern-format coverage (WebP / AVIF % direct + via `<picture>` fallback), responsive sizing (`srcset` / `sizes`), lazy-loading taxonomy (`native` / `perfmatters` / `ewww` / `js-generic` / `none` — credits AgriciDaniel for the taxonomy), LCP signals (`loading` / `fetchpriority` / `decoding`), CLS dimensions (`width`/`height` attributes), file-name quality, and `ImageObject` JSON-LD detect/validate/generate. Optional Google PSI cross-reference (Tier 0) pulls `modern-image-formats` / `uses-optimized-images` / `uses-responsive-images` / `offscreen-images` / `unsized-images` / `prioritize-lcp-image` / `efficient-animated-content` and merges `wastedBytes` per image into the prioritised remediation list. Optional SE Ranking audit cross-reference elevates audit-flagged image issues alongside per-page findings. Output is `IMAGES.md` + `images.csv` + per-page inventory + paste-ready `<picture>` snippets + `ImageObject` JSON-LD + optional PSI report. Adapted from `AgriciDaniel/claude-seo`'s `seo-images` skill (MIT). File-level optimisation tooling (`cwebp` / `exiftool` / `ffmpeg`) referenced in `references/image-checks.md` § Optimisation pipeline but explicitly out of scope for the skill itself — analysis only, no auto-fix.
 
+### Added (new skill)
+- **`seo-api`** (189-line `SKILL.md` + `references/auth-and-keys.md` + `references/rate-limits-and-credits.md` + `references/api-surface-map.md` + `references/integration-patterns.md`) — SE Ranking API integration architect for developers. Covers the full ~195-tool surface across the Data API (keyword research, backlinks, domain & competitor analysis, SERP, website audit, AI Search, account) and the Project API (rank tracking, project management, audits, AIRT prompts, backlink groups, marketing plan, sub-accounts). Resolves endpoint / parameter / JSON-schema / credit-cost / rate-limit / auth questions, then either emits a code recipe (ready-to-paste cURL + Python + TypeScript + MCP-tool-call variants) or — with explicit per-call confirmation — wires up Project API state live. Three execution modes: code (emit; developer runs), live (execute via MCP step by step), hybrid (wire one-time setup live, emit recurring-job code). Output is `RECIPE.md` + a `code/` folder + an `evidence/` trail (preflight, cost forecast, IDs resolved, execution log). Pulls live tool schemas from the connected MCP so reference data never drifts from the server. First catalogue skill to operate on the Project API and to mutate account state — every `PROJECT_create*` / `add*` / `delete*` / `update*` and audit-creation call is gated behind explicit user confirmation. References cover the single-key auth model (OAuth vs `X-Api-Key` header, per-client config for 9 MCP clients, key rotation), the 10-RPS Data / 5-RPS Project rate limits with an exponential-backoff-with-jitter template, the credit vs plan-limit billing models, the full tool routing + ID-resolution tables, and five canonical integration patterns (rank tracker setup, bulk backlink export, audit pipeline, AIRT visibility tracker, keyword research bulk job).
+
 ### Changed
 - README skills table updated with the new row (between `seo-schema` and `seo-drift`); install-option-3 skill count corrected from a stale "21 of 22" to the accurate "24 of 25"; Firecrawl-dependents note expanded to mark `seo-images` as a hard requirement (the audit cannot run without Firecrawl — `<img>` attributes are stripped from WebFetch's markdown).
+- `seo-api` integration: README skills table gains a 26th row; install-option-3 skill count corrected "24 of 25" → "25 of 26"; repository-layout tree updated with `skills/seo-api/`.
+- `CONTRIBUTING.md`: the Data-API-only scope restriction is lifted — both Data API and Project API tools are now in scope for skills. The `SKILL.md` line ceiling was raised 300 → 400. Mutating-tool guidance now covers plan-limit cost alongside credit cost.
 
 ### Notes
 - JPEG XL coverage: rubric flags JPEG XL as a Nov-2025 Chromium-restoration announcement, not yet in stable Chrome — the skill does not recommend JPEG XL deployment today and marks it for monitoring through 2026.
 - CSS background-images surfaced as an explicit blind spot in the synthesis (count reported, not audited — they don't appear in Google Images search and aren't subject to the `<img>`-tag rubric).
-- No version bump committed; tag at release time.
+- `seo-api` never auto-writes to account state — every mutating Project API call is gated behind explicit per-call user confirmation; declining falls back to emitting equivalent code.
+- `seo-api` ships without an `examples/` entry and has not been smoke-tested against a live SE Ranking account — both recommended as immediate follow-ups.
 
 ## [2.8.0] — 2026-05-01
 
