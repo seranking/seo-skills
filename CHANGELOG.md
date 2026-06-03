@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.10.2] — 2026-06-03
+
+Patch release. Fixes a YAML frontmatter bug that made `seo-keyword-cluster` load with no metadata, and adds CI validation so the same class of error cannot ship again.
+
+### Fixed
+- **`seo-keyword-cluster` — broken `SKILL.md` frontmatter.** The `description` contained a colon-space (`seed keywords: intent-grouped …`), which terminates an unquoted YAML scalar — the frontmatter failed to parse and the skill loaded with all metadata silently dropped (no `name` / `description`). Replaced the colon with an em-dash; it was the only skill in the catalogue with a colon-space in its description.
+
+### Added
+- **`.github/workflows/validate.yml`** — CI on every push to `main` and every PR. Runs `claude plugin validate --strict` against the marketplace manifest and every `plugin.json` (schema + all skills), and asserts the three version fields (marketplace `metadata.version`, the plugin entry, and `plugin.json`) agree. `claude plugin validate .` alone validates only the marketplace manifest and never descends into skills, so the frontmatter bug above passed it undetected — this workflow closes that gap.
+
 ## [2.10.1] — 2026-05-22
 
 Patch release. Smoke-tested `seo-api` against the live SE Ranking MCP (a read-only domain-intelligence integration for seranking.com) and corrected three inaccuracies the test exposed in the v2.10.0 skill text.
