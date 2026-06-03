@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.10.3] — 2026-06-03
+
+Patch release. Adds release automation and ships the first signed (Verified) release.
+
+### Added
+- **`.github/workflows/release.yml`** — tag-triggered release workflow. Pushing a `vX.Y.Z` tag now asserts the tag matches the three manifest versions, extracts the matching CHANGELOG section as the notes, and creates (or updates) the GitHub Release automatically — removing the manual `gh release create` step and the tag-without-release drift it caused. A `workflow_dispatch` trigger rebuilds a Release for an existing tag.
+
+### Notes
+- First release cut with SSH commit/tag signing configured — `vX.Y.Z` tags are now GitHub-Verified.
+
 ## [2.10.2] — 2026-06-03
 
 Patch release. Fixes a YAML frontmatter bug that made `seo-keyword-cluster` load with no metadata, and adds CI validation so the same class of error cannot ship again.
