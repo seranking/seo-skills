@@ -1,0 +1,67 @@
+name: Validate plugin
+
+# Catches what the marketplace-root check alone misses: `claude plugin validate .`
+# validates ONLY the marketplace manifest and never descends into skills, so a
+# broken SKILL.md frontmatter passes that check. Validating each plugin.json is a
+# separate invocation — this workflow runs both, with --strict (warnings = failure).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Claude Code CLI
+        # Pin a version (e.g. @anthropic-ai/claude-code@2.1.161) for reproducible
+        # builds; latest keeps the validator current with new --strict checks.
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Show CLI version
+        run: claude --version
+
+      - name: Validate marketplace manifest
+        run: claude plugin validate . --strict
+
+      - name: Validate every plugin manifest (schema + all skills)
+        shell: bash
+        run: |
+          set -uo pipefail
+          status=0
+          while IFS= read -r manifest; do
+            echo "::group::validate $manifest"
+            if ! claude plugin validate "$manifest" --strict; then
+              status=1
+              echo "::error file=$manifest::plugin validation failed (see log group above)"
+            fi
+            echo "::endgroup::"
+          done < <(find . -path '*/.claude-plugin/plugin.json' -not -path '*/node_modules/*' | sort)
+          exit "$status"
+
+      - name: Check manifest versions agree
+        shell: bash
+        # Assumes the current single-plugin marketplace (plugins[0], plugin.json
+        # at the repo root). Generalise this if a second plugin is ever added.
+        run: |
+          set -euo pipefail
+          meta=$(jq -r '.metadata.version'   .claude-plugin/marketplace.json)
+          entry=$(jq -r '.plugins[0].version' .claude-plugin/marketplace.json)
+          pj=$(jq -r '.version'               .claude-plugin/plugin.json)
+          echo "metadata=$meta  marketplace-entry=$entry  plugin.json=$pj"
+          if [ "$meta" != "$entry" ] || [ "$meta" != "$pj" ]; then
+            echo "::error::version drift across manifests: metadata=$meta entry=$entry plugin.json=$pj"
+            exit 1
+          fi
