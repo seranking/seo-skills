@@ -1,0 +1,99 @@
+name: Release
+
+# Triggered by pushing a vX.Y.Z tag. Turns the tag into a GitHub Release
+# deterministically — asserts the tag matches the manifest versions, pulls the
+# matching CHANGELOG section for the notes, and creates (or updates) the Release.
+# Removes the manual `gh release create` step and the tag-without-release drift
+# it caused. workflow_dispatch lets you (re)build a Release for an existing tag.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing vX.Y.Z tag to (re)build a Release for'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "name=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check out the tagged commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.tag.outputs.name }}
+          fetch-depth: 0
+
+      - name: Assert tag matches manifest versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${{ steps.tag.outputs.name }}"
+          ver="${tag#v}"
+          meta=$(jq -r '.metadata.version'   .claude-plugin/marketplace.json)
+          entry=$(jq -r '.plugins[0].version' .claude-plugin/marketplace.json)
+          pj=$(jq -r '.version'               .claude-plugin/plugin.json)
+          echo "tag=$ver  metadata=$meta  entry=$entry  plugin.json=$pj"
+          if [ "$ver" != "$meta" ] || [ "$ver" != "$entry" ] || [ "$ver" != "$pj" ]; then
+            echo "::error::tag $tag does not match manifest versions (metadata=$meta entry=$entry plugin.json=$pj)"
+            exit 1
+          fi
+
+      - name: Build release notes from CHANGELOG
+        id: notes
+        shell: bash
+        run: |
+          set -euo pipefail
+          ver="${{ steps.tag.outputs.name }}"; ver="${ver#v}"
+          awk -v v="$ver" '
+            $0 ~ "^## \\[" v "\\]" {flag=1; next}
+            flag && /^## \[/ {exit}
+            flag {print}
+          ' CHANGELOG.md > release-notes.md
+          if [ -s release-notes.md ]; then
+            echo "have_notes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::no CHANGELOG section for $ver — falling back to auto-generated notes"
+            echo "have_notes=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create or update the Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${{ steps.tag.outputs.name }}"
+          # Title = the annotated tag's subject (matches the repo's "vX.Y.Z — desc"
+          # convention); fall back to the bare tag name.
+          title=$(git tag -l --format='%(contents:subject)' "$tag")
+          [ -z "$title" ] && title="$tag"
+          echo "title: $title"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            if [ "${{ steps.notes.outputs.have_notes }}" = "true" ]; then
+              gh release edit "$tag" --title "$title" --notes-file release-notes.md
+            else
+              gh release edit "$tag" --title "$title"
+            fi
+            echo "updated existing Release $tag"
+          else
+            if [ "${{ steps.notes.outputs.have_notes }}" = "true" ]; then
+              gh release create "$tag" --title "$title" --notes-file release-notes.md --verify-tag
+            else
+              gh release create "$tag" --title "$title" --generate-notes --verify-tag
+            fi
+            echo "created Release $tag"
+          fi
