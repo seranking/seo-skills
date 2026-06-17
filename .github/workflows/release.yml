@@ -1,38 +1,124 @@
 name: Release
 
-# Triggered by pushing a vX.Y.Z tag. Turns the tag into a GitHub Release
-# deterministically — asserts the tag matches the manifest versions, pulls the
-# matching CHANGELOG section for the notes, and creates (or updates) the Release.
-# Removes the manual `gh release create` step and the tag-without-release drift
-# it caused. workflow_dispatch lets you (re)build a Release for an existing tag.
+# Two ways to cut a release:
+#   1. Push a signed vX.Y.Z tag locally → a GitHub-Verified release. This is the
+#      `push: tags` trigger below. Use it when you want the Verified badge (the
+#      Actions runner cannot sign with your key).
+#   2. Run this workflow from the Actions UI ("Run workflow") and pick a
+#      patch / minor / major bump (or type an explicit version). The `bump` job
+#      rewrites the version across all four manifests, commits `release: vX.Y.Z`
+#      to main as github-actions[bot], and pushes the tag. Convenient and
+#      button-only — but the tag is created by Actions, so it is NOT Verified.
+#
+# Either way the `release` job turns the tag into a GitHub Release: it asserts
+# the tag matches all four manifest versions and uses the matching CHANGELOG
+# section as the notes (falling back to auto-generated notes when none exists).
 
 on:
   push:
     tags: ['v*']
   workflow_dispatch:
     inputs:
-      tag:
-        description: 'Existing vX.Y.Z tag to (re)build a Release for'
-        required: true
+      release_type:
+        description: "Semver bump (ignored if 'version' is set)."
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+      version:
+        description: "Explicit version override, e.g. 2.11.0 (optional)."
+        required: false
+        default: ""
 
 permissions:
   contents: write
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
+  # Manual dispatch only: bump the four manifests, commit to main, push the tag.
+  # A tag pushed with GITHUB_TOKEN does not re-trigger this workflow, so the
+  # release job below runs in the same dispatch run via `needs`.
+  bump:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.bump.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # Default GITHUB_TOKEN (contents: write) pushes the bump commit + tag;
+          # main is unprotected, so no PAT is needed.
+          ref: main
+          fetch-depth: 0
+
+      - id: bump
+        env:
+          RELEASE_TYPE: ${{ inputs.release_type }}
+          VERSION_OVERRIDE: ${{ inputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          CUR="$(jq -r '.version' .claude-plugin/plugin.json)"
+          if [ -n "$VERSION_OVERRIDE" ]; then
+            NEW="$VERSION_OVERRIDE"
+          else
+            IFS=. read -r MA MI PA <<< "$CUR"
+            case "$RELEASE_TYPE" in
+              major) MA=$((MA + 1)); MI=0; PA=0 ;;
+              minor) MI=$((MI + 1)); PA=0 ;;
+              patch) PA=$((PA + 1)) ;;
+              *) echo "::error::unknown release_type '$RELEASE_TYPE'"; exit 1 ;;
+            esac
+            NEW="$MA.$MI.$PA"
+          fi
+          if ! printf '%s' "$NEW" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::computed version '$NEW' is not X.Y.Z"; exit 1
+          fi
+          echo "bumping $CUR -> $NEW ($RELEASE_TYPE)"
+
+          tmp="$(mktemp)"
+          jq --arg v "$NEW" '.version = $v' .claude-plugin/plugin.json > "$tmp" && mv "$tmp" .claude-plugin/plugin.json
+          jq --arg v "$NEW" '.metadata.version = $v | .plugins[0].version = $v' .claude-plugin/marketplace.json > "$tmp" && mv "$tmp" .claude-plugin/marketplace.json
+          jq --arg v "$NEW" '.version = $v' .cursor-plugin/plugin.json > "$tmp" && mv "$tmp" .cursor-plugin/plugin.json
+
+          # Sanity: every version field must read $NEW before we tag.
+          m=$(jq -r '.metadata.version'   .claude-plugin/marketplace.json)
+          e=$(jq -r '.plugins[0].version' .claude-plugin/marketplace.json)
+          p=$(jq -r '.version'            .claude-plugin/plugin.json)
+          c=$(jq -r '.version'            .cursor-plugin/plugin.json)
+          if [ "$m" != "$NEW" ] || [ "$e" != "$NEW" ] || [ "$p" != "$NEW" ] || [ "$c" != "$NEW" ]; then
+            echo "::error::manifests did not all update to $NEW (metadata=$m entry=$e plugin=$p cursor=$c)"; exit 1
+          fi
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -am "release: v$NEW"
+          git push origin main
+          git tag -a "v$NEW" -m "v$NEW"
+          git push origin "v$NEW"
+          echo "tag=v$NEW" >> "$GITHUB_OUTPUT"
+
   release:
+    needs: [bump]
+    # Runs for a pushed tag (push event) OR right after a successful bump
+    # (dispatch). always() is required so a skipped bump (the push path) does
+    # not skip this job.
+    if: ${{ always() && (github.event_name == 'push' || needs.bump.result == 'success') }}
     runs-on: ubuntu-latest
     steps:
       - name: Resolve tag
         id: tag
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "name=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+            echo "name=${{ needs.bump.outputs.tag }}" >> "$GITHUB_OUTPUT"
           else
             echo "name=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Check out the tagged commit
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ steps.tag.outputs.name }}
           fetch-depth: 0
