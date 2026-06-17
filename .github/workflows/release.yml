@@ -46,9 +46,10 @@ jobs:
           meta=$(jq -r '.metadata.version'   .claude-plugin/marketplace.json)
           entry=$(jq -r '.plugins[0].version' .claude-plugin/marketplace.json)
           pj=$(jq -r '.version'               .claude-plugin/plugin.json)
-          echo "tag=$ver  metadata=$meta  entry=$entry  plugin.json=$pj"
-          if [ "$ver" != "$meta" ] || [ "$ver" != "$entry" ] || [ "$ver" != "$pj" ]; then
-            echo "::error::tag $tag does not match manifest versions (metadata=$meta entry=$entry plugin.json=$pj)"
+          cursor=$(jq -r '.version'           .cursor-plugin/plugin.json)
+          echo "tag=$ver  metadata=$meta  entry=$entry  plugin.json=$pj  cursor=$cursor"
+          if [ "$ver" != "$meta" ] || [ "$ver" != "$entry" ] || [ "$ver" != "$pj" ] || [ "$ver" != "$cursor" ]; then
+            echo "::error::tag $tag does not match manifest versions (metadata=$meta entry=$entry plugin.json=$pj cursor=$cursor)"
             exit 1
           fi
 

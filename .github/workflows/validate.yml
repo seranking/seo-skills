@@ -51,6 +51,20 @@ jobs:
           done < <(find . -path '*/.claude-plugin/plugin.json' -not -path '*/node_modules/*' | sort)
           exit "$status"
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate Cursor plugin manifest (schema + assets)
+        # The Claude CLI only validates Claude manifests; this guards the Cursor
+        # manifest against schemas/cursor-plugin.schema.json and checks its assets.
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet jsonschema
+          python scripts/validate_cursor_manifest.py
+
       - name: Check manifest versions agree
         shell: bash
         # Assumes the current single-plugin marketplace (plugins[0], plugin.json
@@ -60,8 +74,9 @@ jobs:
           meta=$(jq -r '.metadata.version'   .claude-plugin/marketplace.json)
           entry=$(jq -r '.plugins[0].version' .claude-plugin/marketplace.json)
           pj=$(jq -r '.version'               .claude-plugin/plugin.json)
-          echo "metadata=$meta  marketplace-entry=$entry  plugin.json=$pj"
-          if [ "$meta" != "$entry" ] || [ "$meta" != "$pj" ]; then
-            echo "::error::version drift across manifests: metadata=$meta entry=$entry plugin.json=$pj"
+          cursor=$(jq -r '.version'           .cursor-plugin/plugin.json)
+          echo "metadata=$meta  marketplace-entry=$entry  plugin.json=$pj  cursor=$cursor"
+          if [ "$meta" != "$entry" ] || [ "$meta" != "$pj" ] || [ "$meta" != "$cursor" ]; then
+            echo "::error::version drift across manifests: metadata=$meta entry=$entry plugin.json=$pj cursor=$cursor"
             exit 1
           fi

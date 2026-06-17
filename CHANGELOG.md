@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.10.4] — 2026-06-17
+
+Adds Cursor marketplace support. The plugin can now be listed on cursor.com/marketplace alongside the existing Claude Code listing — it ships a Cursor manifest, declares the hosted SE Ranking MCP server for Cursor, carries a plugin logo, and is guarded in CI against the same class of schema and version errors as the Claude manifests.
+
+### Added
+- **Cursor plugin packaging** — `.cursor-plugin/plugin.json` (Cursor manifest) and `mcp.json` (declares the hosted SE Ranking MCP server at `https://api.seranking.com/mcp`, OAuth, auto-detected by Cursor). The repo is a single self-contained plugin, so `skills/`, `README.md`, `CHANGELOG.md`, and `LICENSE` are shared with the Claude listing.
+- **`icon.png`** — 512×512 plugin logo (SE Ranking brand mark), referenced by the Cursor manifest's `logo` field. Required for the marketplace listing.
+- **`schemas/cursor-plugin.schema.json`** + **`scripts/validate_cursor_manifest.py`** — a CI guard for the Cursor manifest. `claude plugin validate` only understands Claude manifests, so this validates `.cursor-plugin/plugin.json` against Cursor's published draft-07 schema (vendored, so there is no network dependency at validation time) and confirms the `logo`, `skills`, and `mcp.json` it relies on exist.
+
+### Fixed
+- **Cursor manifest failed Cursor's schema (`additionalProperties: false`).** Renamed `icon` → `logo` (the schema has no `icon` property) and removed `author.url` (the `author` object permits only `name` and `email`) — either would have rejected the plugin at submission.
+
+### Changed
+- **Cursor manifest**: `category` `Productivity` → `developer-tools` (the convention used across the official marketplace); added an explicit `skills: ./skills/` declaration.
+- **CI**: `validate.yml` runs the Cursor-manifest validator on every push and PR, and both `validate.yml` and `release.yml` now assert `.cursor-plugin/plugin.json`'s version agrees with the three Claude manifest versions.
+- **`README.md`**: added an "Install in Cursor" path under Install.
+- Version bumped to **2.10.4** across all four manifests (Claude `marketplace.json` ×2, Claude `plugin.json`, Cursor `plugin.json`).
+
 ## [2.10.3] — 2026-06-03
 
 Patch release. Adds release automation and ships the first signed (Verified) release.

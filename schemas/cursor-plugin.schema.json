@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cursor.com/schemas/cursor-plugin/plugin.json",
+  "title": "Cursor Plugin Manifest",
+  "description": "Schema for .cursor-plugin/plugin.json — defines a single Cursor plugin's metadata, components, and configuration.",
+  "type": "object",
+  "required": ["name"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]([a-z0-9.-]*[a-z0-9])?$",
+      "description": "Unique plugin identifier in kebab-case (lowercase alphanumeric with hyphens and periods)."
+    },
+    "displayName": {
+      "type": "string",
+      "description": "Human-readable display name for the plugin."
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description of what the plugin does."
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the plugin (e.g. \"1.2.3\")."
+    },
+    "author": {
+      "$ref": "#/$defs/author",
+      "description": "The plugin author."
+    },
+    "publisher": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Publisher or organisation name."
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to the plugin's homepage."
+    },
+    "repository": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to the plugin's source code repository."
+    },
+    "license": {
+      "type": "string",
+      "description": "SPDX license identifier (e.g. \"MIT\", \"Apache-2.0\")."
+    },
+    "logo": {
+      "type": "string",
+      "description": "Path to a logo image (relative to the plugin root) or an absolute URL."
+    },
+    "keywords": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Keywords for discovery and search."
+    },
+    "category": {
+      "type": "string",
+      "description": "Plugin category for marketplace classification."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Tags for filtering and discovery."
+    },
+    "commands": {
+      "$ref": "#/$defs/stringOrStringArray",
+      "description": "Glob pattern(s) or path(s) to command files."
+    },
+    "agents": {
+      "$ref": "#/$defs/stringOrStringArray",
+      "description": "Glob pattern(s) or path(s) to agent definition files."
+    },
+    "skills": {
+      "$ref": "#/$defs/stringOrStringArray",
+      "description": "Glob pattern(s) or path(s) to skill files."
+    },
+    "rules": {
+      "$ref": "#/$defs/stringOrStringArray",
+      "description": "Glob pattern(s) or path(s) to rule files."
+    },
+    "hooks": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "object" }
+      ],
+      "description": "Path to a hooks configuration file, or an inline hooks object."
+    },
+    "mcpServers": {
+      "$ref": "#/$defs/mcpServers",
+      "description": "MCP server configuration — a path, an inline config object, or an array of either."
+    }
+  },
+  "$defs": {
+    "author": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Author name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Author email address."
+        }
+      }
+    },
+    "stringOrStringArray": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      ]
+    },
+    "mcpServers": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "object" },
+        {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "object" }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

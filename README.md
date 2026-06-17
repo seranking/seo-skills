@@ -54,6 +54,16 @@ curl -fsSL https://raw.githubusercontent.com/seranking/seo-skills/main/install.s
 
 The manual install only wires your *environment* (extensions, Python deps, `~/.config/seo-skills/`). You still need Option 1 or 2 above so Claude can find the skill files.
 
+### 4. Cursor
+
+SE Ranking is also packaged as a [Cursor plugin](.cursor-plugin/plugin.json). Once it is listed on [cursor.com/marketplace](https://cursor.com/marketplace), install it from the marketplace, or add it by name in Cursor:
+
+```
+/add-plugin se-ranking
+```
+
+The hosted SE Ranking MCP server is declared in [`mcp.json`](mcp.json) and is auto-detected when the plugin is installed — open Cursor's MCP settings and sign in via OAuth (no API token to manage). The same skills ship to the Cursor agent.
+
 ### Connect SE Ranking (any install path)
 
 The SE Ranking remote MCP auto-registers when you install the plugin — there's no separate `claude mcp add` step. On your first session, run `/mcp` and sign in via OAuth. No API token to manage. If you don't have an SE Ranking account yet, [sign up](https://seranking.com/api.html) — API access is required.
