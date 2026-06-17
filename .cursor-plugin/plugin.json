@@ -1,0 +1,25 @@
+{
+  "name": "se-ranking",
+  "displayName": "SE Ranking",
+  "description": "Plugin that includes the SE Ranking MCP server and Skills for SEO and AI-search workflows.",
+  "version": "2.10.3",
+  "author": {
+    "name": "SE Ranking",
+    "email": "api@seranking.com",
+    "url": "https://seranking.com"
+  },
+  "license": "MIT",
+  "category": "Productivity",
+  "homepage": "https://seranking.com/api/integrations/mcp/",
+  "repository": "https://github.com/seranking/seo-skills",
+  "icon": "icon.png",
+  "keywords": [
+    "SEO",
+    "GEO",
+    "AEO",
+    "keyword rank tracking",
+    "AI results tracking",
+    "competitive research",
+    "AI visibility"
+  ]
+}
