@@ -1,0 +1,34 @@
+{
+  "name": "se-ranking",
+  "version": "2.10.3",
+  "description": "Connect Codex to live SE Ranking data plus ready-to-run SEO and AI-search skills.",
+  "author": {
+    "name": "SE Ranking",
+    "email": "api@seranking.com",
+    "url": "https://seranking.com"
+  },
+  "homepage": "https://seranking.com/api/integrations/mcp/",
+  "repository": "https://github.com/seranking/seo-skills",
+  "license": "MIT",
+  "keywords": ["seo", "geo", "aeo", "keyword-research", "backlinks", "site-audit", "ai-search", "competitive-research"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "SE Ranking",
+    "shortDescription": "Live SEO & AI-search data plus ready-made workflows",
+    "longDescription": "SE Ranking MCP gives Codex direct access to 180+ SEO and GEO tools — keyword research, backlinks, domain and competitor analysis, website audits, SERP analysis, and AI search visibility across ChatGPT, Gemini, Perplexity, and Google AI Overviews — plus open-source SEO skills that turn the data into finished deliverables.",
+    "developerName": "SE Ranking",
+    "category": "Productivity",
+    "capabilities": ["Read"],
+    "websiteURL": "https://seranking.com",
+    "privacyPolicyURL": "https://seranking.com/legal/privacy-policy.html",
+    "termsOfServiceURL": "https://seranking.com/legal/terms-of-service.html",
+    "defaultPrompt": [
+      "Use SE Ranking to find keyword ideas for [topic] in [country].",
+      "Use SE Ranking to compare backlinks for [my domain] and [competitor]."
+    ],
+    "brandColor": "#2D2DF5",
+    "composerIcon": "./icon.png",
+    "logo": "./icon.png"
+  }
+}
