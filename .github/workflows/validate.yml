@@ -65,6 +65,18 @@ jobs:
           python -m pip install --quiet jsonschema
           python scripts/validate_cursor_manifest.py
 
+      - name: Validate skill frontmatter (Skills-API rules)
+        # `claude plugin validate` only truncates over-long descriptions; the
+        # claude.ai / Cowork "Add marketplace" sync HARD-REJECTS them (and any XML
+        # tags) and fails the whole sync. This lints what the CLI misses: per skill,
+        # description non-empty + <=1024 chars/bytes + no XML tags, and name <=64,
+        # kebab-case, no reserved words. See DAT-563.
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet pyyaml
+          python scripts/validate_skill_frontmatter.py
+
       - name: Check manifest versions agree
         shell: bash
         # Assumes the current single-plugin marketplace (plugins[0], plugin.json
