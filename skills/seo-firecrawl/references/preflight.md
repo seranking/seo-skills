@@ -8,9 +8,9 @@ The pattern was duplicated 6+ times across SKILL.md files until v2.7.0; centrali
 
 ## The 3-stage preflight
 
-### Stage A — SE Ranking credit balance (`DATA_getCreditBalance`)
+### Stage A — SE Ranking credit balance (`DATA_getSubscription`)
 
-Call `DATA_getCreditBalance` before running anything that costs SE Ranking credits. Surface the result and the per-skill estimate to the user before continuing, in this canonical shape:
+Call `DATA_getSubscription` before running anything that costs SE Ranking credits (0 credits; `units_left` is the remaining balance to forecast against). Surface the result and the per-skill estimate to the user before continuing, in this canonical shape:
 
 ```
 Remaining: {n} credits. Estimated cost: ~{n} credits. Continue? (y/N)
@@ -45,7 +45,7 @@ Mirror the cross-skill-integration table for the Google stage; the Firecrawl + c
 
 | Failure | Detection | Skill response |
 |---|---|---|
-| Credit balance call fails | `DATA_getCreditBalance` returns error or non-200 | Note "SE Ranking credit balance unavailable — proceeding without preflight cost estimate; surface actual cost in deliverable" and continue. **Never** fail the run on this — credit data is a courtesy, not a gate. |
+| Credit balance call fails | `DATA_getSubscription` returns error or non-200 | Note "SE Ranking credit balance unavailable — proceeding without preflight cost estimate; surface actual cost in deliverable" and continue. **Never** fail the run on this — credit data is a courtesy, not a gate. |
 | Credit balance below estimate | `remaining < estimated_cost` | Surface the shortfall; ask the user whether to proceed with a reduced scope (e.g. lower URL cap, lite mode) or top up credits before re-running. |
 | Firecrawl MCP not installed | `mcp__firecrawl-mcp__firecrawl_scrape` not in available tools | Note "Firecrawl not installed — degraded path active; install via `bash extensions/firecrawl/install.sh`" and run the WebFetch-only path. |
 | Firecrawl rate-limit hit | Firecrawl response 429 | Note "Firecrawl rate-limit reached — falling back to WebFetch for remaining URLs" and continue degraded for the rest of the run. Do not retry in a tight loop. |

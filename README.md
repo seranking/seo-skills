@@ -290,7 +290,7 @@ The SE Ranking MCP server has two namespaces with different rate limits:
 - **Data API** (`DATA_*`): 10 requests per second. Charges API credits per call.
 - **Project API** (`PROJECT_*`): 5 requests per second. Retrieval and management calls do not charge; writes consume quota slots.
 
-Every skill in this repo is designed to pace sequentially inside these limits. The largest skills (`seo-competitor-gap-analysis` with full keyword dumps, `seo-keyword-cluster` with 20 seeds) can consume thousands of credits on large domains. Check `DATA_getCreditBalance` before running on production accounts, and use the `ceiling` parameters the skills document to cap cost.
+Every skill in this repo is designed to pace sequentially inside these limits. The largest skills (`seo-competitor-gap-analysis` with full keyword dumps, `seo-keyword-cluster` with 20 seeds) can consume thousands of credits on large domains. Check `DATA_getSubscription` before running on production accounts, and use the `ceiling` parameters the skills document to cap cost.
 
 ## Contributing
 

@@ -65,7 +65,7 @@ seo-{skill}-{target-slug}-{YYYYMMDD}/
 ## Tips
 
 - Respect rate limit: 10 req/sec on Data API.
-- Call `DATA_getCreditBalance` before running. {credit estimate}.
+- Call `DATA_getSubscription` before running. {credit estimate}.
 - {skill-specific tips}
 ```
 
