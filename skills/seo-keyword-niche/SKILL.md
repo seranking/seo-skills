@@ -17,7 +17,7 @@ Mine the long tail for content opportunities. Pulls longtail variants, question-
 
 1. **Validate & preflight**
    - Confirm seeds make sense (not too broad, not branded, not single-letter).
-   - `DATA_getCreditBalance` — surface remaining credits. This skill is heavier than most: pulling longtail at depth costs more than pulling head terms.
+   - `DATA_getSubscription` — surface remaining credits. This skill is heavier than most: pulling longtail at depth costs more than pulling head terms.
 
 2. **Longtail expansion** `DATA_getLongTailKeywords`
    - For each seed: pull longtail variants (typically 3+ words, lower individual volume, lower KD).
@@ -167,7 +167,7 @@ Build a small pilot — 10 pages from the top cluster — before committing to t
 ## Tips
 
 - Respect rate limit: 10 req/sec. Steps 2–4 fan out across all seeds; pace sequentially.
-- Cost: ~30–80 credits for 5 seeds, ~150+ for 10–20 seeds. Call `DATA_getCreditBalance` before running and surface the estimate.
+- Cost: ~30–80 credits for 5 seeds, ~150+ for 10–20 seeds. Call `DATA_getSubscription` before running and surface the estimate.
 - **Programmatic SEO is risky.** Pages that don't pass the unique-data threshold are dead weight at best, penalty bait at worst. The quality gates in step 9 are not optional.
 - The pilot recommendation is critical. 10 pages with thoughtful templates outperform 1000 pages of templated mush.
 - For e-commerce / inventory-driven content (city pages, product variations), the unique-data threshold is usually easy to hit.

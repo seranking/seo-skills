@@ -137,7 +137,7 @@ seo-sxo-{target-slug}-{YYYYMMDD}/
 ## Tips
 
 - Respect rate limit: 10 req/sec. The SERP calls in step 2/3 are fast; WebFetch calls in step 4 dominate latency, not API.
-- **Cost is mode-dependent.** `mode=full` is ~750–900 SE Ranking credits per run (the SERP-advanced call dominates). `mode=lite` is ~80–150 SE Ranking credits. Always call `DATA_getCreditBalance` before running and surface the estimate against remaining balance. Step 4 adds 4 Firecrawl credits when Firecrawl is available, +4 more if `--screenshots` is passed. Pass `--no-firecrawl` to skip both.
+- **Cost is mode-dependent.** `mode=full` is ~750–900 SE Ranking credits per run (the SERP-advanced call dominates). `mode=lite` is ~80–150 SE Ranking credits. Always call `DATA_getSubscription` before running and surface the estimate against remaining balance. Step 4 adds 4 Firecrawl credits when Firecrawl is available, +4 more if `--screenshots` is passed. Pass `--no-firecrawl` to skip both.
 - **`result_type=advanced` is the only way to get AIO / PAA / pack data.** The standard SERP endpoint returns organic-only. Don't try to reconstruct SERP features from organic results — that's the cost the user is paying for.
 - Page-type classification is a heuristic — `references/page-type-patterns.md` documents the signals so users can override. If the heuristic gets a result wrong, edit that file with the correction.
 - The 4 personas are opinionated. They come from the framework's original source — don't invent more without good reason.
