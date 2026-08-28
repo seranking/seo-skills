@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [Unreleased]
+
+### Fixed
+- **`seo-google` PageSpeed reports** now initialize `audit_details` before collecting detailed Lighthouse audit rows, preventing full PSI runs from crashing with `KeyError`.
+
 ## [2.10.4] — 2026-06-17
 
 Adds Cursor marketplace support. The plugin can now be listed on cursor.com/marketplace alongside the existing Claude Code listing — it ships a Cursor manifest, declares the hosted SE Ranking MCP server for Cursor, carries a plugin logo, and is guarded in CI against the same class of schema and version errors as the Claude manifests.
