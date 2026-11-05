@@ -17,7 +17,7 @@ Map a domain's paid-search footprint and the competitive landscape around its ta
 
 1. **Validate input & preflight**
    - Determine: domain mode (analyse a brand's paid footprint) or keyword mode (analyse the bidding landscape for one keyword).
-   - `DATA_getCreditBalance` — surface remaining credits.
+   - `DATA_getSubscription` — surface remaining credits.
 
 2. **Domain mode** `DATA_getDomainAdsByDomain`
    - Pull paid keywords the target domain bids on.

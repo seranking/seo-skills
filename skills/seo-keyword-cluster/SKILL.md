@@ -134,7 +134,7 @@ All gates passed (cannibalisation/orphan/coverage/anchor-diversity).
 ## Tips
 
 - Respect Data API rate limit: 10 requests per second. With 20 seeds and 3 expansion endpoints, this is ~60 calls; pace sequentially.
-- Call `DATA_getCreditBalance` before running. The dominant cost driver is now the SERP-overlap pass in step 4: ≈ 3 credits per candidate keyword in SERP-standard mode (default), ≈ 10 credits in SERP-advanced. A typical 40-keyword candidate set is ≈ 120 credits standard / ≈ 400 credits advanced. Step 4's budget guard surfaces this estimate to the user before fetching any SERPs and offers a cheaper-fallback path if the estimate exceeds 500 credits.
+- Call `DATA_getSubscription` before running. The dominant cost driver is now the SERP-overlap pass in step 4: ≈ 3 credits per candidate keyword in SERP-standard mode (default), ≈ 10 credits in SERP-advanced. A typical 40-keyword candidate set is ≈ 120 credits standard / ≈ 400 credits advanced. Step 4's budget guard surfaces this estimate to the user before fetching any SERPs and offers a cheaper-fallback path if the estimate exceeds 500 credits.
 - Do not lump different intents into the same cluster even if the keywords are semantically similar. "Best X" (commercial) and "What is X" (informational) deserve separate content.
 - Pillar pages fail when they try to rank for too narrow a query. The primary keyword of a pillar cluster should have volume > 1,000/mo and be broad enough to justify a 3,000+ word article.
 - The priority score is a starting point, not a mandate. Ask the user to review the top 3 clusters before committing a quarter of content.

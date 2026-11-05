@@ -151,7 +151,7 @@ See:
 ## Tips
 
 - Respect rate limit. AIO + AIO-prompts queries are ~5–10 calls; plenty of headroom.
-- Call `DATA_getCreditBalance` before running. ~10–15 SE Ranking credits typical, plus 1 Firecrawl credit per URL audited when Firecrawl is installed (default cap 50 URLs).
+- Call `DATA_getSubscription` before running. ~10–15 SE Ranking credits typical, plus 1 Firecrawl credit per URL audited when Firecrawl is installed (default cap 50 URLs).
 - The thresholds (75% E-E-A-T, 70% CITE) are starting points. Tune per domain — a YMYL site (medical, financial) should require higher (85%/80%); a general-interest blog can run lower (65%/60%).
 - The veto checks are not negotiable. A piece with anonymous authorship on a YMYL topic doesn't pass regardless of score.
 - For pieces that score "publish with fixes," the top-5 list is the deliverable. Hand it to the writer; re-audit after fixes.

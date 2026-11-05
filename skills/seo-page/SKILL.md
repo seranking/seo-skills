@@ -164,7 +164,7 @@ Reasoning: {1–2 sentences anchored in objective signals from above}.
 ## Tips
 
 - Respect SE Ranking Data API rate limit: 10 requests per second. The 3–5 SERP queries in step 5 should be paced sequentially.
-- Call `DATA_getCreditBalance` before running. ~10–15 credits is typical for one URL.
+- Call `DATA_getSubscription` before running. ~10–15 credits is typical for one URL.
 - Verdict heuristic:
   - **KEEP**: PA stable or up; traffic stable or up; top 3 keywords held in their positions; AIO citations present where AIO appears.
   - **REFRESH**: any of (PA dropped >5 in 90 days; traffic dropped >20%; a top-3 keyword fell to position 11+; AIO citations missing while competitors get cited). **Hardens** when GSC data (step 4b) shows `INDEXED` + impressions > 100 + average position 4–10 (clear quick-win territory).
