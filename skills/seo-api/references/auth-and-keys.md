@@ -13,6 +13,8 @@ Get keys at: <https://online.seranking.com/admin.api.dashboard.html>.
 
 You can mint multiple keys per account — useful for splitting rate-limit budgets across environments (dev, staging, prod) or workloads (research vs. recurring jobs).
 
+An account can hold up to **20 API keys** created in SE Ranking; the dashboard shows the count as "N / 20 API keys". Keys that SE Visible creates for the same account don't count toward this limit. At the limit, the dashboard asks you to delete an unused key before you create a new one.
+
 ### Required plan
 
 - **Data API access** ships with: any plan that has API credits — Business / Enterprise plans (100K credits/month included), API add-on (1M+), or standalone API plan (1M+).

@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.11.0] — 2026-11-18
+
+Adds six skills that carry SE Ranking SEO and AI-search data into Planable, and packages the plugin for Codex. Fixes the claude.ai / Cowork "Add marketplace" sync, which four skill descriptions broke, and states the new API key limit in `seo-api`.
+
+### Added
+- **Six SE Ranking → Planable skills.** Each one needs both the SE Ranking MCP and the Planable MCP connected:
+  - `ai-search-gaps-to-social-campaign`: finds the AI-search prompts and topics where a brand is missing or losing to competitors, turns them into a social campaign in Planable, and sets up before/after tracking.
+  - `client-onboarding-proposal`: builds an agency's onboarding proposal from an SE Ranking SEO and AI-search audit plus a Planable analysis of the client's current social performance.
+  - `local-gmb-visibility`: turns SE Ranking city-level rank tracking into local social content in Planable, including Google Business Profile posts.
+  - `seo-ai-social-report`: one report across SEO rankings, AI-search visibility (SE Ranking) and social engagement (Planable), as a short chat summary plus a self-contained interactive HTML report.
+  - `seo-gaps-to-social-campaign`: turns keyword gaps, competitor wins, ranking losses and question keywords into a ready-to-publish social campaign in Planable.
+  - `site-audit-to-social-distribution`: finds weak pages, technical issues and content gaps in SE Ranking and coordinates the fix in Planable, from the rewritten page copy to the supporting social posts.
+- **Codex plugin packaging**: `.codex-plugin/plugin.json` (the Codex manifest), `.agents/plugins/marketplace.json` (the Codex marketplace entry) and `.mcp.json` (the hosted SE Ranking MCP server for Codex).
+- **`scripts/validate_skill_frontmatter.py`**, run by `validate.yml` on every push and PR. It checks every `SKILL.md` against the Agent Skills API rules that `claude plugin validate --strict` does not enforce: the description is non-empty, at most 1024 characters and 1024 bytes, with no XML tags; the name is at most 64 characters, kebab-case, with no reserved words.
+
+### Fixed
+- **The claude.ai / Cowork "Add marketplace" sync failed** with "Marketplace sync failed. Check the repository URL and try again." The Agent Skills API rejects a skill whose description is over 1024 characters or contains XML tags, and one rejected skill fails the whole sync. The `seo-api` description is trimmed from 1388 to 998 characters, and `seo-firecrawl`, `seo-images` and `seo-schema` no longer have angle-bracket tags in theirs.
+
+### Changed
+- **`seo-api` — `references/auth-and-keys.md`**: states the API key limit. An account can hold up to 20 API keys created in SE Ranking (raised from 10 on 2026-11-18); keys created by SE Visible don't count, and at the limit the dashboard asks to delete an unused key first.
+- **`README.md`**: a new intro and "What are Claude SEO skills?" section, an install path for any agent that supports Agent Skills and MCP, and links to the SE Ranking MCP pages and the Claude SEO Skills page.
+- **Release workflow**: "Run workflow" now takes a patch / minor / major bump or an explicit version, bumps the four Claude and Cursor manifests, commits `release: vX.Y.Z` and pushes the tag. Pushing a signed tag still gives a GitHub-Verified release.
+- Version **2.11.0** across all five manifests (Claude `marketplace.json` ×2 and `plugin.json`, Cursor `plugin.json`, Codex `plugin.json`).
+
 ## [2.10.4] — 2026-06-17
 
 Adds Cursor marketplace support. The plugin can now be listed on cursor.com/marketplace alongside the existing Claude Code listing — it ships a Cursor manifest, declares the hosted SE Ranking MCP server for Cursor, carries a plugin logo, and is guarded in CI against the same class of schema and version errors as the Claude manifests.
