@@ -1,5 +1,7 @@
 # Domain Intelligence Snapshot: seranking.com
 
+> **Superseded (2026-11-18):** this run called `DATA_getCreditBalance`, which the SE Ranking MCP has since removed (2026-05-22). The logs below are kept as recorded. For the balance today, call `DATA_getSubscription` and read `subscription_info.units_left`.
+
 > Run dated 2026-05-22 · Mode: code (read-only Data API calls executed live to populate real figures) · Target market: US · Total cost: 300 credits/run
 
 ## Goal

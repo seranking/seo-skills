@@ -78,7 +78,7 @@ User says: "set up rank tracking for X", "create a new project for client Y", "I
 ### Sequence
 
 ```text
-1. DATA_getCreditBalance                    // confirm budget
+1. DATA_getSubscription                     // confirm budget (subscription_info.units_left)
 2. for each domain:
      DATA_getBacklinksSummary               // 100 credits / domain
 3. DATA_exportBacklinksData                 // 1 credit per backlink record returned (per domain)

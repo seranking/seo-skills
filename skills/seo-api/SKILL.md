@@ -22,7 +22,7 @@ Help developers ship real integrations against the SE Ranking SEO Data API and P
      claude mcp add --transport http se-ranking https://api.seranking.com/mcp
      ```
      and stop. See `references/auth-and-keys.md` for OAuth vs. `X-Api-Key` header tradeoffs and headless / CI patterns.
-   - Call `DATA_getSubscription` (0 credits). Record `units_left`, plan status, expiration — `units_left` is the figure to forecast against, and it gets printed in the cost forecast in step 5. Optionally also call `DATA_getCreditBalance` for its `{ limit, used }` view — but the two are **not** aliases: they report different remaining-credit numbers that do not reconcile (an ~8.6M gap is normal), so treat `getSubscription.units_left` as the source of truth.
+   - Call `DATA_getSubscription` (0 credits). Record `subscription_info.units_left`, plan status, expiration — `units_left` is the figure to forecast against, and it gets printed in the cost forecast in step 5. It counts plan and add-on credits only, not the wallet, and never goes below 0, so on an account with a wallet a 0 does not mean requests will be refused.
 
 2. **Clarify the goal.** Ask 1–3 questions only if the goal is ambiguous. Skip when the user already spelled it out. Useful follow-ups:
    - "Is this a one-off run, a recurring job (daily/weekly), or a long-lived integration in your product?"
@@ -96,7 +96,7 @@ Top-level: `RECIPE.md` + `code/`. The `evidence/` folder preserves the reasoning
 
 | Step | MCP tool | REST endpoint | Verb | Cost |
 |------|----------|---------------|------|------|
-| 1    | `DATA_getCreditBalance` | `/v1/account/subscription` | GET | 0 credits |
+| 1    | `DATA_getSubscription` | `/v1/account/subscription` | GET | 0 credits |
 | 2    | `PROJECT_listProjects` | `/v1/account/projects` | GET | 0 (plan limit: read) |
 | 3    | `PROJECT_createProject` | `/v1/projects` | POST | 1 Site from plan |
 | ...  | ... | ... | ... | ... |

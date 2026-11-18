@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.11.1] — 2026-11-18
+
+Fixes the credit check that skills run before costly work. They told the agent to call `DATA_getCreditBalance`, which the SE Ranking MCP removed on 2026-05-22, so the check was skipped.
+
+### Fixed
+- **The credit pre-check calls a tool that exists.** 11 skills (`seo-ads`, `seo-competitor-gap-analysis`, `seo-content-audit`, `seo-drift`, `seo-keyword-cluster`, `seo-keyword-niche`, `seo-local`, `seo-page`, `seo-plan`, `seo-subdomain`, `seo-sxo`), `seo-firecrawl/references/preflight.md`, `README.md` and `CONTRIBUTING.md` now call `DATA_getSubscription` instead of the removed `DATA_getCreditBalance` (#13).
+- **`seo-api`**: `SKILL.md` and the `api-surface-map`, `integration-patterns` and `rate-limits-and-credits` references no longer tell the agent to call `DATA_getCreditBalance`. The surface-map row for `/v1/account/subscription` names `DATA_getSubscription`, and the user-profile tool is `PROJECT_getUserProfile`, not `DATA_getUserProfile`.
+
+### Changed
+- **What `units_left` means**, stated in `seo-api` and the shared preflight: it counts plan and add-on credits only, not the wallet, and never goes below 0, so on an account with a wallet a 0 does not mean requests will be refused.
+- **`examples/seo-api-seranking-com-20260522`**: a dated "Superseded" note in `RECIPE.md` and `code/mcp-calls.md`. The recorded logs are unchanged.
+- Version **2.11.1** across all five manifests (Claude `marketplace.json` ×2 and `plugin.json`, Cursor `plugin.json`, Codex `plugin.json`).
+
 ## [2.11.0] — 2026-11-18
 
 Adds six skills that carry SE Ranking SEO and AI-search data into Planable, and packages the plugin for Codex. Fixes the claude.ai / Cowork "Add marketplace" sync, which four skill descriptions broke, and states the new API key limit in `seo-api`.

@@ -1,5 +1,7 @@
 # MCP tool-call sequence — domain intelligence snapshot for seranking.com
 
+> **Superseded (2026-11-18):** `DATA_getCreditBalance` in step 1 no longer exists in the SE Ranking MCP (removed 2026-05-22). Skip it; `DATA_getSubscription` is the balance call.
+
 Agent-native variant. Run inside any MCP client connected to the SE Ranking
 server (`https://api.seranking.com/mcp`). These are the exact calls executed
 in this run on 2026-05-22 — every one verified live.

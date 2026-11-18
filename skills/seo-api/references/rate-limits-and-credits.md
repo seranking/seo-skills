@@ -95,7 +95,7 @@ curl -X GET 'https://api.seranking.com/v1/account/subscription' \
   -H 'Authorization: Token YOUR_API_KEY'
 ```
 
-Or via MCP: `DATA_getCreditBalance` (0 credits, returns `units_left`).
+Or via MCP: `DATA_getSubscription` (0 credits, returns `subscription_info.units_left`). It counts plan and add-on credits only, not the wallet, and never goes below 0, so on an account with a wallet a 0 does not mean requests will be refused.
 
 Response shape:
 ```json
@@ -184,7 +184,7 @@ Credit costs are **not** carried in the MCP tool descriptions — the canonical 
 | Endpoint | MCP tool | Cost |
 |---|---|---|
 | Account subscription | `DATA_getSubscription` | 0 |
-| Credit balance | `DATA_getCreditBalance` | 0 |
+| Credit balance | none (the MCP removed `DATA_getCreditBalance` on 2026-05-22) | 0 |
 | Domain overview (worldwide) | `DATA_getDomainOverviewWorldwide` | 100 / request |
 | Domain overview (regional) | `DATA_getDomainOverviewDatabases` | 100 / request |
 | Domain competitors | `DATA_getDomainCompetitors` | 100 / request (flat — *not* per-competitor) |

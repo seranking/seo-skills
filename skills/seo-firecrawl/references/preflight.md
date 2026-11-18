@@ -10,7 +10,7 @@ The pattern was duplicated 6+ times across SKILL.md files until v2.7.0; centrali
 
 ### Stage A — SE Ranking credit balance (`DATA_getSubscription`)
 
-Call `DATA_getSubscription` before running anything that costs SE Ranking credits (0 credits; `units_left` is the remaining balance to forecast against). Surface the result and the per-skill estimate to the user before continuing, in this canonical shape:
+Call `DATA_getSubscription` before running anything that costs SE Ranking credits (0 credits; `subscription_info.units_left` is the remaining balance to forecast against). It counts plan and add-on credits only, not the wallet, and never goes below 0, so on an account with a wallet a 0 does not mean requests will be refused. Say so and continue. Surface the result and the per-skill estimate to the user before continuing, in this canonical shape:
 
 ```
 Remaining: {n} credits. Estimated cost: ~{n} credits. Continue? (y/N)
