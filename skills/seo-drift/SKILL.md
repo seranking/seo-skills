@@ -173,7 +173,7 @@ Top-level: `DRIFT-REPORT.md` only. The four delta step files are inlined into na
 ## Tips
 
 - Respect rate limit: 10 req/sec. Baseline runs 4–6 sequential calls; pace easily.
-- Call `DATA_getCreditBalance` before running. Domain baseline ~10–15 SE Ranking credits; URL baseline ~15–20 SE Ranking credits + 1 Firecrawl credit; compare ~20–30 SE Ranking credits + 1 Firecrawl credit (current-state capture).
+- Call `DATA_getSubscription` before running. Domain baseline ~10–15 SE Ranking credits; URL baseline ~15–20 SE Ranking credits + 1 Firecrawl credit; compare ~20–30 SE Ranking credits + 1 Firecrawl credit (current-state capture).
 - Snapshot storage is **local-only** in v0.4.0. If your team needs shared baselines, point everyone at the same `seo-drift-{target-slug}/` directory in a shared filesystem or commit it to a private repo. Baselines are JSON — git-friendly.
 - Baseline cadence: monthly is the natural rhythm because SE Ranking's history endpoints have monthly granularity. Weekly is too noisy for backlink data. Document recommended cadence in handoff to your team.
 - For deploy-time "did anything break in the last hour" use cases, the URL-mode page-fingerprint half is the workhorse — that doesn't depend on monthly data.

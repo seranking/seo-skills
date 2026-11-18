@@ -212,7 +212,7 @@ This skill could NOT assess:
 ## Tips
 
 - Respect SE Ranking Data API rate limit: 10 requests per second. Pace the per-keyword `DATA_getSerpResults` calls sequentially.
-- Call `DATA_getCreditBalance` before running. ~15–25 SE Ranking credits typical, plus 6–12 Firecrawl credits when Firecrawl is installed.
+- Call `DATA_getSubscription` before running. ~15–25 SE Ranking credits typical, plus 6–12 Firecrawl credits when Firecrawl is installed.
 - Verdict heuristic:
   - **STRONG**: composite ≥7/10, NAP consistent across all sampled pages, target in local pack on majority of keywords, valid LocalBusiness schema with industry-correct subtype, ≥10 Google reviews with healthy velocity.
   - **NEEDS WORK**: composite 4–6.9/10, OR 1+ NAP discrepancy, OR target out of local pack on majority of keywords. The "Top fixes" section is the deliverable here — most local-SEO audits land in this bucket.

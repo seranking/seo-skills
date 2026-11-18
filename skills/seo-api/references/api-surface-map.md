@@ -74,11 +74,11 @@ LLM-engine visibility data.
 - **Sources / topics / sentiment / models / aliases / scores:** the `DATA_getAiVisibility*` family.
 - **Reports:** `DATA_getAiVisibilityReports`.
 
-### Account & system (~4 tools)
+### Account & system
 
-- `DATA_getSubscription` — plan info. Returns `{ subscription_info: { status, units_limit, units_left, start_date, expiraton_date } }`. **`units_left` is the figure to forecast against** — it matches the official credit-system docs.
-- `DATA_getCreditBalance` — returns `{ limit, used }`. **Not an alias of `getSubscription`:** the two report different remaining-credit figures that do not reconcile against `limit` (an ~8.6M gap observed in testing). Use it as a secondary view only; forecast from `getSubscription.units_left`.
-- `DATA_getUserProfile` — user identity + workspace.
+- `DATA_getSubscription` — plan info. Returns `{ subscription_info: { status, units_limit, units_left, start_date, expiraton_date } }`. **`units_left` is the figure to forecast against** — it matches the official credit-system docs. It counts plan and add-on credits only, not the wallet, and never goes below 0, so on an account with a wallet a 0 does not mean requests will be refused.
+- `DATA_getCreditBalance` no longer exists: the SE Ranking MCP removed it on 2026-05-22. The 2026-05-22 example still shows it, with an ~8.6M gap against `getSubscription`; that gap is not a second balance to plan from. Forecast from `units_left` only.
+- `PROJECT_getUserProfile` — user identity + workspace (a Project API tool).
 
 ## Project API surfaces
 

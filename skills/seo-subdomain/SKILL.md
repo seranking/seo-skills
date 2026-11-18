@@ -18,7 +18,7 @@ Map a domain's subdomain ecosystem. Which subdomains exist, what each ranks for,
 
 1. **Validate & preflight**
    - Normalise root domain (no protocol, no `www.`).
-   - `DATA_getCreditBalance` — surface remaining credits. Subdomain analysis is N × ~5 calls; cost scales with subdomain count.
+   - `DATA_getSubscription` — surface remaining credits. Subdomain analysis is N × ~5 calls; cost scales with subdomain count.
 
 2. **Discover subdomains** `DATA_getDomainSubdomains`
    - List all subdomains of the root domain.
@@ -134,7 +134,7 @@ Top-level: `SUBDOMAINS.md` + `06-topic-ownership-map.md` + `07-fragmentation-fla
 ## Tips
 
 - Respect rate limit. The skill makes ~5 calls per subdomain. With `--limit 10`, that's ~50 calls; pace sequentially.
-- Call `DATA_getCreditBalance` before running. Cost scales with subdomain count: ~20–60 credits typical for `--limit 10`; up to 150+ for unlimited.
+- Call `DATA_getSubscription` before running. Cost scales with subdomain count: ~20–60 credits typical for `--limit 10`; up to 150+ for unlimited.
 - **`--limit` is your friend.** Sites with hundreds of subdomains (large platforms) don't need every subdomain analysed — top 10 by keyword count covers >90% of organic value usually.
 - **Don't conflate "subdomain has lower DA" with "subdomain is bad."** Subdomains often have lower DA than the root because they accumulate links separately. The question is topic ownership and cannibalization, not DA per se.
 - **Consolidation is risky.** A 301 from `blog.example.com` to `example.com/blog/` retains most link equity but can lose 5–15% in transition. Track post-migration with `seo-drift`.
