@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.11.2] — 2026-11-18
+
+Lets the plugin pass Claude Plugins Directory validation again. The directory rejected every version after 2.10.4 with "MCP server: invalid configuration" and "Remote MCP server has no \"type\"".
+
+### Fixed
+- **`.mcp.json` declares the SE Ranking server as `"type": "http"`.** The file was added for Codex. Claude Code also reads a `.mcp.json` at the plugin root, and without a `type` it treats the entry as a local (stdio) server, finds no `command` and drops it. The SE Ranking MCP still loaded from `.claude-plugin/plugin.json`, so users were not affected, but `claude plugin validate --strict` and the directory rejected the plugin. Codex accepts the field (`codex-rs/codex-mcp/src/plugin_config.rs` reads `type: "http"`), as in OpenAI's own Codex plugins. The Cursor `mcp.json` is unchanged.
+
+### Changed
+- Version **2.11.2** across all five manifests (Claude `marketplace.json` ×2 and `plugin.json`, Cursor `plugin.json`, Codex `plugin.json`).
+
 ## [2.11.1] — 2026-11-18
 
 Fixes the credit check that skills run before costly work. They told the agent to call `DATA_getCreditBalance`, which the SE Ranking MCP removed on 2026-05-22, so the check was skipped.

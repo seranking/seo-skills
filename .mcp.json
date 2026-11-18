@@ -1,6 +1,7 @@
 {
   "mcpServers": {
     "se-ranking": {
+      "type": "http",
       "url": "https://api.seranking.com/mcp"
     }
   }
