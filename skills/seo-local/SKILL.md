@@ -84,6 +84,7 @@ Score a local business's website against the signals that drive local-pack and "
      - Schema validation errors (broken `aggregateRating`, malformed `address`).
    - **Defer schema fixes to `seo-schema`.** This skill does NOT generate JSON-LD. If LocalBusiness schema is missing or broken, the deliverable says "Run `seo-schema` for paste-ready LocalBusiness markup with the correct industry subtype" — that's `seo-schema`'s job and reimplementing it here would duplicate work.
 
+<!-- dir-edition:remove -->
 8b. **GSC local query performance** *(only if google-api.json is present, tier ≥ 1)*
    - Pull GSC search analytics for the target property, last 28 days, dimension=query, filtered to local-intent patterns:
      `python3 scripts/gsc_query.py --property "{config.default_property}" --days 28 --json`
@@ -97,6 +98,10 @@ Score a local business's website against the signals that drive local-pack and "
      `python3 scripts/ga4_report.py --report top-pages --days 28 --json`
    - For multi-location sites, surface per-location-page sessions. If one location page captures 80%+ of organic traffic while peer location pages capture <5%, that's location-page quality variance worth flagging (probable doorway-page or thin-content risk on the underperformers).
    - Single-location sites: just record the homepage's organic sessions as one row in the snapshot.
+<!-- dir-edition:end -->
+<!-- dir-edition:only
+8b. **GSC and GA4 data** — not available in the Claude Plugins Directory edition (they need the Google API scripts from the full edition on GitHub). Skip steps 8b and 8c.
+-->
 
 9. **Citation-presence sample (best-effort)** `WebSearch` (no API key cost)
    - For each Tier-1 directory in the vertical's list (load `references/local-citation-sources.md`), check whether the business has a listing using `site:{directory} "{business_name}"` queries via WebSearch.

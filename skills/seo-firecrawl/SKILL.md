@@ -16,7 +16,12 @@ A direct interface to Firecrawl MCP for tasks that fall outside the data-driven 
 
 ## Prerequisites
 
+<!-- dir-edition:remove -->
 - **Required:** the `firecrawl-mcp` MCP server. If `mcp__firecrawl-mcp__firecrawl_scrape` is unavailable, abort with the install command — `bash extensions/firecrawl/install.sh` from this plugin repo, plus the firecrawl.dev signup URL (free tier 500 credits/month). Don't attempt fallbacks; this skill exists for the cases WebFetch can't cover.
+<!-- dir-edition:end -->
+<!-- dir-edition:only
+- **Required:** the `firecrawl-mcp` MCP server. If `mcp__firecrawl-mcp__firecrawl_scrape` is unavailable, abort and tell the user to add the Firecrawl MCP server (setup and signup at firecrawl.dev, free tier 500 credits/month). Don't attempt fallbacks; this skill exists for the cases WebFetch can't cover.
+-->
 - User provides: a target URL or domain, plus optionally a mode (`scrape` / `map` / `crawl` / `search`). If mode unspecified, infer from input shape (single URL → `scrape`, single domain → `map`).
 
 ## Process

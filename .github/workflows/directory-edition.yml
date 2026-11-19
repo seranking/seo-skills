@@ -1,0 +1,87 @@
+name: Directory edition
+
+# Builds the Claude Plugins Directory edition of a release with
+# directory-edition/build.py and commits it to the claude-directory branch,
+# which the directory listing tracks. release.yml calls this after every
+# release; run it by hand to rebuild the edition of an existing tag.
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: "Release tag to build from, e.g. v2.11.3"
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Release tag to build from, e.g. v2.11.3"
+        type: string
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: directory-edition
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      BRANCH: claude-directory
+      REF: ${{ inputs.ref }}
+    steps:
+      - name: Check out the release
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref }}
+          path: source
+
+      - name: Set up Node.js
+        # Claude Code needs Node 22+ (see validate.yml).
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Build and check the edition
+        run: python3 source/directory-edition/build.py --src source --out edition
+
+      - name: Validate the edition
+        working-directory: edition
+        run: |
+          claude --version
+          claude plugin validate . --strict
+          claude plugin validate .claude-plugin/plugin.json --strict
+
+      - name: Commit the edition to the claude-directory branch
+        env:
+          TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha=$(git -C source rev-parse HEAD)
+          mkdir target && cd target
+          git init -q -b "$BRANCH"
+          git remote add origin "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null; then
+            git fetch -q --depth 1 origin "$BRANCH"
+            # Keep the branch history; the index stays empty, so the next commit
+            # holds exactly the new edition and drops files it no longer has.
+            git reset -q --soft FETCH_HEAD
+          fi
+          cp -a ../edition/. .
+          git add -A
+          if git rev-parse -q --verify HEAD >/dev/null && git diff --cached --quiet; then
+            echo "The $BRANCH branch already holds the edition of $REF."
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "Directory edition of $REF" -m "Built by directory-edition/build.py from ${sha}."
+          git push -q origin "HEAD:refs/heads/$BRANCH"
+          echo "Pushed the edition of $REF to $BRANCH: $(git rev-parse --short HEAD)"

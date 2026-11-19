@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file. Format base
 
 ## [Unreleased]
 
-Addresses the privacy policy, credential and download-and-run findings that the Claude Plugins Directory raised on v2.11.2. These changes don't clear the main refusal ("Files outside the allowed list accepted only from Verified organizations"), which needs the plugin to ship without its scripts.
+Gets the plugin back into the Claude Plugins Directory, which refused v2.11.2. The directory now gets its own edition without the scripts, installers and examples it refuses from organizations it hasn't verified, published to the `claude-directory` branch on every release. It also fixes the privacy policy, credential and download-and-run findings in the files both editions share.
+
+### Added
+- **Claude Plugins Directory edition.** `directory-edition/build.py` builds it from the repo: only the files the directory accepts (Markdown, JSON, YAML, images), the `<!-- dir-edition:… -->` markers applied, `directory-edition/overrides/` copied in, and links to files it doesn't ship pointed at GitHub. It then checks every file for refused types, `#!` lines, credential reads, download-and-run commands and references to the scripts and installers. `.github/workflows/directory-edition.yml` commits the edition of each release to the `claude-directory` branch (`release.yml` calls it), and the `validate` workflow builds it on every pull request. See `directory-edition/README.md`.
+- **Edition text in the skills and README.** The steps that run the Google API scripts (`seo-content-audit`, `seo-drift`, `seo-hreflang`, `seo-images`, `seo-local`, `seo-page`, `seo-plan`, `seo-technical-audit`) and the Firecrawl/Google installer hints carry markers. In the directory edition they say the step isn't available and point to the GitHub edition. `seo-google` ships there as a short pointer skill.
+
+### Changed
+- `seo-geo`, `seo-images` and `seo-schema` tell the user to add the Firecrawl MCP server from firecrawl.dev instead of running `extensions/firecrawl/install.sh`.
 
 ### Fixed
 - **No privacy policy URL.** `.claude-plugin/plugin.json` sets `privacyPolicyUrl` to the SE Ranking privacy policy, and the README links it under Links.

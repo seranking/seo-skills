@@ -38,6 +38,7 @@ If you use Claude Code in the terminal:
 
 Trigger skills with `/seo-content-brief`, `/seo-page`, etc. — no `seo-skills:` prefix needed. Or just describe what you want and Claude picks the right skill. Update the marketplace later with `/plugin marketplace update seranking`.
 
+<!-- dir-edition:remove -->
 ### 3. Manual install (only if you want `seo-google` or the optional extensions)
 
 Options 1 and 2 cover **25 of 26 skills**. The 26th — `seo-google` — ships Python scripts that need a local clone. The optional Firecrawl + Google extensions also need this. **If neither matters to you, skip this option.**
@@ -61,7 +62,17 @@ SE Ranking is also packaged as a [Cursor plugin](.cursor-plugin/plugin.json). On
 
 The hosted SE Ranking MCP server is declared in [`mcp.json`](mcp.json) and is auto-detected when the plugin is installed — open Cursor's MCP settings and sign in via OAuth (no API token to manage). The same skills ship to the Cursor agent.
 
+<!-- dir-edition:end -->
+<!-- dir-edition:only
+### 3. Google APIs and local extensions
+
+This is the Claude Plugins Directory edition of SE Ranking's SEO skills. The `seo-google` skill's Python scripts, the optional Firecrawl and Google API installers, and the Cursor and Codex packages ship only in the full edition on GitHub: https://github.com/seranking/seo-skills. Skills that use Google API data note that step as unavailable and carry on.
+
+### 4. Any other AI agent
+-->
+<!-- dir-edition:remove -->
 ### 5. Any other AI agent
+<!-- dir-edition:end -->
 
 The skills follow the open Agent Skills format (one SKILL.md per folder), so any agent that supports skills and MCP can use them:
 
@@ -138,6 +149,7 @@ The rest of the catalogue — every other skill the plugin ships.
 | [`seo-google`](skills/seo-google/SKILL.md) | Google's own SEO data: GSC Search Analytics + URL Inspection + Sitemaps, PageSpeed Insights, CrUX field data + 25-week history, Indexing API, GA4 organic, YouTube, NLP, Knowledge Graph, Web Risk, Keyword Planner. 4 credential tiers; lower tiers are useful on their own *(requires the [Google APIs extension](#google-apis-real-cwv-gsc-ga4-youtube-keyword-planner))* | "search console", "GSC", "PageSpeed", "CrUX", "URL inspection", "real CWV data", "GA4 organic", "google api setup" |
 | [`seo-api`](skills/seo-api/SKILL.md) | SE Ranking API integration architect — covers the entire 195-tool surface (Data API + Project API), forecasts credit and plan-limit cost, emits ready-to-paste cURL / Python / TypeScript / MCP-tool-call recipes, and (with explicit confirmation) wires up Project API state (projects, keywords, search engines, audits, AIRT prompts, backlink groups) | "how do I use SE Ranking API to do X", "what endpoint gives me Y", "credit cost of workflow Z", "build a rank tracker", "set up an audit", "Postman / cURL / Python / TypeScript for SE Ranking", "rate limit for X", "integrate SE Ranking with Looker / n8n / Make" |
 
+<!-- dir-edition:remove -->
 ## Optional extensions
 
 Some skills work best when paired with optional MCP servers or Python toolchains beyond SE Ranking. Each extension is opt-in — the skills that use it degrade gracefully when it's absent: they fall back to a lower-fidelity method, or note what was unavailable, rather than failing the run.
@@ -172,6 +184,13 @@ Fill in the config per [`skills/seo-google/references/auth-setup.md`](skills/seo
 
 **Skills that gain capabilities when Google APIs are configured:** `seo-google` (the dedicated skill — fully gated on this extension), plus `seo-page`, `seo-drift`, `seo-technical-audit`, `seo-content-audit`, `seo-sitemap`, `seo-geo`, `seo-keyword-cluster`, `seo-keyword-niche`, and `seo-plan` (real impressions/clicks/conversions/CWV instead of estimates when configured).
 
+<!-- dir-edition:end -->
+<!-- dir-edition:only
+## Optional extensions
+
+Firecrawl (raw HTML, JSON-LD, JavaScript rendering) and the Google APIs (real Core Web Vitals, Search Console, GA4) make several skills more precise. Add the Firecrawl MCP server from firecrawl.dev if you use it; the Google API scripts ship with the full edition on GitHub. Without them, the skills fall back to `WebFetch` or note what was unavailable, and still produce a deliverable.
+
+-->
 ## How these skills work
 
 Each skill is a single `SKILL.md` file with YAML frontmatter. Claude loads the frontmatter at startup to know when to use the skill, then loads the body only when triggered, then reads any bundled reference files only when needed. This is Anthropic's [progressive disclosure](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview#how-skills-work) pattern.
@@ -190,6 +209,7 @@ The skills chain naturally. A typical agency workflow:
 4. Run `seo-backlink-gap` to identify link targets for the new content.
 5. Run `seo-ai-search-share-of-voice` quarterly to track LLM visibility.
 
+<!-- dir-edition:remove -->
 ## Repository layout
 
 ```
@@ -287,6 +307,12 @@ seo-skills/
 The repo is a Claude Code marketplace whose single plugin is the repo itself (marketplace `plugins[0].source` is `"./"`). This keeps skill folders visible at the top level rather than buried two layers deep.
 
 Every skill writes its output to a folder named `{skill-slug}-{target-slug}-{YYYYMMDD}/` (e.g., `seo-content-brief-example-com-20260427/`). The date stamp keeps re-runs non-destructive and makes it easy to diff outputs over time. Browse [`examples/`](./examples/) to see what a finished run looks like before installing.
+<!-- dir-edition:end -->
+<!-- dir-edition:only
+## Output
+
+Every skill writes its output to a folder named `{skill-slug}-{target-slug}-{YYYYMMDD}/` (e.g., `seo-content-brief-example-com-20260427/`). The date stamp keeps re-runs non-destructive and makes it easy to diff outputs over time. Finished example runs are in the GitHub repository: https://github.com/seranking/seo-skills/tree/main/examples
+-->
 
 ## Rate limits and costs
 

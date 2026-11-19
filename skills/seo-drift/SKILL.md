@@ -59,12 +59,17 @@ List all stored baselines for the target with their dates and key metrics (DA, t
    - **If Firecrawl unavailable (or `--no-firecrawl` passed):** only WebFetch fields enter the fingerprint. `BASELINE.md` notes: `Snapshot fields recovered via WebFetch only — canonical, robots, og:*, twitter:*, and JSON-LD changes will not be detected on subsequent compares. Install Firecrawl for full coverage.`
    - Compute a fingerprint hash of the captured fields.
    - Also capture page authority: `DATA_getPageAuthority`.
+<!-- dir-edition:remove -->
 4b. **Google field-data snapshot** *(only if google-api.json is present AND `--skip-cwv` not set)*
    - Tier 0 (always when configured): `python3 scripts/pagespeed_check.py "{target}" --crux-only --json` (URL mode) or `python3 scripts/pagespeed_check.py "https://{domain}" --crux-only --json` (domain mode, origin-level CrUX). Store the resulting p75 LCP / INP / CLS / FCP / TTFB and the source label ("URL" or "origin").
    - Tier 0 (always when configured): `python3 scripts/crux_history.py "{target_or_origin}" --json` for the 25-week trend window snapshot — store as `crux_history_baseline`. Subsequent compares can detect drift against the most recent week.
    - Tier 1 (URL mode only): `python3 scripts/gsc_inspect.py "{target_url}" --site-url "{config.default_property}" --json`. Store `indexStatusVerdict`, `coverageState`, `googleCanonical`, `userCanonical`, `lastCrawlTime`.
    - If `--skip-cwv` was passed, skip this step entirely and store `null` for `cwv` / `crux_history` fields. The compare-mode rules then surface "Field-data drift: skipped — `--skip-cwv` flag passed at baseline."
    - If CrUX returns insufficient data, store `null` for the affected metrics and continue.
+<!-- dir-edition:end -->
+<!-- dir-edition:only
+4b. **Google field-data snapshot** — not available in the Claude Plugins Directory edition (it needs the Google API scripts from the full edition on GitHub). Store `null` for the `cwv` / `crux_history` fields. The compare-mode rules then surface "Field-data drift: skipped — Google APIs not available in this edition."
+-->
 5. **Write snapshot file** `seo-drift-{target-slug}-{YYYYMMDD}/snapshot.json`.
 6. **Update index** `seo-drift-{target-slug}/baselines.json` — append `{date, snapshot_path}` entry.
 

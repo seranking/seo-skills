@@ -35,6 +35,7 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
    - Current PA score and its 12-month trajectory.
    - Flag any drop > 5 points in the last 90 days.
 
+<!-- dir-edition:remove -->
 4b. **GSC URL performance + URL Inspection** *(only if google-api.json is present, tier ≥ 1)*
    - Replaces the directional traffic estimate from step 2 with first-party Google data for the exact URL.
    - Pull GSC search analytics for the URL (last 28 days, by query and page):
@@ -45,6 +46,10 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
    - Surface in `PAGE.md` "## Snapshot": `GSC last 28d: {clicks}/{impressions}/{ctr}% CTR / pos {position}` and `Google sees: {INDEXED|EXCLUDED} · canonical {userCanonical} → {googleCanonical} · last crawled {date}`.
    - **Feed into the verdict heuristic:** `INDEXED` + impressions > 100 + position 4–10 → harden REFRESH (clear quick-win). `EXCLUDED` (any reason) → harden KILL or CONSOLIDATE. `userCanonical ≠ googleCanonical` → flag as critical issue regardless of verdict.
    - See `skills/seo-google/references/cross-skill-integration.md` § "seo-page" for the full recipe.
+<!-- dir-edition:end -->
+<!-- dir-edition:only
+4b. **GSC URL performance + URL Inspection** — not available in the Claude Plugins Directory edition (it needs the Google API scripts from the full edition on GitHub). Keep the directional traffic estimate from step 2.
+-->
 
 5. **SERP context** `DATA_getSerpResults` and `DATA_getAiOverview`
    - For each of the 3–5 primary keywords:

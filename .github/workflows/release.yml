@@ -107,6 +107,8 @@ jobs:
     # not skip this job.
     if: ${{ always() && (github.event_name == 'push' || needs.bump.result == 'success') }}
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.name }}
     steps:
       - name: Resolve tag
         id: tag
@@ -184,3 +186,12 @@ jobs:
             fi
             echo "created Release $tag"
           fi
+
+  directory-edition:
+    # Publishes the release to the claude-directory branch, which the Claude
+    # Plugins Directory listing tracks.
+    needs: [release]
+    if: ${{ always() && needs.release.result == 'success' }}
+    uses: ./.github/workflows/directory-edition.yml
+    with:
+      ref: ${{ needs.release.outputs.tag }}

@@ -61,6 +61,7 @@ Validate hreflang implementations on a multi-language or multi-region site. Surf
    - **Cross-check against per-URL inventory (step 4):** if a sample URL's HTML lists 4 hreflang alternates but the sitemap entry for that URL lists 6, that mismatch is a conflict — Google may pick either, and inconsistency degrades the signal.
    - Persist to `03-sitemap-hreflang.md` and append findings to `hreflang-issues.csv`.
 
+<!-- dir-edition:remove -->
 6. **GSC verification of hreflang-targeted alternates** *(only if google-api.json is present, tier ≥ 1)*
    - For each unique domain that appears as an `href` target in the hreflang sets (e.g. `example.com`, `example.de`, `example.fr`), confirm GSC verification:
      `python3 scripts/gsc_query.py --property "{property}" --json` (a status-only check; just confirm the property responds without `PROPERTY_NOT_VERIFIED`).
@@ -68,6 +69,10 @@ Validate hreflang implementations on a multi-language or multi-region site. Surf
    - Surface in `HREFLANG-REPORT.md` as a section "## GSC verification of hreflang targets" with one row per target domain: `verified` / `not verified` / `not configured`.
    - If property not verified for a target domain: list it as a fix at Medium severity ("Verify {domain} in Google Search Console — required for cross-domain hreflang trust").
    - See `skills/seo-google/references/cross-skill-integration.md` § "Trigger pattern" for the failure-mode contract.
+<!-- dir-edition:end -->
+<!-- dir-edition:only
+6. **GSC verification of hreflang-targeted alternates** — not available in the Claude Plugins Directory edition (it needs the Google API scripts from the full edition on GitHub). In `HREFLANG-REPORT.md`, write `GSC verification: not available in this edition` and recommend verifying every hreflang target domain in Google Search Console.
+-->
 
 7. **Synthesise verdict**
    - Apply the verdict heuristic (see Tips) to produce **PASS**, **NEEDS-FIX**, or **BROKEN**.
@@ -148,7 +153,12 @@ Reasoning: {1–2 sentences anchored in concrete numbers from the data}.
 | {domain1} | ✓ / ✗ | {note if unverified} |
 | ... |
 
+<!-- dir-edition:remove -->
 (Or: `GSC verification: not configured (run bash extensions/google/install.sh)`.)
+<!-- dir-edition:end -->
+<!-- dir-edition:only
+(Or: `GSC verification: not available in this edition`.)
+-->
 
 ## Coverage notes
 

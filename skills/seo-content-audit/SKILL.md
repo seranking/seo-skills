@@ -40,6 +40,7 @@ Score an existing piece of content against modern E-E-A-T (Experience, Expertise
    - Sample LLM prompts where the target URL's domain appears as a source.
    - Cross-reference with the candidate URL — does it show up in any sampled prompts?
 
+<!-- dir-edition:remove -->
 3b. **GA4 organic traffic on the audited URL** *(only if google-api.json is present, tier ≥ 2)*
    - Replaces the implicit traffic estimation with actual measured organic sessions for the audited URL.
    - Pull the top organic landing pages (last 28 days):
@@ -48,6 +49,10 @@ Score an existing piece of content against modern E-E-A-T (Experience, Expertise
      - GA4 organic last 28d: `{sessions} sessions / {users} users / avg engagement {n}s`
      - If the URL doesn't appear in the top-100 organic landing pages: "GA4: not in top-100 organic landing pages last 28d — low or zero traffic."
    - **This is a signal, not a veto.** Low GA4 traffic on a YMYL page with high E-E-A-T is informative ("we're not earning the visibility our content quality should support") but doesn't change the publish decision.
+<!-- dir-edition:end -->
+<!-- dir-edition:only
+3b. **GA4 organic traffic on the audited URL** — not available in the Claude Plugins Directory edition (it needs the Google API scripts from the full edition on GitHub). Skip this step.
+-->
    - See `skills/seo-google/references/cross-skill-integration.md` § "seo-content-audit" for the full recipe.
 
 4. **Score E-E-A-T** using `references/core-eeat.md`

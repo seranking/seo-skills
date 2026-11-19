@@ -60,7 +60,9 @@ These thresholds drive the red / yellow / green coding in `DRIFT-REPORT.md`. Tun
 | TTFB p75 increase | ≥20% | ≥30% |
 | 25-week CrUX trend reversal (improving → degrading) | yellow | — |
 
+<!-- dir-edition:remove -->
 **Cross-reference:** when an LCP / INP / CLS field-data drift fires, deep-dive with `seo-google` directly: `python3 scripts/pagespeed_check.py {url} --json` (Lighthouse + CrUX combined view) for waterfall / opportunity-list context. Mirrors theirs at `seo-drift/references/comparison-rules.md:88`.
+<!-- dir-edition:end -->
 
 ## Indexation drift (GSC URL Inspection) — URL mode only, Tier 1+
 
@@ -72,7 +74,9 @@ These thresholds drive the red / yellow / green coding in `DRIFT-REPORT.md`. Tun
 | `lastCrawlTime` >60 days old (Google hasn't visited recently) | yellow |
 | `coverageState` text changed (e.g. "Submitted and indexed" → "Crawled - currently not indexed") | red |
 
+<!-- dir-edition:remove -->
 **Cross-reference:** when indexation drift fires, deep-dive with `python3 scripts/gsc_inspect.py {url} --json` for Google's full verdict and any associated rich-result issues, then run `python3 scripts/gsc_query.py --property {property} --url {url} --json` to see whether the change correlates with impression / click drops over the same window.
+<!-- dir-edition:end -->
 
 ## What to investigate first
 

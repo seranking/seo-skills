@@ -72,6 +72,7 @@ A one-shot technical SEO audit for a domain. Pulls SE Ranking's audit data, cate
      - Then make one additional call: `firecrawl_scrape` on `/robots.txt` (1 credit). Parse for AI-crawler User-Agent rules — `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended`, `ChatGPT-User`, `Bytespider`, `CCBot`. Surface allow/disallow scope per agent.
    - **If Firecrawl unavailable:** skip this step. Note in `TECH-AUDIT.md`: `Modern signals (JS canonical/noindex divergence, X-Robots-Tag, AI-crawler robots.txt rules, Dec-2025 JS-SEO risks): skipped — Firecrawl not installed.`
 
+<!-- dir-edition:remove -->
 8b. **CWV field data via CrUX** *(only if google-api.json is present, tier ≥ 0)*
    - SE Ranking's audit reports lab-only CWV (Lighthouse-flavoured estimates). CrUX returns actual Chrome user p75 metrics — the data Google ranks against.
    - Run `python3 scripts/pagespeed_check.py "https://{domain}" --crux-only --json` for current p75 LCP / INP / CLS / FCP / TTFB.
@@ -88,6 +89,10 @@ A one-shot technical SEO audit for a domain. Pulls SE Ranking's audit data, cate
    - If the property isn't verified in GSC for this account, surface "GSC: {domain} not verified — add it in Search Console" and skip 8c only.
    - Surface in `TECH-AUDIT.md` as a new section "## Indexation reality check (GSC URL Inspection)" with one row per top-5-traffic URL: status / canonical-divergence / last-crawled.
    - See `skills/seo-google/references/cross-skill-integration.md` § "seo-technical-audit" for the full recipe and failure modes.
+<!-- dir-edition:end -->
+<!-- dir-edition:only
+8b. **CWV field data and GSC URL Inspection** — not available in the Claude Plugins Directory edition (they need the Google API scripts from the full edition on GitHub). Skip steps 8b and 8c; the report uses SE Ranking's lab CWV only.
+-->
 
 8d. **IndexNow detection** `WebFetch`
    - Detection logic — IndexNow advertises its key one of three ways. Check in this order:
@@ -202,7 +207,12 @@ Top-level: `TECH-AUDIT.md` + `issues.csv` + `03-key-pages-issues.md`. The audit 
 | TTFB | {n} ms | … | ≤800 ms good · ≤1800 ms needs improvement | … |
 
 Source: CrUX 28-day origin. If insufficient field data: "CrUX: insufficient data for {domain} (low-traffic origin)."
+<!-- dir-edition:remove -->
 (Or: `CWV (field data): not configured — run `bash extensions/google/install.sh` for setup.`)
+<!-- dir-edition:end -->
+<!-- dir-edition:only
+(Or: `CWV (field data): not available in this edition.`)
+-->
 
 ## Indexation reality check (GSC URL Inspection)
 

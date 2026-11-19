@@ -19,7 +19,7 @@ For one URL, surface its AI-search citation footprint and recommend the page-lev
 1. **Validate target & preflight.** See `skills/seo-firecrawl/references/preflight.md` for the canonical 3-stage preflight (credit balance, Firecrawl availability, Google APIs). Skill-specific notes:
    - Confirm URL is fetchable before continuing.
    - Estimated SE Ranking cost for this skill: ~10–20 credits typical (URL keyword footprint, AIO presence + leaderboard for top 5 keywords).
-   - Firecrawl: optional, ~3 Firecrawl credits if available. When available, the JSON-LD parse in step 7 and the AI-protocol-files step 8 use it. Without it, those steps emit `(skipped — Firecrawl not installed; install via extensions/firecrawl/install.sh)` notes in `GEO.md` rather than failing the run. Pass `--no-firecrawl` to skip Firecrawl even when available (saves credits).
+   - Firecrawl: optional, ~3 Firecrawl credits if available. When available, the JSON-LD parse in step 7 and the AI-protocol-files step 8 use it. Without it, those steps emit `(skipped — Firecrawl not installed; add the Firecrawl MCP server from firecrawl.dev)` notes in `GEO.md` rather than failing the run. Pass `--no-firecrawl` to skip Firecrawl even when available (saves credits).
    - Google APIs: not used.
 
 2. **URL keyword footprint** `DATA_getUrlOverviewWorldwide` and `DATA_getDomainKeywords` (URL-filtered)
