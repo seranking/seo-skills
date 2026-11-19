@@ -1,0 +1,1 @@
+  - PageSpeed Insights (pagespeed.web.dev), or `seo-google` in the full edition on GitHub — for the full Lighthouse report (this skill cherry-picks the image audits; PSI has 100+ more).

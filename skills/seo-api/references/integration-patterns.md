@@ -21,12 +21,13 @@ Five canonical recipes the `seo-api` skill draws from. Each one is ready to past
 6. PROJECT_getPositionHistory       // project_id=<from #2>  (poll until ready)
 ```
 
+<!-- dir-edition:begin seo-api-patterns-py-rank-tracker -->
 ### Python equivalent
 
 ```python
-import os, time, requests
+import time, requests
 
-API_KEY = os.environ["SERANKING_API_KEY"]
+API_KEY = "YOUR_API_KEY"  # your SE Ranking API key
 HEADERS = {"Authorization": f"Token {API_KEY}", "Content-Type": "application/json"}
 BASE = "https://api.seranking.com/v1"
 
@@ -56,6 +57,7 @@ for _ in range(20):
         break
     time.sleep(15)
 ```
+<!-- dir-edition:end seo-api-patterns-py-rank-tracker -->
 
 ### When to use
 
@@ -86,6 +88,7 @@ User says: "set up rank tracking for X", "create a new project for client Y", "I
 5. (when ready) fetch the result URL        // 0 credits
 ```
 
+<!-- dir-edition:begin seo-api-patterns-py-backlink-export -->
 ### Python skeleton
 
 ```python
@@ -112,6 +115,7 @@ for domain in DOMAINS:
             break
         time.sleep(15)
 ```
+<!-- dir-edition:end seo-api-patterns-py-backlink-export -->
 
 (See `references/rate-limits-and-credits.md` for the `client` wrapper — it handles 429 + 403 + throttling.)
 
@@ -232,6 +236,7 @@ merge + dedupe
 write to CSV
 ```
 
+<!-- dir-edition:begin seo-api-patterns-py-keyword-job -->
 ### Python skeleton
 
 ```python
@@ -258,6 +263,7 @@ with open("keywords.csv", "w", newline="") as f:
     writer.writeheader()
     writer.writerows(unique)
 ```
+<!-- dir-edition:end seo-api-patterns-py-keyword-job -->
 
 ### When to use
 

@@ -17,6 +17,7 @@ Everything the `seo-api` skill needs to forecast cost and pace requests against 
 
 ## Handling 429 — exponential backoff with jitter
 
+<!-- dir-edition:begin seo-api-limits-py-backoff -->
 ```python
 import random, time, requests
 
@@ -31,6 +32,7 @@ def call(url, headers, max_attempts=5):
         delay *= 2
     r.raise_for_status()
 ```
+<!-- dir-edition:end seo-api-limits-py-backoff -->
 
 ```typescript
 async function call(url: string, headers: HeadersInit, maxAttempts = 5): Promise<Response> {
@@ -54,6 +56,7 @@ async function call(url: string, headers: HeadersInit, maxAttempts = 5): Promise
 
 Better than reactive 429 handling: proactively pace requests to stay under the limit.
 
+<!-- dir-edition:begin seo-api-limits-py-throttle -->
 ```python
 import time
 from collections import deque
@@ -76,6 +79,7 @@ for url in urls:
     limiter.acquire()
     call(url, headers)
 ```
+<!-- dir-edition:end seo-api-limits-py-throttle -->
 
 ## Credit system (Data API)
 
@@ -196,10 +200,11 @@ For any endpoint not in this table, read the **"Cost:"** line on its docs page b
 
 The end-to-end shape for any production integration:
 
+<!-- dir-edition:begin seo-api-limits-py-client -->
 ```python
 import time, random, requests
 
-API_KEY = os.environ["SERANKING_API_KEY"]
+API_KEY = "YOUR_API_KEY"  # your SE Ranking API key
 HEADERS = {"Authorization": f"Token {API_KEY}"}
 BASE = "https://api.seranking.com/v1"
 
@@ -231,5 +236,6 @@ class SERankingClient:
             return r.json()
         raise RuntimeError(f"Rate-limited after {max_attempts} attempts on {path}")
 ```
+<!-- dir-edition:end seo-api-limits-py-client -->
 
 This handles the common cases: rate-limit pacing, exponential backoff with jitter, terminal 403, transient 5xx. Tune `rps` to match the API (5 for Project, 10 for Data).

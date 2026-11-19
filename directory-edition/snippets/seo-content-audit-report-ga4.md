@@ -1,0 +1,1 @@
+- GA4 organic last 28d: not available in this edition

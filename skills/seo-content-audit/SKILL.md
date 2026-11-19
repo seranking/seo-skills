@@ -21,13 +21,13 @@ Score an existing piece of content against modern E-E-A-T (Experience, Expertise
    - **Validate target & preflight.** See `skills/seo-firecrawl/references/preflight.md` for the canonical 3-stage preflight (credit balance, Firecrawl availability, Google APIs). Skill-specific notes:
      - Estimated SE Ranking cost for this skill: ~10–15 credits typical (AIO context + AIO prompt sampling for the target keyword + audited URL).
      - Firecrawl: optional with WebFetch fallback, 1 Firecrawl credit per URL audited (default cap 50 URLs, hard cap 200). Surface the projected Firecrawl credit count before continuing. Pass `--no-firecrawl` to force WebFetch-only inspection (lower-confidence veto checks; see step 4 caveat).
-     - Google APIs: tier 2 (GA4 available) unlocks step 3b (GA4 organic traffic on the audited URL) after the AIO context step. See `skills/seo-google/references/cross-skill-integration.md` § "seo-content-audit" for the full recipe.
+     - Google APIs: tier 2 (GA4 available) unlocks step 3b (GA4 organic traffic on the audited URL) after the AIO context step. See `skills/seo-google/references/cross-skill-integration.md` § "seo-content-audit" for the full recipe. <!-- dir-edition:line seo-content-audit-preflight-google -->
    - **WebFetch first** (free, instant): pull the markdown for word count, H-tag hierarchy, source citations (links to authorities, numbered references), images, tables, code blocks, comment thread.
    - **Page-type detection.** From the URL pattern, H1 phrasing, and JSON-LD `@type`, classify the page as one of: ultimate guide / pillar, how-to, listicle / best-of, comparison (X vs Y), explainer, review (single product), landing page (commercial). Look up the corresponding word-count floor from `references/core-eeat.md` → "Word-count floors by page type". Surface the detected type, the applied floor, and the actual word count in `evidence/01-content-snapshot.md`. If the actual word count is materially below the floor, flag it for the depth E-E-A-T items (auto ✗ unless the auditor justifies the exception).
    - **Firecrawl second** — recovers what WebFetch's markdown loses:
      - From `metadata`: canonical URL, robots, lang, `og:title`.
-     - From the returned `html`: every `<script type="application/ld+json">` block. Parse for `Article` / `BlogPosting` schema and extract `author` (name, `@type: Person`, optional `url` + `sameAs`), `datePublished` / `dateModified` (ISO 8601), `publisher`, `mainEntityOfPage`. Detect `Person` schema standalone if present.
-     - DOM-level byline detection: locate the structural byline (`<a rel="author">`, `<meta name="author">`, `<span class="byline">`, `[itemprop="author"]`). Distinguish a real byline element from prose mentions ("Written by Jane in collaboration..." in body text is not a byline; `<a rel="author">Jane Doe</a>` is).
+     - From the returned `html`: every `script type="application/ld+json"` block. Parse for `Article` / `BlogPosting` schema and extract `author` (name, `@type: Person`, optional `url` + `sameAs`), `datePublished` / `dateModified` (ISO 8601), `publisher`, `mainEntityOfPage`. Detect `Person` schema standalone if present.
+     - DOM-level byline detection: locate the structural byline (`a rel="author"`, `meta name="author"`, `span class="byline"`, `[itemprop="author"]`). Distinguish a real byline element from prose mentions ("Written by Jane in collaboration..." in body text is not a byline; `<a rel="author">Jane Doe</a>` is).
    - **If Firecrawl unavailable:** WebFetch portion runs unchanged. Mark schema-type detection and structural byline detection as `(skipped — Firecrawl required)` in `evidence/01-content-snapshot.md`. Step 4's veto checks #1 and #4 fall back to prose-level inspection (less reliable) — surface that caveat in `VERDICT.md`.
 
 2. **AIO context** `DATA_getAiOverview` and `DATA_getAiOverviewLeaderboard`
@@ -40,7 +40,7 @@ Score an existing piece of content against modern E-E-A-T (Experience, Expertise
    - Sample LLM prompts where the target URL's domain appears as a source.
    - Cross-reference with the candidate URL — does it show up in any sampled prompts?
 
-<!-- dir-edition:remove -->
+<!-- dir-edition:begin seo-content-audit-ga4 -->
 3b. **GA4 organic traffic on the audited URL** *(only if google-api.json is present, tier ≥ 2)*
    - Replaces the implicit traffic estimation with actual measured organic sessions for the audited URL.
    - Pull the top organic landing pages (last 28 days):
@@ -49,11 +49,8 @@ Score an existing piece of content against modern E-E-A-T (Experience, Expertise
      - GA4 organic last 28d: `{sessions} sessions / {users} users / avg engagement {n}s`
      - If the URL doesn't appear in the top-100 organic landing pages: "GA4: not in top-100 organic landing pages last 28d — low or zero traffic."
    - **This is a signal, not a veto.** Low GA4 traffic on a YMYL page with high E-E-A-T is informative ("we're not earning the visibility our content quality should support") but doesn't change the publish decision.
-<!-- dir-edition:end -->
-<!-- dir-edition:only
-3b. **GA4 organic traffic on the audited URL** — not available in the Claude Plugins Directory edition (it needs the Google API scripts from the full edition on GitHub). Skip this step.
--->
    - See `skills/seo-google/references/cross-skill-integration.md` § "seo-content-audit" for the full recipe.
+<!-- dir-edition:end seo-content-audit-ga4 -->
 
 4. **Score E-E-A-T** using `references/core-eeat.md`
    - 60-item rubric across 4 dimensions (15 items each).
@@ -137,7 +134,7 @@ Step files 01 + 02 are inlined as a "Snapshot" / "AIO context" section in `VERDI
 - Gap vs cited sources: {bulleted gaps}
 
 ## Snapshot (measured)
-- GA4 organic last 28d: {sessions} sessions / {users} users / avg engagement {n}s  *(or `not in top-100` / `not configured (Tier 2 required)`)*
+- GA4 organic last 28d: {sessions} sessions / {users} users / avg engagement {n}s  *(or `not in top-100` / `not configured (Tier 2 required)`)* <!-- dir-edition:line seo-content-audit-report-ga4 -->
 
 ## Top 5 fixes
 

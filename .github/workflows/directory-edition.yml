@@ -3,7 +3,8 @@ name: Directory edition
 # Builds the Claude Plugins Directory edition of a release with
 # directory-edition/build.py and commits it to the claude-directory branch,
 # which the directory listing tracks. release.yml calls this after every
-# release; run it by hand to rebuild the edition of an existing tag.
+# release. Run it by hand only for a tag that contains directory-edition/
+# (v2.11.3 and later); see directory-edition/README.md.
 
 on:
   workflow_call:
@@ -12,12 +13,20 @@ on:
         description: "Release tag to build from, e.g. v2.11.3"
         type: string
         required: true
+      force:
+        description: "Publish even if the branch already holds the same or a higher version"
+        type: boolean
+        default: false
   workflow_dispatch:
     inputs:
       ref:
         description: "Release tag to build from, e.g. v2.11.3"
         type: string
         required: true
+      force:
+        description: "Publish even if the branch already holds the same or a higher version"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -32,12 +41,14 @@ jobs:
     env:
       BRANCH: claude-directory
       REF: ${{ inputs.ref }}
+      FORCE: ${{ inputs.force }}
     steps:
       - name: Check out the release
         uses: actions/checkout@v5
         with:
           ref: ${{ inputs.ref }}
           path: source
+          persist-credentials: false
 
       - name: Set up Node.js
         # Claude Code needs Node 22+ (see validate.yml).
@@ -49,7 +60,7 @@ jobs:
         run: npm install -g @anthropic-ai/claude-code
 
       - name: Build and check the edition
-        run: python3 source/directory-edition/build.py --src source --out edition
+        run: python3 source/directory-edition/build.py --src source --out edition --ref "$REF" --require-sniff
 
       - name: Validate the edition
         working-directory: edition
@@ -65,14 +76,18 @@ jobs:
         run: |
           set -euo pipefail
           sha=$(git -C source rev-parse HEAD)
+          auth="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$TOKEN" | base64 -w0)"
+          git_auth() { git -c "http.https://github.com/.extraheader=$auth" "$@"; }
           mkdir target && cd target
           git init -q -b "$BRANCH"
-          git remote add origin "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null; then
-            git fetch -q --depth 1 origin "$BRANCH"
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          old_version=""
+          if git_auth ls-remote --exit-code --heads origin "$BRANCH" >/dev/null; then
+            git_auth fetch -q --depth 1 origin "$BRANCH"
             # Keep the branch history; the index stays empty, so the next commit
             # holds exactly the new edition and drops files it no longer has.
             git reset -q --soft FETCH_HEAD
+            old_version=$(git show FETCH_HEAD:.claude-plugin/plugin.json | jq -r .version)
           fi
           cp -a ../edition/. .
           git add -A
@@ -80,8 +95,19 @@ jobs:
             echo "The $BRANCH branch already holds the edition of $REF."
             exit 0
           fi
+          new_version=$(jq -r .version .claude-plugin/plugin.json)
+          if [ -n "$old_version" ] && [ "$FORCE" != "true" ]; then
+            if [ "$new_version" = "$old_version" ]; then
+              echo "::error::$BRANCH already holds version $old_version with different content. Ship edition changes in a new release (users only update when the version changes), or rerun with force."
+              exit 1
+            fi
+            if [ "$(printf '%s\n%s\n' "$old_version" "$new_version" | sort -V | tail -1)" != "$new_version" ]; then
+              echo "::error::$REF is version $new_version, older than $old_version on $BRANCH. Rerun with force to roll back on purpose."
+              exit 1
+            fi
+          fi
           git -c user.name="github-actions[bot]" \
               -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
-              commit -q -m "Directory edition of $REF" -m "Built by directory-edition/build.py from ${sha}."
-          git push -q origin "HEAD:refs/heads/$BRANCH"
-          echo "Pushed the edition of $REF to $BRANCH: $(git rev-parse --short HEAD)"
+              commit -q -m "Directory edition of $REF ($new_version)" -m "Built by directory-edition/build.py from ${sha}."
+          git_auth push -q origin "HEAD:refs/heads/$BRANCH"
+          echo "Pushed the edition of $REF ($new_version) to $BRANCH: $(git rev-parse --short HEAD)"

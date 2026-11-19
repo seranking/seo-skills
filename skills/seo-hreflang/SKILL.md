@@ -8,7 +8,7 @@ description: Hreflang and international SEO audit for multi-language and multi-r
 
 Adapted from `AgriciDaniel/claude-seo`'s `seo-hreflang` skill (MIT). Concept and validation rules originate there; this implementation is rebuilt against our backend (SE Ranking MCP + Firecrawl + WebFetch + Google APIs via `seo-google`).
 
-Validate hreflang implementations on a multi-language or multi-region site. Surface SE Ranking audit-level hreflang issues, parse a sample of pages for the actual `<link rel="alternate" hreflang="…">` tags they emit, cross-check the sitemap, and produce one of three verdicts — **PASS**, **NEEDS-FIX**, or **BROKEN** — with a top-fixes table anchored in objective signals.
+Validate hreflang implementations on a multi-language or multi-region site. Surface SE Ranking audit-level hreflang issues, parse a sample of pages for the actual `link rel="alternate" hreflang="…"` tags they emit, cross-check the sitemap, and produce one of three verdicts — **PASS**, **NEEDS-FIX**, or **BROKEN** — with a top-fixes table anchored in objective signals.
 
 ## Prerequisites
 
@@ -22,8 +22,8 @@ Validate hreflang implementations on a multi-language or multi-region site. Surf
 1. **Validate target & preflight.** See `skills/seo-firecrawl/references/preflight.md` for the canonical 3-stage preflight (credit balance, Firecrawl availability, Google APIs). Skill-specific notes:
    - Normalise domain (strip protocol, trailing slash) before continuing.
    - Estimated SE Ranking cost for this skill: ~5–10 SE Ranking credits for re-using an existing audit (up to ~3 Firecrawl credits for the per-URL inventory).
-   - Firecrawl: optional with WebFetch fallback, ~6 Firecrawl credits if available (hard cap). When available, step 4 (per-URL hreflang inventory) runs on homepage + 5 representative pages with `formats: ["rawHtml"]`. Without Firecrawl, step 4 falls back to WebFetch — coverage is degraded because WebFetch returns markdown only and silently strips `<link rel="alternate">` tags from `<head>`. Pass `--no-firecrawl` to force WebFetch even when Firecrawl is available.
-   - Google APIs: tier 1 (GSC) unlocks step 6 (GSC verification of hreflang-targeted alternates). See `skills/seo-google/references/cross-skill-integration.md` for the full enrichment contract.
+   - Firecrawl: optional with WebFetch fallback, ~6 Firecrawl credits if available (hard cap). When available, step 4 (per-URL hreflang inventory) runs on homepage + 5 representative pages with `formats: ["rawHtml"]`. Without Firecrawl, step 4 falls back to WebFetch — coverage is degraded because WebFetch returns markdown only and silently strips `link rel="alternate"` tags from `head`. Pass `--no-firecrawl` to force WebFetch even when Firecrawl is available.
+   - Google APIs: tier 1 (GSC) unlocks step 6 (GSC verification of hreflang-targeted alternates). See `skills/seo-google/references/cross-skill-integration.md` for the full enrichment contract. <!-- dir-edition:line seo-hreflang-preflight-google -->
 
 2. **Find or refresh the audit** `DATA_listAudits` → `DATA_getAuditStatus`
    - List audits for the domain. If a recent audit exists (<30 days), use it.
@@ -38,15 +38,15 @@ Validate hreflang implementations on a multi-language or multi-region site. Surf
 
 4. **Per-URL hreflang tag inventory** `mcp__firecrawl-mcp__firecrawl_scrape` (preferred) / `WebFetch` (fallback)
    - **Sample selection:** homepage + up to 5 representative pages from `DATA_getDomainPages` (sort by traffic descending; bias toward pages on different language paths if the URL structure exposes them — `/en/`, `/fr/`, `/de/`, etc.).
-   - **Firecrawl path** (1 credit per URL, ~6 total): call `firecrawl_scrape(url=..., formats=["rawHtml"])`. Pin `rawHtml` — the default `html` post-processing strips `<link rel="alternate">` on many sites. Parse every `<link rel="alternate" hreflang="…" href="…">` from the `<head>`. Capture: source URL, hreflang attribute, href, and whether it's self-referencing.
-   - **WebFetch fallback** (no Firecrawl): try fetching each URL and extracting hreflang from the markdown response. WebFetch frequently returns markdown that has stripped `<head>` link tags, so this path will under-report. Note in `HREFLANG-REPORT.md`: `Per-URL inventory: degraded coverage — Firecrawl not installed; some hreflang tags may be missed.`
+   - **Firecrawl path** (1 credit per URL, ~6 total): call `firecrawl_scrape(url=..., formats=["rawHtml"])`. Pin `rawHtml` — the default `html` post-processing strips `link rel="alternate"` on many sites. Parse every `link rel="alternate" hreflang="…" href="…"` from the `head`. Capture: source URL, hreflang attribute, href, and whether it's self-referencing.
+   - **WebFetch fallback** (no Firecrawl): try fetching each URL and extracting hreflang from the markdown response. WebFetch frequently returns markdown that has stripped `head` link tags, so this path will under-report. Note in `HREFLANG-REPORT.md`: `Per-URL inventory: degraded coverage — Firecrawl not installed; some hreflang tags may be missed.`
    - **Apply validation rules** (see references/validation-rules.md for the full list):
      - **Self-referencing tag:** the page's own URL must appear in its own hreflang set.
      - **Return tags:** every alternate link must reciprocate. If page A lists B as `fr`, page B must list A as `en` (or whichever).
      - **x-default:** at least one alternate per set must use `hreflang="x-default"`.
      - **Language-region code validation:** every value must be a valid ISO 639-1 language (optionally followed by `-` and an ISO 3166-1 Alpha-2 region). Common errors caught: `eng` (use `en`), `jp` (use `ja`), `en-uk` (use `en-GB`), `es-LA` (no such ISO region).
      - **Conflict detection:** the same hreflang value (e.g. `de-DE`) appearing on multiple distinct URLs is a conflict — Google ignores conflicting sets.
-     - **Canonical alignment:** if the page has `<link rel="canonical">`, it must match the page's own URL (or its self-referencing hreflang URL). Hreflang on a non-canonical page is silently ignored by Google.
+     - **Canonical alignment:** if the page has `link rel="canonical"`, it must match the page's own URL (or its self-referencing hreflang URL). Hreflang on a non-canonical page is silently ignored by Google.
      - **Protocol consistency:** all URLs in a set must share the same scheme (HTTPS preferred).
    - Persist to `02-per-url-hreflang.md` and append findings to `hreflang-issues.csv`.
 
@@ -61,7 +61,7 @@ Validate hreflang implementations on a multi-language or multi-region site. Surf
    - **Cross-check against per-URL inventory (step 4):** if a sample URL's HTML lists 4 hreflang alternates but the sitemap entry for that URL lists 6, that mismatch is a conflict — Google may pick either, and inconsistency degrades the signal.
    - Persist to `03-sitemap-hreflang.md` and append findings to `hreflang-issues.csv`.
 
-<!-- dir-edition:remove -->
+<!-- dir-edition:begin seo-hreflang-gsc -->
 6. **GSC verification of hreflang-targeted alternates** *(only if google-api.json is present, tier ≥ 1)*
    - For each unique domain that appears as an `href` target in the hreflang sets (e.g. `example.com`, `example.de`, `example.fr`), confirm GSC verification:
      `python3 scripts/gsc_query.py --property "{property}" --json` (a status-only check; just confirm the property responds without `PROPERTY_NOT_VERIFIED`).
@@ -69,10 +69,7 @@ Validate hreflang implementations on a multi-language or multi-region site. Surf
    - Surface in `HREFLANG-REPORT.md` as a section "## GSC verification of hreflang targets" with one row per target domain: `verified` / `not verified` / `not configured`.
    - If property not verified for a target domain: list it as a fix at Medium severity ("Verify {domain} in Google Search Console — required for cross-domain hreflang trust").
    - See `skills/seo-google/references/cross-skill-integration.md` § "Trigger pattern" for the failure-mode contract.
-<!-- dir-edition:end -->
-<!-- dir-edition:only
-6. **GSC verification of hreflang-targeted alternates** — not available in the Claude Plugins Directory edition (it needs the Google API scripts from the full edition on GitHub). In `HREFLANG-REPORT.md`, write `GSC verification: not available in this edition` and recommend verifying every hreflang target domain in Google Search Console.
--->
+<!-- dir-edition:end seo-hreflang-gsc -->
 
 7. **Synthesise verdict**
    - Apply the verdict heuristic (see Tips) to produce **PASS**, **NEEDS-FIX**, or **BROKEN**.
@@ -153,12 +150,9 @@ Reasoning: {1–2 sentences anchored in concrete numbers from the data}.
 | {domain1} | ✓ / ✗ | {note if unverified} |
 | ... |
 
-<!-- dir-edition:remove -->
+<!-- dir-edition:begin seo-hreflang-gsc-output -->
 (Or: `GSC verification: not configured (run bash extensions/google/install.sh)`.)
-<!-- dir-edition:end -->
-<!-- dir-edition:only
-(Or: `GSC verification: not available in this edition`.)
--->
+<!-- dir-edition:end seo-hreflang-gsc-output -->
 
 ## Coverage notes
 

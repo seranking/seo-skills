@@ -12,13 +12,10 @@ A focused, page-level (or domain-sample) audit of every `<img>` and `<picture>` 
 ## Prerequisites
 
 - **Required for inventory:** `mcp__firecrawl-mcp__firecrawl_scrape` (raw HTML access). `WebFetch` returns markdown only — every `<img>` attribute (`srcset`, `sizes`, `loading`, `fetchpriority`, `width`, `height`, `data-src*` lazy variants) is stripped before the skill ever sees it. Without Firecrawl the audit cannot run. Add the Firecrawl MCP server from firecrawl.dev.
-<!-- dir-edition:remove -->
-- **Optional (PSI byte-saving estimates):** `google-api.json` configured (Tier 0 — API key only). When present, step 9 runs and adds real Lighthouse `wastedBytes` per image to the remediation list.
-<!-- dir-edition:end -->
-<!-- dir-edition:only
-- **Optional (PSI byte-saving estimates):** not available in the Claude Plugins Directory edition; it needs the Google API scripts from the full edition on GitHub (https://github.com/seranking/seo-skills).
--->
-- **Optional (SE Ranking audit cross-reference):** SE Ranking MCP server connected and a recent audit for the domain. When present, step 10 elevates image-related audit issues onto the same remediation list.
+<!-- dir-edition:begin seo-images-psi-prereq -->
+- **Optional (PSI byte-saving estimates):** `google-api.json` configured (Tier 0 — API key only). When present, step 10 runs and adds real Lighthouse `wastedBytes` per image to the remediation list.
+<!-- dir-edition:end seo-images-psi-prereq -->
+- **Optional (SE Ranking audit cross-reference):** SE Ranking MCP server connected and a recent audit for the domain. When present, step 11 elevates image-related audit issues onto the same remediation list.
 - User provides: a target URL (single-page audit) or a domain (sampled audit). For domains, the skill confirms how many pages to sample before spending Firecrawl credits.
 
 ## Process
@@ -27,14 +24,11 @@ A focused, page-level (or domain-sample) audit of every `<img>` and `<picture>` 
    - **URL mode** (default for inputs that look like a single page): the target is one URL. Cost: 1 Firecrawl credit + optional PSI calls.
    - **Domain mode** (input is a bare domain or the user explicitly asks for a domain-wide audit): map first, then scrape a sample.
    - **Preflight checks** (mirror `skills/seo-firecrawl/references/preflight.md` where it applies):
-     - Confirm Firecrawl is connected. If not, abort with the install command and stop.
-     <!-- dir-edition:remove -->
-     - If Google APIs are wired up (`~/.config/seo-skills/google-api.json` present), record the detected tier; step 9 will use it. If not, mark step 9 as skipped.
-     <!-- dir-edition:end -->
-     <!-- dir-edition:only
-     - Mark step 9 as skipped: Google APIs are not available in this edition.
-     -->
-     - If SE Ranking MCP is connected and a recent audit exists for the domain, record the audit ID; step 10 will use it. If not, mark step 10 as skipped.
+     - Confirm Firecrawl is connected. If not, tell the user to add the Firecrawl MCP server (firecrawl.dev) and stop.
+     <!-- dir-edition:begin seo-images-psi-preflight -->
+     - If Google APIs are wired up (`~/.config/seo-skills/google-api.json` present), record the detected tier; step 10 will use it. If not, mark step 10 as skipped.
+     <!-- dir-edition:end seo-images-psi-preflight -->
+     - If SE Ranking MCP is connected and a recent audit exists for the domain, record the audit ID; step 11 will use it. If not, mark step 11 as skipped.
 
 2. **Gather image inventory** `mcp__firecrawl-mcp__firecrawl_scrape` (URL mode) or `firecrawl_map` + `firecrawl_scrape` (domain mode)
    - **URL mode:** scrape the target with `formats: ["html", "markdown"]` and `onlyMainContent: false` (we want nav/footer images too — hero logo, footer trust badges, decorative imagery all matter for the audit). For SPAs, pass `waitFor: 2000` so lazy-injected images appear in the rendered DOM. Parse every `<img>` and every `<picture>` from the returned `html`. Capture per image:
@@ -107,7 +101,7 @@ A focused, page-level (or domain-sample) audit of every `<img>` and `<picture>` 
    - **Generate:** for each image that doesn't already have an `ImageObject` block AND that meets the "worth marking up" threshold (the image is the page's hero / first-fold and the page has a clear creator/owner), produce a paste-ready block from `templates/image-object.json`, filling in fields from the live HTML. Mark unresolved fields as `{REPLACE: ...}`. The generated file is emitted as `02-remediation/image-object.jsonld` (the `.jsonld` extension marks it as a deliverable for `<script type="application/ld+json">`).
    - **Don't generate `ImageObject` for every `<img>`.** It's noise. Limit to the hero image and any image that should be eligible for licensable-images rich results.
 
-<!-- dir-edition:remove -->
+<!-- dir-edition:begin seo-images-psi-step -->
 10. **Optional: PageSpeed Insights byte savings** *(only if `~/.config/seo-skills/google-api.json` is present, Tier ≥ 0)*
     - Run `python3 scripts/pagespeed_check.py "{url}" --strategy=mobile --json` and `--strategy=desktop --json` (2 API calls per target URL — within PSI's 25k/day free quota).
     - Pull the following audits from the JSON response and merge per-image `wastedBytes` into the remediation list:
@@ -120,10 +114,7 @@ A focused, page-level (or domain-sample) audit of every `<img>` and `<picture>` 
       - `efficient-animated-content` — confirms animated-GIF flagging from step 4.
     - Each PSI audit returns `details.items[]` with `url` and `wastedBytes`. Join on image URL (resolved absolute) and tag each remediation row with `psi_wasted_bytes` so the prioritised list orders by real savings, not heuristic severity alone.
     - **If PSI is configured but returns no audits** (likely a 4xx — usually a private/protected URL Lighthouse can't load): note "PSI: could not analyse {url} ({reason})" and continue with non-PSI signals.
-<!-- dir-edition:end -->
-<!-- dir-edition:only
-10. **Optional: PageSpeed Insights byte savings** — not available in the Claude Plugins Directory edition (it needs the Google API scripts from the full edition on GitHub). Skip this step and note `PSI byte savings: not available in this edition` in the report.
--->
+<!-- dir-edition:end seo-images-psi-step -->
 
 11. **Optional: SE Ranking audit cross-reference** *(only if SE Ranking MCP is connected and a recent audit exists)*
     - `DATA_listAudits` → find the most recent audit for the domain. If none exists or it's >30 days old, skip this step (don't trigger a new audit from the image skill — that's `seo-technical-audit`'s call to make).
@@ -234,7 +225,7 @@ See `02-remediation/`:
 
 - {`seo-technical-audit` if domain-wide image issues need to be quantified — uncompressed-images counts, etc.}
 - {`seo-schema` if `ImageObject` was generated and the page also needs `Article` / `Product` / etc. markup.}
-- {`seo-google pagespeed` for the full Lighthouse breakdown (this skill only pulls image-specific audits).}
+- {`seo-google pagespeed` for the full Lighthouse breakdown (this skill only pulls image-specific audits).} <!-- dir-edition:line seo-images-next-pagespeed -->
 ```
 
 `images.csv` columns: `page_url,image_url,alt,alt_length,alt_issue,format,in_picture,modern_source,srcset,sizes,loading,lazy_method,fetchpriority,decoding,width,height,unsized,lcp_candidate,filename_issue,psi_wasted_bytes,severity,fix,effort`.
@@ -260,5 +251,5 @@ See `02-remediation/`:
   - `seo-page` — when a URL-level keyword/traffic verdict is "refresh" and images are part of the refresh.
 - **Successors:**
   - `seo-schema` — when the page also needs `Article` / `Product` / `LocalBusiness` schema beyond `ImageObject`.
-  - `seo-google pagespeed` — for the full Lighthouse report (this skill cherry-picks the image audits; PSI has 100+ more).
+  - `seo-google pagespeed` — for the full Lighthouse report (this skill cherry-picks the image audits; PSI has 100+ more). <!-- dir-edition:line seo-images-related-pagespeed -->
   - `seo-drift` — to baseline image markup and detect regressions after a CMS or theme upgrade.

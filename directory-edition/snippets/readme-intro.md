@@ -1,0 +1,1 @@
+**32 free, open-source Claude SEO skills** for Claude (claude.ai, Claude Desktop and Cowork, Claude Code) and any AI agent that supports Agent Skills and MCP. Each SEO skill turns live [SE Ranking](https://seranking.com) data into a finished deliverable: content briefs, technical audits, AI search share of voice, backlink gap lists, keyword clusters and 90-day SEO plans.

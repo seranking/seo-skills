@@ -1,0 +1,1 @@
+   - Google APIs: not available in this edition (steps 8b and 8c are skipped).

@@ -1,0 +1,1 @@
+4b. **GSC URL performance + URL Inspection** — not available in the Claude Plugins Directory edition (it needs the Google API scripts from the full edition on GitHub). Keep the directional traffic estimate from step 2.

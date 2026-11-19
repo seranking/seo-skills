@@ -1,0 +1,1 @@
+   - Google APIs: not available in this edition, so baselines carry no CrUX or URL Inspection data and compares skip field-data and indexation drift.

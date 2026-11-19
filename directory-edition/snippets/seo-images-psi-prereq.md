@@ -1,0 +1,1 @@
+- **Optional (PSI byte-saving estimates):** not available in the Claude Plugins Directory edition; step 10 needs the Google API scripts from the full edition on GitHub (https://github.com/seranking/seo-skills).

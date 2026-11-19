@@ -104,7 +104,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python directory-edition/build.py --out "$RUNNER_TEMP/edition"
+          python directory-edition/test_build.py
+          python directory-edition/build.py --out "$RUNNER_TEMP/edition" --require-sniff
           cd "$RUNNER_TEMP/edition"
           claude plugin validate . --strict
           claude plugin validate .claude-plugin/plugin.json --strict

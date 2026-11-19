@@ -20,8 +20,8 @@ Git for SEO. Capture a snapshot of a domain or URL's SEO state ("baseline"), the
 
 | Flag | Mode | Effect |
 |---|---|---|
-| `--no-firecrawl` | baseline, compare | Skip Firecrawl-based `<head>` + JSON-LD capture even when Firecrawl is installed (saves credits at the cost of canonical / robots / og:* / JSON-LD diff coverage). |
-| `--skip-cwv` | baseline, compare | Skip the Google CrUX capture (step 4b) even when `google-api.json` is configured. Useful when you only care about content/structural drift, or when CrUX rate-limit concerns outweigh CWV coverage. Mirrors theirs at `seo-drift/SKILL.md:107, 131`. |
+| `--no-firecrawl` | baseline, compare | Skip Firecrawl-based `head` + JSON-LD capture even when Firecrawl is installed (saves credits at the cost of canonical / robots / og:* / JSON-LD diff coverage). |
+| `--skip-cwv` | baseline, compare | Skip the Google CrUX capture (step 4b) even when `google-api.json` is configured. Useful when you only care about content/structural drift, or when CrUX rate-limit concerns outweigh CWV coverage. Mirrors theirs at `seo-drift/SKILL.md:107, 131`. | <!-- dir-edition:line seo-drift-flag-skip-cwv -->
 | `--baseline-id <n>` | compare | Compare against a specific baseline by ID rather than the most recent. |
 | `--limit <n>` | history | Cap the number of historical entries shown. |
 
@@ -41,42 +41,41 @@ List all stored baselines for the target with their dates and key metrics (DA, t
 ### baseline mode
 
 1. **Validate target.** Determine if domain or URL. Domain = `example.com`; URL = anything starting with `http(s)://`.
+   <!-- dir-edition:begin seo-drift-ssrf -->
    - **SSRF protection (URL mode).** If target is a URL, validate via `python3 -c "from scripts.google_auth import validate_url; import sys; sys.exit(0 if validate_url('{target}') else 1)"` (or import `validate_url` directly in any helper script). Reject loopback (127.0.0.1, ::1, localhost), private IP ranges (10/8, 172.16/12, 192.168/16), link-local (169.254/16), and Google metadata endpoints. If validation fails, abort with a clear error and don't proceed to fetch — feeding an unvalidated URL into Firecrawl / WebFetch / Google APIs would risk SSRF against internal services. Mirrors theirs at `seo-drift/SKILL.md:97`.
+   <!-- dir-edition:end seo-drift-ssrf -->
 2. **Preflight.** See `skills/seo-firecrawl/references/preflight.md` for the canonical 3-stage preflight (credit balance, Firecrawl availability, Google APIs). Skill-specific notes:
    - Estimated SE Ranking cost for this skill: typical baseline costs ~10–20 SE Ranking credits depending on whether step 4 (URL-mode page snapshot) is included.
-   - Firecrawl: optional with WebFetch fallback, +1 Firecrawl credit per URL if available (URL mode). When available, the snapshot also captures `<head>` + JSON-LD content so canonical / robots / og:* / JSON-LD changes are detectable on diff. Without it the snapshot is partial. Pass `--no-firecrawl` to skip Firecrawl even when available (saves credits at the cost of diff coverage).
-   - Google APIs: tier 0 unlocks CrUX p75 LCP/INP/CLS capture (origin in domain mode, URL in URL mode); tier 1 (URL mode only) additionally captures URL Inspection state (`indexStatusVerdict`, `googleCanonical`, `lastCrawlTime`) so subsequent compares can flag field-data and indexation drift. See `skills/seo-google/references/cross-skill-integration.md` § "seo-drift" for the full recipe.
+   - Firecrawl: optional with WebFetch fallback, +1 Firecrawl credit per URL if available (URL mode). When available, the snapshot also captures `head` + JSON-LD content so canonical / robots / og:* / JSON-LD changes are detectable on diff. Without it the snapshot is partial. Pass `--no-firecrawl` to skip Firecrawl even when available (saves credits at the cost of diff coverage).
+   - Google APIs: tier 0 unlocks CrUX p75 LCP/INP/CLS capture (origin in domain mode, URL in URL mode); tier 1 (URL mode only) additionally captures URL Inspection state (`indexStatusVerdict`, `googleCanonical`, `lastCrawlTime`) so subsequent compares can flag field-data and indexation drift. See `skills/seo-google/references/cross-skill-integration.md` § "seo-drift" for the full recipe. <!-- dir-edition:line seo-drift-preflight-google -->
 3. **Domain snapshot** (always):
    - `DATA_getDomainOverviewWorldwide` — DA, traffic, organic + paid keyword counts.
    - `DATA_getDomainKeywords` — top 100 organic keywords with positions.
    - `DATA_getBacklinksSummary` — backlinks total, referring domains total.
    - `DATA_getBacklinksRefDomains` — top 20 referring domains with authority.
 4. **Page snapshot** (if target is a URL): `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
-   - **WebFetch** (free): extract `<title>`, all `<h1..h6>`, lang, word count, internal-link count, image count, body markdown for prose-level diff.
-   - **Firecrawl** (1 Firecrawl credit per URL) — recovers `<head>` and `<script>` content WebFetch strips:
+   - **WebFetch** (free): extract `title`, all `h1..h6`, lang, word count, internal-link count, image count, body markdown for prose-level diff.
+   - **Firecrawl** (1 Firecrawl credit per URL) — recovers `head` and `script` content WebFetch strips:
      - From `metadata`: canonical URL, robots meta, og:title, og:description, og:image, twitter:card.
-     - From returned `html`: every `<script type="application/ld+json">` block. Capture both detected `@type`s and a hash of the full block content (so any schema-content change is detected on diff, not just type-list changes).
+     - From returned `html`: every `script type="application/ld+json"` block. Capture both detected `@type`s and a hash of the full block content (so any schema-content change is detected on diff, not just type-list changes).
    - **If Firecrawl unavailable (or `--no-firecrawl` passed):** only WebFetch fields enter the fingerprint. `BASELINE.md` notes: `Snapshot fields recovered via WebFetch only — canonical, robots, og:*, twitter:*, and JSON-LD changes will not be detected on subsequent compares. Install Firecrawl for full coverage.`
    - Compute a fingerprint hash of the captured fields.
    - Also capture page authority: `DATA_getPageAuthority`.
-<!-- dir-edition:remove -->
+<!-- dir-edition:begin seo-drift-field-data -->
 4b. **Google field-data snapshot** *(only if google-api.json is present AND `--skip-cwv` not set)*
    - Tier 0 (always when configured): `python3 scripts/pagespeed_check.py "{target}" --crux-only --json` (URL mode) or `python3 scripts/pagespeed_check.py "https://{domain}" --crux-only --json` (domain mode, origin-level CrUX). Store the resulting p75 LCP / INP / CLS / FCP / TTFB and the source label ("URL" or "origin").
    - Tier 0 (always when configured): `python3 scripts/crux_history.py "{target_or_origin}" --json` for the 25-week trend window snapshot — store as `crux_history_baseline`. Subsequent compares can detect drift against the most recent week.
    - Tier 1 (URL mode only): `python3 scripts/gsc_inspect.py "{target_url}" --site-url "{config.default_property}" --json`. Store `indexStatusVerdict`, `coverageState`, `googleCanonical`, `userCanonical`, `lastCrawlTime`.
    - If `--skip-cwv` was passed, skip this step entirely and store `null` for `cwv` / `crux_history` fields. The compare-mode rules then surface "Field-data drift: skipped — `--skip-cwv` flag passed at baseline."
    - If CrUX returns insufficient data, store `null` for the affected metrics and continue.
-<!-- dir-edition:end -->
-<!-- dir-edition:only
-4b. **Google field-data snapshot** — not available in the Claude Plugins Directory edition (it needs the Google API scripts from the full edition on GitHub). Store `null` for the `cwv` / `crux_history` fields. The compare-mode rules then surface "Field-data drift: skipped — Google APIs not available in this edition."
--->
+<!-- dir-edition:end seo-drift-field-data -->
 5. **Write snapshot file** `seo-drift-{target-slug}-{YYYYMMDD}/snapshot.json`.
 6. **Update index** `seo-drift-{target-slug}/baselines.json` — append `{date, snapshot_path}` entry.
 
 ### compare mode
 
 1. **Validate target + locate latest baseline** in `seo-drift-{target-slug}/baselines.json`.
-   - **SSRF protection (URL mode).** Same `validate_url()` check as baseline mode. Refuses to fetch private/loopback/metadata addresses.
+   - **SSRF protection (URL mode).** Same SSRF check as baseline mode (step 1). Refuses to fetch private/loopback/metadata addresses.
    - If no baseline exists, fall through to baseline mode and tell the user to come back later.
 2. **Capture current state** (same data as baseline mode).
 3. **Diff** each metric using `references/drift-thresholds.md`:
@@ -149,6 +148,7 @@ Top-level: `DRIFT-REPORT.md` only. The four delta step files are inlined into na
 - {finding}
 - ...
 
+<!-- dir-edition:begin seo-drift-report-field-data -->
 ## Field-data drift (CrUX + URL Inspection)
 - LCP p75: {baseline} → {current} ms ({Δ%}) {↑ red / ↑ yellow / stable / ↓ green}
 - INP p75: {baseline} → {current} ms ({Δ%}) {…}
@@ -156,6 +156,7 @@ Top-level: `DRIFT-REPORT.md` only. The four delta step files are inlined into na
 - Indexation status: {baseline INDEXED → current EXCLUDED} (URL mode)
 - googleCanonical: {baseline → current} (if changed)
 - (Or: `Field-data / indexation drift: not configured` / `not comparable — missing from {snapshot}`)
+<!-- dir-edition:end seo-drift-report-field-data -->
 
 ## What to investigate first
 1. {prioritised action with reasoning}

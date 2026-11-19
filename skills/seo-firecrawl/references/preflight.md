@@ -28,7 +28,7 @@ Check whether `mcp__firecrawl-mcp__firecrawl_scrape` is connected. The branch is
 - **If unavailable → degraded path.** The skill still runs on WebFetch + SE Ranking data. The Firecrawl-only deliverable lines emit `(skipped — Firecrawl not installed)` notes; skill-specific caveats (lower-confidence schema detection, missing canonical/robots/og:* recovery, etc.) are documented in the skill's own step descriptions.
 - **`--no-firecrawl` flag.** User may pass `--no-firecrawl` to force the degraded path even when Firecrawl is available — useful for credit conservation.
 
-<!-- dir-edition:remove -->
+<!-- dir-edition:begin seo-firecrawl-preflight-google -->
 When unavailable, also surface the install hint: `bash extensions/firecrawl/install.sh` (free tier 500 credits/month — see `seo-firecrawl/SKILL.md`).
 
 ### Stage C — Google APIs (`python3 scripts/google_auth.py --check --json`)
@@ -39,18 +39,11 @@ Run `python3 scripts/google_auth.py --check --json` and parse the result.
 - **If `tier == -1`** or the file is missing: the skill proceeds without Google enrichment and notes `Google enrichment: not configured (run `bash extensions/google/install.sh`)` in the deliverable.
 
 This stage **defers entirely** to `skills/seo-google/references/cross-skill-integration.md` for per-tier branches, failure handling, and the per-skill enrichment recipes — don't duplicate that contract here.
-<!-- dir-edition:end -->
-<!-- dir-edition:only
-When unavailable, also surface the install hint: add the Firecrawl MCP server (setup at firecrawl.dev, free tier 500 credits/month — see `seo-firecrawl/SKILL.md`).
-
-### Stage C — Google APIs
-
-Not available in the Claude Plugins Directory edition: the Google API scripts ship with the full edition on GitHub (https://github.com/seranking/seo-skills). Skip Google enrichment and note `Google enrichment: not available in this edition` in the deliverable.
--->
+<!-- dir-edition:end seo-firecrawl-preflight-google -->
 
 ## Failure-mode table
 
-<!-- dir-edition:remove -->
+<!-- dir-edition:begin seo-firecrawl-preflight-failures -->
 Mirror the cross-skill-integration table for the Google stage; the Firecrawl + credit-balance rows are this skill's own additions.
 
 | Failure | Detection | Skill response |
@@ -66,16 +59,7 @@ Mirror the cross-skill-integration table for the Google stage; the Firecrawl + c
 | GA4 property not configured | `ga4_property_id` empty in config | Note "GA4: property ID not configured (Tier 2 setup required)" and skip GA4 only. |
 | Insufficient CrUX data | `pagespeed_check.py --crux-only` returns `{"crux": null}` | Note "CrUX: insufficient field data for `{url}` (low traffic)" and skip CrUX only. |
 | Google API rate-limit hit | Script returns HTTP 429 | Note "Google API rate-limit reached — try again in 1h" and skip the affected enrichment. |
-<!-- dir-edition:end -->
-<!-- dir-edition:only
-| Failure | Detection | Skill response |
-|---|---|---|
-| Credit balance call fails | `DATA_getSubscription` returns error or non-200 | Note "SE Ranking credit balance unavailable — proceeding without preflight cost estimate; surface actual cost in deliverable" and continue. **Never** fail the run on this — credit data is a courtesy, not a gate. |
-| Credit balance below estimate | `remaining < estimated_cost` | Surface the shortfall; ask the user whether to proceed with a reduced scope (e.g. lower URL cap, lite mode) or top up credits before re-running. |
-| Firecrawl MCP not installed | `mcp__firecrawl-mcp__firecrawl_scrape` not in available tools | Note "Firecrawl not installed — degraded path active; add the Firecrawl MCP server from firecrawl.dev" and run the WebFetch-only path. |
-| Firecrawl rate-limit hit | Firecrawl response 429 | Note "Firecrawl rate-limit reached — falling back to WebFetch for remaining URLs" and continue degraded for the rest of the run. Do not retry in a tight loop. |
-| Firecrawl Cloudflare/anti-bot block | Firecrawl response 403 / "blocked by WAF" | Note the affected URL and the block reason in the deliverable, then continue. Defeating WAFs is out of scope. |
--->
+<!-- dir-edition:end seo-firecrawl-preflight-failures -->
 
 A skill **never** fails the run because preflight enrichment failed. Enrichment is optional uplift; the SE Ranking-based deliverable always ships.
 

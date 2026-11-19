@@ -1,0 +1,1 @@
+- {For the full Lighthouse breakdown: PageSpeed Insights (pagespeed.web.dev), or `seo-google` in the full edition on GitHub.}
