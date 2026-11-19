@@ -1,0 +1,1 @@
+| [`seo-google`](skills/seo-google/SKILL.md) | Points you to the full GitHub edition for Search Console, GA4, CrUX and PageSpeed data, and offers SE Ranking data that can stand in: rankings, traffic estimates, keyword metrics and site-audit issues *(live Google data: full edition on GitHub only)* | "search console", "GSC", "PageSpeed", "CrUX", "URL inspection", "GA4 organic" |

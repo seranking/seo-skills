@@ -122,6 +122,7 @@ Before opening a PR:
 - [ ] `SKILL.md` ≤ 400 lines.
 - [ ] README skills table updated (new row if a new skill).
 - [ ] CHANGELOG entry added under the next planned version.
+- [ ] Text that runs a script or installer, reads a local credential, or points at the Google API scripts is wrapped in `dir-edition` markers, with the directory text in `directory-edition/snippets/` ([`directory-edition/README.md`](directory-edition/README.md)). Code examples use the placeholder `YOUR_API_KEY`, never an environment variable. CI builds the Claude Plugins Directory edition and fails otherwise.
 - [ ] Tested end-to-end against a public target. Surface real, redacted-if-needed output in the PR description.
 
 ## Versioning rules

@@ -44,15 +44,15 @@ Produce conversion-tuned landing pages targeting comparative-intent keywords ("X
 5. **Fetch existing comparison pages** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
    - **WebFetch first** (free): pull the top 3 SERP winners' markdown. Extract H2 outline, feature-matrix dimensions, verdict pattern, CTA placement.
    - **Firecrawl second** (3 Firecrawl credits — 1 per winner) — recovers what WebFetch markdown can't show:
-     - Schema types from `<script type="application/ld+json">` blocks (`Product` ×N, `BreadcrumbList`, `FAQPage`, `Review`, `AggregateRating`).
+     - Schema types from `script type="application/ld+json"` blocks (`Product` ×N, `BreadcrumbList`, `FAQPage`, `Review`, `AggregateRating`).
      - `og:title` / `og:description` / `og:image` / `twitter:card` from `metadata`.
-     - `<title>` and meta description lengths from real HTML.
+     - `title` and meta description lengths from real HTML.
    - **If Firecrawl unavailable:** WebFetch portion runs unchanged. The "schema types" line in `evidence/04-existing-pages-teardown.md` reads `(skipped — Firecrawl required for JSON-LD)`. Schema generation in step 8 falls back to a default `Product + BreadcrumbList + FAQPage` template instead of mirroring whatever the winners use.
    - This anchors the draft in observed-rewarded-pattern.
 
 5b. **Bulk competitor scrape** `mcp__firecrawl-mcp__firecrawl_scrape` (optional, opt-in)
    - When user passes `--bulk-scrape <urls>` or supplies a list of competitor URLs to compare directly (beyond the SERP top-3), Firecrawl-scrape each URL.
-   - For each URL, extract: `<title>`, `og:*`, `twitter:*`, JSON-LD `@type`s, hero-image presence, pricing-block detection (regex on prose for `$N/mo`, `€N/mo`, etc.), CTA count, comparison-table presence, free-tier-mention boolean.
+   - For each URL, extract: `title`, `og:*`, `twitter:*`, JSON-LD `@type`s, hero-image presence, pricing-block detection (regex on prose for `$N/mo`, `€N/mo`, etc.), CTA count, comparison-table presence, free-tier-mention boolean.
    - Output `competitor-elements.csv` — one row per competitor URL × these signals.
    - Cost: 1 Firecrawl credit per URL. Surface estimate before running; refuse >50 URLs without `--confirm-cost`.
 

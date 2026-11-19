@@ -49,6 +49,7 @@ These thresholds drive the red / yellow / green coding in `DRIFT-REPORT.md`. Tun
 | Loss of any DA-50+ referring domain | red regardless of count |
 | Net new backlinks > +20% | green |
 
+<!-- dir-edition:begin seo-drift-thresholds-google -->
 ## Field-data drift (CrUX) — only when google-api.json is configured AND `--skip-cwv` not set
 
 | Metric | Yellow | Red |
@@ -73,6 +74,7 @@ These thresholds drive the red / yellow / green coding in `DRIFT-REPORT.md`. Tun
 | `coverageState` text changed (e.g. "Submitted and indexed" → "Crawled - currently not indexed") | red |
 
 **Cross-reference:** when indexation drift fires, deep-dive with `python3 scripts/gsc_inspect.py {url} --json` for Google's full verdict and any associated rich-result issues, then run `python3 scripts/gsc_query.py --property {property} --url {url} --json` to see whether the change correlates with impression / click drops over the same window.
+<!-- dir-edition:end seo-drift-thresholds-google -->
 
 ## What to investigate first
 

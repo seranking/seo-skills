@@ -1,0 +1,1 @@
+- **Required:** the `firecrawl-mcp` MCP server. If `mcp__firecrawl-mcp__firecrawl_scrape` is unavailable, abort and tell the user to add the Firecrawl MCP server (setup and signup at firecrawl.dev, free tier 500 credits/month). Don't attempt fallbacks; this skill exists for the cases WebFetch can't cover.

@@ -21,6 +21,7 @@ This is the "what should we work on next quarter" skill. It does not replace spe
 
 ## Process
 
+<!-- dir-edition:begin seo-plan-google-check -->
 0. **Google data availability check (advisory, not blocking)**
    - Run `python3 scripts/google_auth.py --check --json`. If `tier >= 0`, the downstream specialist skills (technical-audit, page, content-audit, drift) will enrich their outputs with real Google field data — and `seo-plan` ingests those richer outputs in step 4. The plan itself doesn't dispatch `seo-google` directly; it prints a one-line notice so the user knows the option is on the table:
    ```
@@ -35,6 +36,7 @@ This is the "what should we work on next quarter" skill. It does not replace spe
    > with SE Ranking data only.
    ```
    - This is the **lightest possible auto-spawn** — `seo-plan` doesn't run `seo-google` itself (transferring friction to a single command is theirs' anti-pattern we critiqued in `EVAL_RESULT_v2.md`); it surfaces the option so the user can opt in or out before specialist skills run. See `skills/seo-google/references/cross-skill-integration.md` § "seo-plan" for the full rationale.
+<!-- dir-edition:end seo-plan-google-check -->
 
 1. **Detect business type** `DATA_getDomainOverviewWorldwide`, plus a Firecrawl `scrape` of the homepage if available
    - Inspect title, H1, JSON-LD types, primary nav patterns.

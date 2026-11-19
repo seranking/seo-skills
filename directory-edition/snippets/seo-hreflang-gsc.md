@@ -1,0 +1,1 @@
+6. **GSC verification of hreflang-targeted alternates** — not available in the Claude Plugins Directory edition (it needs the Google API scripts from the full edition on GitHub). In `HREFLANG-REPORT.md`, write `GSC verification: not available in this edition` and recommend verifying every hreflang target domain in Google Search Console.

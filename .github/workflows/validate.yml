@@ -94,3 +94,18 @@ jobs:
             echo "::error::version drift across manifests: metadata=$meta entry=$entry plugin.json=$pj cursor=$cursor"
             exit 1
           fi
+
+      - name: Build and check the Claude Plugins Directory edition
+        # The directory accepts only Markdown, JSON, YAML and images from
+        # organizations it hasn't verified, and refuses credential reads and
+        # download-and-run commands. directory-edition/build.py builds the edition
+        # the claude-directory branch serves; this fails a PR that adds text the
+        # edition can't ship without a dir-edition marker (see directory-edition/README.md).
+        shell: bash
+        run: |
+          set -euo pipefail
+          python directory-edition/test_build.py
+          python directory-edition/build.py --out "$RUNNER_TEMP/edition" --require-sniff
+          cd "$RUNNER_TEMP/edition"
+          claude plugin validate . --strict
+          claude plugin validate .claude-plugin/plugin.json --strict

@@ -15,7 +15,7 @@ Use this map at brief time to classify the article being briefed against one of 
 ---
 
 ## 1. ultimate-guide
-**Pick when:** the SERP top-10 has ≥ 6 pages with `<title>` length > 60 chars and the keyword is a broad noun phrase (e.g. "content marketing", "supply chain management").
+**Pick when:** the SERP top-10 has ≥ 6 pages with `title` length > 60 chars and the keyword is a broad noun phrase (e.g. "content marketing", "supply chain management").
 
 - **SERP signals:** PAA cluster of 6+ "what is / how does / types of" questions; top-10 dominated by long-form editorial on .com/blog or .com/guide; AIO almost always present; titles often "The Ultimate Guide to X" / "X: A Complete Guide".
 - **Intent classification:** informational (broad).

@@ -21,7 +21,7 @@ A one-shot technical SEO audit for a domain. Pulls SE Ranking's audit data, cate
    - Normalise domain (strip protocol, trailing slash) before continuing.
    - Estimated SE Ranking cost for this skill: a re-check of an existing audit is cheap; creating a new audit is significantly more expensive and varies by page count. Surface the cost before deciding.
    - Firecrawl: optional. When available, step 8 (Modern signals checklist) runs on 5 sample URLs and `/robots.txt`, ~6 Firecrawl credits (hard cap). Without it, step 8 is skipped — JS-render canonical/noindex divergence, X-Robots-Tag headers, and AI-crawler robots-rule analysis are unavailable but the full technical-audit deliverable still ships. Pass `--no-firecrawl` to skip step 8 even when Firecrawl is available (saves credits).
-   - Google APIs: tier 0 unlocks step 8b (CrUX field data); tier 1 also unlocks step 8c (per-URL GSC Inspection on top 5 traffic pages). See `skills/seo-google/references/cross-skill-integration.md` § "seo-technical-audit" for the full recipe and per-tier branches.
+   - Google APIs: tier 0 unlocks step 8b (CrUX field data); tier 1 also unlocks step 8c (per-URL GSC Inspection on top 5 traffic pages). See `skills/seo-google/references/cross-skill-integration.md` § "seo-technical-audit" for the full recipe and per-tier branches. <!-- dir-edition:line seo-technical-audit-preflight-google -->
 
 2. **Find or create the audit** `DATA_listAudits`
    - List audits for the domain.
@@ -72,6 +72,7 @@ A one-shot technical SEO audit for a domain. Pulls SE Ranking's audit data, cate
      - Then make one additional call: `firecrawl_scrape` on `/robots.txt` (1 credit). Parse for AI-crawler User-Agent rules — `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended`, `ChatGPT-User`, `Bytespider`, `CCBot`. Surface allow/disallow scope per agent.
    - **If Firecrawl unavailable:** skip this step. Note in `TECH-AUDIT.md`: `Modern signals (JS canonical/noindex divergence, X-Robots-Tag, AI-crawler robots.txt rules, Dec-2025 JS-SEO risks): skipped — Firecrawl not installed.`
 
+<!-- dir-edition:begin seo-technical-audit-field-data -->
 8b. **CWV field data via CrUX** *(only if google-api.json is present, tier ≥ 0)*
    - SE Ranking's audit reports lab-only CWV (Lighthouse-flavoured estimates). CrUX returns actual Chrome user p75 metrics — the data Google ranks against.
    - Run `python3 scripts/pagespeed_check.py "https://{domain}" --crux-only --json` for current p75 LCP / INP / CLS / FCP / TTFB.
@@ -88,6 +89,7 @@ A one-shot technical SEO audit for a domain. Pulls SE Ranking's audit data, cate
    - If the property isn't verified in GSC for this account, surface "GSC: {domain} not verified — add it in Search Console" and skip 8c only.
    - Surface in `TECH-AUDIT.md` as a new section "## Indexation reality check (GSC URL Inspection)" with one row per top-5-traffic URL: status / canonical-divergence / last-crawled.
    - See `skills/seo-google/references/cross-skill-integration.md` § "seo-technical-audit" for the full recipe and failure modes.
+<!-- dir-edition:end seo-technical-audit-field-data -->
 
 8d. **IndexNow detection** `WebFetch`
    - Detection logic — IndexNow advertises its key one of three ways. Check in this order:

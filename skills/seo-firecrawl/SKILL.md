@@ -8,7 +8,7 @@ description: Ad-hoc web scraping, site mapping, and full-site crawling via Firec
 
 A direct interface to Firecrawl MCP for tasks that fall outside the data-driven SE Ranking skills. Use when:
 
-- You need raw HTML, `<head>` metadata, JSON-LD, or post-JS DOM that WebFetch's markdown conversion strips.
+- You need raw HTML, `head` metadata, JSON-LD, or post-JS DOM that WebFetch's markdown conversion strips.
 - You need a list of all URLs on a domain without pulling each one.
 - You need to crawl a site and audit each page's metadata.
 - You need to search within a known domain.
@@ -16,7 +16,9 @@ A direct interface to Firecrawl MCP for tasks that fall outside the data-driven 
 
 ## Prerequisites
 
+<!-- dir-edition:begin seo-firecrawl-required -->
 - **Required:** the `firecrawl-mcp` MCP server. If `mcp__firecrawl-mcp__firecrawl_scrape` is unavailable, abort with the install command — `bash extensions/firecrawl/install.sh` from this plugin repo, plus the firecrawl.dev signup URL (free tier 500 credits/month). Don't attempt fallbacks; this skill exists for the cases WebFetch can't cover.
+<!-- dir-edition:end seo-firecrawl-required -->
 - User provides: a target URL or domain, plus optionally a mode (`scrape` / `map` / `crawl` / `search`). If mode unspecified, infer from input shape (single URL → `scrape`, single domain → `map`).
 
 ## Process
@@ -32,7 +34,7 @@ A direct interface to Firecrawl MCP for tasks that fall outside the data-driven 
    - For `crawl` and for `map` of >50 expected URLs, surface the estimate and require explicit go-ahead before calling.
    - Always read remaining credits implicitly via Firecrawl's response metadata (`creditsUsed` / `creditsRemaining` in `metadata`).
 4. **Execute.** Call the matching `mcp__firecrawl-mcp__firecrawl_*` tool.
-   - `scrape`: pass `formats: ["markdown", "html"]` by default (markdown for prose, html for `<head>` + JSON-LD). Add `formats: ["screenshot"]` only if the deliverable visibly uses one. SPAs: pass `waitFor: 2000` (or a CSS selector) so the JS-rendered DOM is captured. Default `onlyMainContent: true` to drop nav/footer noise — override only on explicit request.
+   - `scrape`: pass `formats: ["markdown", "html"]` by default (markdown for prose, html for `head` + JSON-LD). Add `formats: ["screenshot"]` only if the deliverable visibly uses one. SPAs: pass `waitFor: 2000` (or a CSS selector) so the JS-rendered DOM is captured. Default `onlyMainContent: true` to drop nav/footer noise — override only on explicit request.
    - `map`: default `limit: 500` (hard cap). Pass `excludePaths: ["/admin/*", "/api/*", "/wp-admin/*", "/feed/*"]` as a sane default.
    - `crawl`: default `limit: 50` (default cap), hard cap `limit: 200`. Always pass `excludePaths` to prune. Poll `firecrawl_check_crawl_status` if the job returns asynchronously.
    - `search`: default `limit: 20`.

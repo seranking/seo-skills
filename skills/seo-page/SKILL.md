@@ -12,15 +12,15 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
 
 - SE Ranking MCP server connected.
 - Claude's `WebFetch` tool available (for the page-level HTML sense-check).
-- User provides: (a) a target URL, optionally (b) target market country (default: `us`), (c) primary topical keyword (auto-inferred from `<title>` + `<h1>` if not supplied).
+- User provides: (a) a target URL, optionally (b) target market country (default: `us`), (c) primary topical keyword (auto-inferred from `title` + `h1` if not supplied).
 
 ## Process
 
 1. **Validate target & preflight.** See `skills/seo-firecrawl/references/preflight.md` for the canonical 3-stage preflight (credit balance, Firecrawl availability, Google APIs). Skill-specific notes:
    - Confirm the URL is fetchable; derive parent domain. If the user supplied a primary keyword, use it; otherwise infer it in step 3.
    - Estimated SE Ranking cost for this skill: ~10–15 credits typical (URL overview, ranking keywords, page authority, SERP context for top 3–5 keywords).
-   - Firecrawl: optional with WebFetch fallback, ~1 Firecrawl credit if available. When available, step 6 recovers `og:*`, `twitter:*`, canonical, robots meta, JSON-LD types, and hreflang count from raw `<head>` — WebFetch returns markdown only and strips those fields. Without Firecrawl, the affected lines in `PAGE.md` emit `(skipped — Firecrawl not installed)`. Pass `--no-firecrawl` to treat Firecrawl as unavailable even when installed (credit conservation).
-   - Google APIs: tier 1 (GSC available) unlocks step 4b (GSC URL performance + URL Inspection) after the page-authority step. See `skills/seo-google/references/cross-skill-integration.md` § "seo-page" for the full recipe.
+   - Firecrawl: optional with WebFetch fallback, ~1 Firecrawl credit if available. When available, step 6 recovers `og:*`, `twitter:*`, canonical, robots meta, JSON-LD types, and hreflang count from raw `head` — WebFetch returns markdown only and strips those fields. Without Firecrawl, the affected lines in `PAGE.md` emit `(skipped — Firecrawl not installed)`. Pass `--no-firecrawl` to treat Firecrawl as unavailable even when installed (credit conservation).
+   - Google APIs: tier 1 (GSC available) unlocks step 4b (GSC URL performance + URL Inspection) after the page-authority step. See `skills/seo-google/references/cross-skill-integration.md` § "seo-page" for the full recipe. <!-- dir-edition:line seo-page-preflight-google -->
 
 2. **URL-level overview** `DATA_getUrlOverviewWorldwide`
    - Pull keyword count, organic traffic estimate, paid keyword count, paid traffic estimate, top regions.
@@ -35,6 +35,7 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
    - Current PA score and its 12-month trajectory.
    - Flag any drop > 5 points in the last 90 days.
 
+<!-- dir-edition:begin seo-page-gsc -->
 4b. **GSC URL performance + URL Inspection** *(only if google-api.json is present, tier ≥ 1)*
    - Replaces the directional traffic estimate from step 2 with first-party Google data for the exact URL.
    - Pull GSC search analytics for the URL (last 28 days, by query and page):
@@ -45,6 +46,7 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
    - Surface in `PAGE.md` "## Snapshot": `GSC last 28d: {clicks}/{impressions}/{ctr}% CTR / pos {position}` and `Google sees: {INDEXED|EXCLUDED} · canonical {userCanonical} → {googleCanonical} · last crawled {date}`.
    - **Feed into the verdict heuristic:** `INDEXED` + impressions > 100 + position 4–10 → harden REFRESH (clear quick-win). `EXCLUDED` (any reason) → harden KILL or CONSOLIDATE. `userCanonical ≠ googleCanonical` → flag as critical issue regardless of verdict.
    - See `skills/seo-google/references/cross-skill-integration.md` § "seo-page" for the full recipe.
+<!-- dir-edition:end seo-page-gsc -->
 
 5. **SERP context** `DATA_getSerpResults` and `DATA_getAiOverview`
    - For each of the 3–5 primary keywords:
@@ -53,8 +55,8 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
      - AIO presence and citations — is this URL cited in the AIO?
 
 6. **HTML sense-check** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
-   - **WebFetch first** (free, instant): extract `<title>`, meta description, all `<h1..h6>`, lang, word count, internal-link count, image count. WebFetch returns markdown so anything in `<head>` beyond `<title>` is lost — the next bullet recovers it.
-   - **Firecrawl second** (1 Firecrawl credit; pass `formats: ["rawHtml"]`) — recovers what WebFetch can't see. Pin the format to `rawHtml`; the default `html` is post-processed and silently strips canonical, hreflang, and `<script type="application/ld+json">` blocks on many sites. If those head fields come back zero on a site that obviously has them (any major SaaS homepage), you forgot the `rawHtml` flag — re-run.
+   - **WebFetch first** (free, instant): extract `title`, meta description, all `h1..h6`, lang, word count, internal-link count, image count. WebFetch returns markdown so anything in `head` beyond `title` is lost — the next bullet recovers it.
+   - **Firecrawl second** (1 Firecrawl credit; pass `formats: ["rawHtml"]`) — recovers what WebFetch can't see. Pin the format to `rawHtml`; the default `html` is post-processed and silently strips canonical, hreflang, and `script type="application/ld+json"` blocks on many sites. If those head fields come back zero on a site that obviously has them (any major SaaS homepage), you forgot the `rawHtml` flag — re-run.
      - From `metadata`: `og:title`, `og:description`, `og:image`, `twitter:card`, `viewport`, robots meta, canonical URL.
      - From the returned `rawHtml`: every `<script type="application/ld+json">` block. Parse each as JSON, list detected `@type`s (Article, BreadcrumbList, Organization, Product, etc.). Note any block that fails to parse.
      - hreflang: count `<link rel="alternate" hreflang="…">` occurrences in `rawHtml`.

@@ -1,0 +1,1 @@
+10. **Optional: PageSpeed Insights byte savings** — not available in the Claude Plugins Directory edition (it needs the Google API scripts from the full edition on GitHub). Skip this step and note `PSI byte savings: not available in this edition` in the report.

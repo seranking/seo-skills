@@ -1,8 +1,10 @@
 # Claude SEO Skills
 
-**26 free, open-source Claude SEO skills** for Claude Code, Claude Desktop, Cursor and any AI agent that supports Agent Skills and MCP. Each SEO skill turns live [SE Ranking](https://seranking.com) data into a finished deliverable: content briefs, technical audits, AI search share of voice, backlink gap lists, keyword clusters and 90-day SEO plans.
+**32 free, open-source Claude SEO skills** for Claude Code, Claude Desktop, Cursor and any AI agent that supports Agent Skills and MCP. Each SEO skill turns live [SE Ranking](https://seranking.com) data into a finished deliverable: content briefs, technical audits, AI search share of voice, backlink gap lists, keyword clusters and 90-day SEO plans. <!-- dir-edition:line readme-intro -->
 
-Overview, use cases and a no-terminal install guide: [Claude SEO Skills by SE Ranking](https://seranking.com/claude-seo-skills.html).
+Overview, use cases and a no-terminal install guide: [Claude SEO Skills by SE Ranking](https://seranking.com/claude-seo-skills.html). <!-- dir-edition:line readme-overview-link -->
+
+<!-- dir-edition:line readme-about-edition -->
 
 Production-ready [Claude Agent Skills](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) for SEO, powered by the [SE Ranking MCP](https://seranking.com/mcp.html). Each skill turns raw API data into a finished SEO deliverable — content briefs, AI Search share of voice, page intelligence, structured data, drift monitoring, SXO diagnostics, competitive analysis, and more.
 
@@ -14,7 +16,8 @@ Claude SEO skills are reusable instructions that teach Claude how to run a speci
 
 ## Install
 
-Three ways. Pick the first one that fits.
+<!-- dir-edition:begin readme-install -->
+Pick the first option that fits.
 
 ### 1. Claude Desktop (recommended)
 
@@ -40,7 +43,7 @@ Trigger skills with `/seo-content-brief`, `/seo-page`, etc. — no `seo-skills:`
 
 ### 3. Manual install (only if you want `seo-google` or the optional extensions)
 
-Options 1 and 2 cover **25 of 26 skills**. The 26th — `seo-google` — ships Python scripts that need a local clone. The optional Firecrawl + Google extensions also need this. **If neither matters to you, skip this option.**
+Options 1 and 2 cover **31 of 32 skills**. The 32nd — `seo-google` — ships Python scripts that need a local clone. The optional Firecrawl + Google extensions also need this. **If neither matters to you, skip this option.**
 
 ```bash
 git clone --depth 1 https://github.com/seranking/seo-skills.git
@@ -68,10 +71,11 @@ The skills follow the open Agent Skills format (one SKILL.md per folder), so any
 1. Copy the folders from skills/ into your agent's skills directory.
 2. Add the SE Ranking remote MCP server: https://api.seranking.com/mcp (OAuth sign-in).
 3. Ask for an SEO task in plain language. The agent picks the matching skill.
+<!-- dir-edition:end readme-install -->
 
 ### Connect SE Ranking (any install path)
 
-The SE Ranking remote MCP auto-registers when you install the plugin — there's no separate `claude mcp add` step. On your first session, run `/mcp` and sign in via OAuth. No API token to manage. If you don't have an SE Ranking account yet, [start a free trial](https://seranking.com/sign-up.html?landing=claude_seo_skills&utm_source=github&utm_medium=readme&utm_campaign=seo_skills) — it includes 100K API credits and MCP access for 14 days.
+The SE Ranking remote MCP auto-registers when you install the plugin — there's no separate `claude mcp add` step. On your first session, run `/mcp` and sign in via OAuth. No API token to manage. If you don't have an SE Ranking account yet, [start a free trial](https://seranking.com/sign-up.html?landing=claude_seo_skills&utm_source=github&utm_medium=readme&utm_campaign=seo_skills) — it includes 100K API credits and MCP access for 14 days. <!-- dir-edition:line readme-connect -->
 
 <details>
 <summary>Manual fallback (older Claude Code, or troubleshooting)</summary>
@@ -88,7 +92,7 @@ Then run `/mcp` and complete OAuth. (User-scope registrations [outrank plugin-bu
 
 ## What you get
 
-25 finished example outputs — covering 25 of the 26 skills — live in [`examples/`](examples/). Each is a real run against a publicly observable target. Three flagship examples to skim before installing:
+25 finished example outputs — covering 25 of the 32 skills — live in [`examples/`](examples/). Each is a real run against a publicly observable target. Three flagship examples to skim before installing:
 
 - **[`seo-plan` for wix.com (90-day plan)](examples/seo-plan-wix-com-20260514/PLAN.md)** — phased SEO roadmap that composes outputs from `seo-ai-search-share-of-voice`, `seo-competitor-gap-analysis`, and `seo-drift` into a 90-day plan with owners, success metrics, and a critical path. Demonstrates skill composition.
 - **[`seo-technical-audit` for linear.app](examples/seo-technical-audit-linear-app-20260514/TECH-AUDIT.md)** — top-10 priority fix list ranked by `severity × affected_pages / effort`, plus `issues.csv` for the engineering team and a per-key-page issue digest.
@@ -96,7 +100,7 @@ Then run `/mcp` and complete OAuth. (User-scope registrations [outrank plugin-bu
 
 Full index of all 25 examples: [`examples/README.md`](examples/README.md). Every example is dated and snapshot-disclaimed — re-run the skill for fresh numbers.
 
-## All 26 Claude SEO Skills
+## All 32 Claude SEO Skills
 
 ### Featured SEO skills
 
@@ -133,11 +137,25 @@ The rest of the catalogue — every other skill the plugin ships.
 | [`seo-keyword-niche`](skills/seo-keyword-niche/SKILL.md) | Mine longtail + question keywords for niche content opportunities. Outputs a content-tier plan with template spec, URL pattern, sample pages, and thin-content quality gates | "longtail keywords", "question keywords", "niche content", "content opportunities at scale", "programmatic SEO" |
 | [`seo-hreflang`](skills/seo-hreflang/SKILL.md) | Hreflang and international SEO audit for multi-language / multi-region sites. Validates language-region codes, return tags, `x-default`, and canonical alignment across per-URL HTML, the SE Ranking audit, and the XML sitemap. PASS / NEEDS-FIX / BROKEN verdict with a top-fixes table | "hreflang", "international SEO", "i18n", "language targeting", "x-default", "regional sites", "multi-language SEO" |
 | [`seo-local`](skills/seo-local/SKILL.md) | Local SEO audit for brick-and-mortar, service-area, and multi-location businesses. Scores Google Business Profile signals on the page, NAP consistency across page and schema, on-page local intent, Tier-1 citation footprint, review-platform presence, and local-pack rank. Prioritised fix list | "local SEO", "GBP", "Google Business Profile", "NAP", "local pack", "citations", "near me", "service area", "multi-location SEO" |
-| [`seo-firecrawl`](skills/seo-firecrawl/SKILL.md) | Ad-hoc web scraping, site mapping, full-site crawling, and within-domain search via Firecrawl. Returns raw HTML, JSON-LD, og:* / twitter:* metadata, JS-rendered DOM, and screenshots that WebFetch can't *(requires the [Firecrawl extension](#firecrawl-raw-html-json-ld-js-rendering-site-crawl))* | "scrape this page", "crawl this site", "map this site", "get the OG tags", "render this JS-heavy page" |
+| [`seo-firecrawl`](skills/seo-firecrawl/SKILL.md) | Ad-hoc web scraping, site mapping, full-site crawling, and within-domain search via Firecrawl. Returns raw HTML, JSON-LD, og:* / twitter:* metadata, JS-rendered DOM, and screenshots that WebFetch can't *(requires the Firecrawl MCP server, see [Optional extensions](#optional-extensions))* | "scrape this page", "crawl this site", "map this site", "get the OG tags", "render this JS-heavy page" |
 | [`seo-plan`](skills/seo-plan/SKILL.md) | Phased SEO roadmap for a domain — quarter-by-quarter, tied to competitive position, content gaps, technical debt, and AI Search readiness. Sequences specialist-skill outputs into one site-level plan with owners, metrics, and a critical path | "SEO plan", "SEO strategy", "SEO roadmap", "90-day plan", "where do we focus next" |
-| [`seo-google`](skills/seo-google/SKILL.md) | Google's own SEO data: GSC Search Analytics + URL Inspection + Sitemaps, PageSpeed Insights, CrUX field data + 25-week history, Indexing API, GA4 organic, YouTube, NLP, Knowledge Graph, Web Risk, Keyword Planner. 4 credential tiers; lower tiers are useful on their own *(requires the [Google APIs extension](#google-apis-real-cwv-gsc-ga4-youtube-keyword-planner))* | "search console", "GSC", "PageSpeed", "CrUX", "URL inspection", "real CWV data", "GA4 organic", "google api setup" |
+| [`seo-google`](skills/seo-google/SKILL.md) | Google's own SEO data: GSC Search Analytics + URL Inspection + Sitemaps, PageSpeed Insights, CrUX field data + 25-week history, Indexing API, GA4 organic, YouTube, NLP, Knowledge Graph, Web Risk, Keyword Planner. 4 credential tiers; lower tiers are useful on their own *(requires the [Google APIs extension](#google-apis-real-cwv-gsc-ga4-youtube-keyword-planner))* | "search console", "GSC", "PageSpeed", "CrUX", "URL inspection", "real CWV data", "GA4 organic", "google api setup" | <!-- dir-edition:line readme-row-seo-google -->
 | [`seo-api`](skills/seo-api/SKILL.md) | SE Ranking API integration architect — covers the entire 195-tool surface (Data API + Project API), forecasts credit and plan-limit cost, emits ready-to-paste cURL / Python / TypeScript / MCP-tool-call recipes, and (with explicit confirmation) wires up Project API state (projects, keywords, search engines, audits, AIRT prompts, backlink groups) | "how do I use SE Ranking API to do X", "what endpoint gives me Y", "credit cost of workflow Z", "build a rank tracker", "set up an audit", "Postman / cURL / Python / TypeScript for SE Ranking", "rate limit for X", "integrate SE Ranking with Looker / n8n / Make" |
 
+### Social and agency workflows
+
+These six skills combine SE Ranking data with [Planable](https://planable.io), so they need the Planable MCP server connected as well.
+
+| Skill | What it produces | Primary triggers |
+|---|---|---|
+| [`seo-gaps-to-social-campaign`](skills/seo-gaps-to-social-campaign/SKILL.md) | A ready-to-publish social campaign in Planable built from keyword gaps, competitor wins, ranking losses and question keywords | "what should we post based on our SEO data", "turn these keyword gaps into posts" |
+| [`ai-search-gaps-to-social-campaign`](skills/ai-search-gaps-to-social-campaign/SKILL.md) | AI-search prompts and topics where the brand is missing or losing, turned into a Planable campaign with before/after tracking | "what should we post to get cited by AI", "improve our AI search visibility with content" |
+| [`site-audit-to-social-distribution`](skills/site-audit-to-social-distribution/SKILL.md) | Weak pages and audit issues from SE Ranking, rewritten page copy for approval in Planable, and scheduled supporting posts | "audit the site and help us fix the weak pages", "fix and promote our content" |
+| [`seo-ai-social-report`](skills/seo-ai-social-report/SKILL.md) | One report across SEO rankings, AI-search visibility and social engagement: a chat summary plus an interactive HTML report | "full report across SEO and social", "how did we do this month across search and social" |
+| [`client-onboarding-proposal`](skills/client-onboarding-proposal/SKILL.md) | A data-backed onboarding proposal for a new agency client: SEO and AI-search audit plus current social performance | "build an onboarding proposal for [client]", "we're starting with [client]" |
+| [`local-gmb-visibility`](skills/local-gmb-visibility/SKILL.md) | City-level rank tracking in SE Ranking paired with local social content and Google Business Profile posts in Planable | "track our rankings in [city]", "set up local rank tracking", "show up in local search" |
+
+<!-- dir-edition:begin readme-extensions -->
 ## Optional extensions
 
 Some skills work best when paired with optional MCP servers or Python toolchains beyond SE Ranking. Each extension is opt-in — the skills that use it degrade gracefully when it's absent: they fall back to a lower-fidelity method, or note what was unavailable, rather than failing the run.
@@ -171,6 +189,7 @@ The script verifies Python 3.10+, pip-installs the Google API libraries (`google
 Fill in the config per [`skills/seo-google/references/auth-setup.md`](skills/seo-google/references/auth-setup.md) (8-step walkthrough). The skill detects which tier is unlocked and only enables the matching commands — Tier 0 (API key) gives PSI + CrUX + YouTube + NLP + Knowledge Graph + Web Risk; Tier 1 (+ service account) adds GSC + Indexing; Tier 2 (+ GA4 property ID) adds GA4; Tier 3 (+ Ads dev token) adds Keyword Planner. See [`extensions/google/README.md`](extensions/google/README.md) for full setup, troubleshooting, and rate-limit reference.
 
 **Skills that gain capabilities when Google APIs are configured:** `seo-google` (the dedicated skill — fully gated on this extension), plus `seo-page`, `seo-drift`, `seo-technical-audit`, `seo-content-audit`, `seo-sitemap`, `seo-geo`, `seo-keyword-cluster`, `seo-keyword-niche`, and `seo-plan` (real impressions/clicks/conversions/CWV instead of estimates when configured).
+<!-- dir-edition:end readme-extensions -->
 
 ## How these skills work
 
@@ -190,6 +209,9 @@ The skills chain naturally. A typical agency workflow:
 4. Run `seo-backlink-gap` to identify link targets for the new content.
 5. Run `seo-ai-search-share-of-voice` quarterly to track LLM visibility.
 
+Data and privacy: the skills send the domains, URLs and keywords you give them to SE Ranking's MCP server (see the [SE Ranking privacy policy](https://seranking.com/legal/privacy-policy.html)). If you've connected Firecrawl, the URLs to scrape go to firecrawl.dev under its own terms, and the social skills send the post drafts and page copy they write to Planable when you've connected it. The skills treat content fetched from web pages as data to analyse, never as instructions.
+
+<!-- dir-edition:begin readme-layout -->
 ## Repository layout
 
 ```
@@ -287,6 +309,7 @@ seo-skills/
 The repo is a Claude Code marketplace whose single plugin is the repo itself (marketplace `plugins[0].source` is `"./"`). This keeps skill folders visible at the top level rather than buried two layers deep.
 
 Every skill writes its output to a folder named `{skill-slug}-{target-slug}-{YYYYMMDD}/` (e.g., `seo-content-brief-example-com-20260427/`). The date stamp keeps re-runs non-destructive and makes it easy to diff outputs over time. Browse [`examples/`](./examples/) to see what a finished run looks like before installing.
+<!-- dir-edition:end readme-layout -->
 
 ## Rate limits and costs
 

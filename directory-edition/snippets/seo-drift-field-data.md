@@ -1,0 +1,1 @@
+4b. **Google field-data snapshot** — not available in the Claude Plugins Directory edition (it needs the Google API scripts from the full edition on GitHub). Store `null` for the `cwv` / `crux_history` fields. Compare mode then reports `Field-data / indexation drift: not available in this edition`.

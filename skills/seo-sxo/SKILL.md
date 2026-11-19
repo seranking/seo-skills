@@ -34,11 +34,11 @@ Diagnose why a "well-optimized" page doesn't rank. Reads the actual SERP for the
    - Note which top-10 organic results are also cited in the AIO.
 
 4. **Fetch user's page + top 3 winners** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
-   - **WebFetch first** (free): pull markdown for the user's page + top 3 winners. Extract `<title>`, all H-tags, primary content structure (numbered list / table / prose / Q&A), word count, image mentions, comparison-table presence, CTA mentions.
+   - **WebFetch first** (free): pull markdown for the user's page + top 3 winners. Extract `title`, all H-tags, primary content structure (numbered list / table / prose / Q&A), word count, image mentions, comparison-table presence, CTA mentions.
    - **Firecrawl second** (4 Firecrawl credits typical — 1 per page) — recovers what WebFetch can't show:
      - JSON-LD `@type`s per page (Product, FAQPage, BreadcrumbList, Article, Review, ItemList, etc.) — these are **load-bearing** for page-type classification in step 5. WebFetch's markdown can't see schema.
      - `og:title` / `og:image` / `twitter:card` from `metadata`.
-     - Real `<title>` length (the markdown first-heading is sometimes wrong).
+     - Real `title` length (the markdown first-heading is sometimes wrong).
    - **`--screenshots` flag (opt-in, +4 Firecrawl credits):** when passed, also call `firecrawl_scrape` with `formats: ["screenshot"]` on the user's page + top 3 winners. Save as `screenshots/{page}.png`. Reference in the wireframe (step 8) to ground recommendations in the visual layout, not just the text outline.
    - **If Firecrawl unavailable (or `--no-firecrawl` passed):** WebFetch portion runs. Page-type classification in step 5 falls back to URL/title heuristics + content-structure heuristics only — schema-based classification is skipped. Note in `02-page-type-classification.md`: `Schema-based classification: skipped — Firecrawl required.` Confidence in dominant-pattern detection drops accordingly.
 

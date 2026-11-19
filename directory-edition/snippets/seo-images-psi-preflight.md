@@ -1,0 +1,1 @@
+     - Mark step 10 (PageSpeed Insights byte savings) as skipped: Google APIs are not available in this edition.

@@ -20,10 +20,10 @@ Score a local business's website against the signals that drive local-pack and "
 ## Process
 
 1. **Validate target & preflight.** See `skills/seo-firecrawl/references/preflight.md` for the canonical 3-stage preflight (credit balance, Firecrawl availability, Google APIs). Skill-specific notes:
-   - Normalise the target (strip protocol from domain; confirm homepage is fetchable). Confirm at least one local keyword was provided — if none, infer from `<title>` + `<h1>` of the homepage; if still ambiguous, ask the user before continuing.
+   - Normalise the target (strip protocol from domain; confirm homepage is fetchable). Confirm at least one local keyword was provided — if none, infer from `title` + `h1` of the homepage; if still ambiguous, ask the user before continuing.
    - Estimated SE Ranking cost for this skill: ~15–25 credits (1 audit re-check + 3–5 SERP queries + 1 domain overview).
    - Firecrawl: optional with WebFetch fallback, ~6–9 Firecrawl credits if available (hard cap 12). When available, steps 4 (GBP-on-page audit), 5 (NAP extraction), and 7 (review scraping) run on the homepage + 5 sample pages + provided review URLs. Without Firecrawl those steps degrade to WebFetch-only — schema/JSON-LD detection and `tel:` / address element extraction become best-effort prose inspection. Pass `--no-firecrawl` to force WebFetch-only.
-   - Google APIs: tier 1 (GSC) unlocks step 8b (GSC local query performance) after the local-pack rank step; tier 2 (GA4) additionally unlocks step 8c (GA4 organic-by-landing-page enrichment). See `skills/seo-google/references/cross-skill-integration.md` for the full enrichment contract.
+   - Google APIs: tier 1 (GSC) unlocks step 8b (GSC local query performance) after the local-pack rank step; tier 2 (GA4) additionally unlocks step 8c (GA4 organic-by-landing-page enrichment). See `skills/seo-google/references/cross-skill-integration.md` for the full enrichment contract. <!-- dir-edition:line seo-local-preflight-google -->
 
 2. **Business-type detection**
    - Read homepage + `/contact` + footer prose (WebFetch markdown is enough for this).
@@ -34,18 +34,18 @@ Score a local business's website against the signals that drive local-pack and "
    - This determines which checks apply downstream. SAB skips embedded-map and physical-address consistency. Record in `LOCAL-SEO-REPORT.md` "Snapshot".
 
 3. **Industry-vertical detection**
-   - From URL patterns (`/menu`, `/practice-areas`, `/listings`, `/inventory`), `<title>`, page prose, infer one of: Restaurant / Healthcare / Legal / Home Services / Real Estate / Automotive / Generic.
+   - From URL patterns (`/menu`, `/practice-areas`, `/listings`, `/inventory`), `title`, page prose, infer one of: Restaurant / Healthcare / Legal / Home Services / Real Estate / Automotive / Generic.
    - This routes citation-source recommendations and schema-subtype recommendations later — load `references/local-citation-sources.md` for the vertical's Tier-1 directories.
 
 4. **GBP signals on the page** `mcp__firecrawl-mcp__firecrawl_scrape` (with `formats: ["rawHtml"]`)
    - Scrape homepage + `/contact` (or whichever page has the most local intent).
    - From `rawHtml` extract:
-     - Embedded Google Maps iframe (`<iframe src="https://www.google.com/maps/embed?...">`) — record place ID if present.
+     - Embedded Google Maps iframe (`iframe src="https://www.google.com/maps/embed?..."`) — record place ID if present.
      - Reviews widget / GBP rich snippet markup.
      - `aggregateRating` JSON-LD block (presence is the strongest signal that the site wants stars in SERPs).
      - Business hours visibility on page (open-at-search-time correlates with rank — Whitespark's #5 factor).
-     - Click-to-call: count of `<a href="tel:...">` elements.
-     - GBP profile link: any `<a href>` to `https://g.page/...` or `https://maps.app.goo.gl/...` or `https://www.google.com/maps/place/...`.
+     - Click-to-call: count of `a href="tel:..."` elements.
+     - GBP profile link: any `a href` to `https://g.page/...` or `https://maps.app.goo.gl/...` or `https://www.google.com/maps/place/...`.
    - **If Firecrawl unavailable:** WebFetch markdown can detect a `tel:` link in some renderings but loses iframes and JSON-LD. Mark Maps embed / aggregateRating / GBP profile-link detection as `(skipped — Firecrawl required)`.
 
 5. **NAP consistency** `mcp__firecrawl-mcp__firecrawl_scrape` on homepage + 5 sample pages
@@ -84,6 +84,7 @@ Score a local business's website against the signals that drive local-pack and "
      - Schema validation errors (broken `aggregateRating`, malformed `address`).
    - **Defer schema fixes to `seo-schema`.** This skill does NOT generate JSON-LD. If LocalBusiness schema is missing or broken, the deliverable says "Run `seo-schema` for paste-ready LocalBusiness markup with the correct industry subtype" — that's `seo-schema`'s job and reimplementing it here would duplicate work.
 
+<!-- dir-edition:begin seo-local-gsc-ga4 -->
 8b. **GSC local query performance** *(only if google-api.json is present, tier ≥ 1)*
    - Pull GSC search analytics for the target property, last 28 days, dimension=query, filtered to local-intent patterns:
      `python3 scripts/gsc_query.py --property "{config.default_property}" --days 28 --json`
@@ -97,6 +98,7 @@ Score a local business's website against the signals that drive local-pack and "
      `python3 scripts/ga4_report.py --report top-pages --days 28 --json`
    - For multi-location sites, surface per-location-page sessions. If one location page captures 80%+ of organic traffic while peer location pages capture <5%, that's location-page quality variance worth flagging (probable doorway-page or thin-content risk on the underperformers).
    - Single-location sites: just record the homepage's organic sessions as one row in the snapshot.
+<!-- dir-edition:end seo-local-gsc-ga4 -->
 
 9. **Citation-presence sample (best-effort)** `WebSearch` (no API key cost)
    - For each Tier-1 directory in the vertical's list (load `references/local-citation-sources.md`), check whether the business has a listing using `site:{directory} "{business_name}"` queries via WebSearch.
