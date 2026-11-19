@@ -193,7 +193,6 @@ Top-level: `TECH-AUDIT.md` + `issues.csv` + `03-key-pages-issues.md`. The audit 
 | Referrer-Policy | {present/absent} | … | … | … | `referrer_policy_missing` if absent |
 | HSTS preload | {preload directive Y/N · on Chromium preload list Y/N} | … | … | … | `hsts_no_preload` if not on list |
 
-<!-- dir-edition:begin seo-technical-audit-report-google -->
 ## Core Web Vitals (field data — CrUX)
 
 | Metric | p75 (current) | 25-week trend | Threshold | Status |
@@ -217,7 +216,6 @@ Source: CrUX 28-day origin. If insufficient field data: "CrUX: insufficient data
 
 Source: GSC URL Inspection (Tier 1). If property not verified: "GSC: {domain} not verified — add it in Search Console."
 (Or: `Indexation reality check: not configured (Tier 1 setup required).`)
-<!-- dir-edition:end seo-technical-audit-report-google -->
 
 ## Key-page deep dives
 

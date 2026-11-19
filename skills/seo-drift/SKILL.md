@@ -148,7 +148,6 @@ Top-level: `DRIFT-REPORT.md` only. The four delta step files are inlined into na
 - {finding}
 - ...
 
-<!-- dir-edition:begin seo-drift-report-field-data -->
 ## Field-data drift (CrUX + URL Inspection)
 - LCP p75: {baseline} → {current} ms ({Δ%}) {↑ red / ↑ yellow / stable / ↓ green}
 - INP p75: {baseline} → {current} ms ({Δ%}) {…}
@@ -156,7 +155,6 @@ Top-level: `DRIFT-REPORT.md` only. The four delta step files are inlined into na
 - Indexation status: {baseline INDEXED → current EXCLUDED} (URL mode)
 - googleCanonical: {baseline → current} (if changed)
 - (Or: `Field-data / indexation drift: not configured` / `not comparable — missing from {snapshot}`)
-<!-- dir-edition:end seo-drift-report-field-data -->
 
 ## What to investigate first
 1. {prioritised action with reasoning}

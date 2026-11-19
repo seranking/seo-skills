@@ -225,7 +225,7 @@ See `02-remediation/`:
 
 - {`seo-technical-audit` if domain-wide image issues need to be quantified — uncompressed-images counts, etc.}
 - {`seo-schema` if `ImageObject` was generated and the page also needs `Article` / `Product` / etc. markup.}
-- {`seo-google pagespeed` for the full Lighthouse breakdown (this skill only pulls image-specific audits).} <!-- dir-edition:line seo-images-next-pagespeed -->
+- {`seo-google pagespeed` for the full Lighthouse breakdown (this skill only pulls image-specific audits).}
 ```
 
 `images.csv` columns: `page_url,image_url,alt,alt_length,alt_issue,format,in_picture,modern_source,srcset,sizes,loading,lazy_method,fetchpriority,decoding,width,height,unsized,lcp_candidate,filename_issue,psi_wasted_bytes,severity,fix,effort`.

@@ -2,7 +2,7 @@
 
 **32 free, open-source Claude SEO skills** for Claude Code, Claude Desktop, Cursor and any AI agent that supports Agent Skills and MCP. Each SEO skill turns live [SE Ranking](https://seranking.com) data into a finished deliverable: content briefs, technical audits, AI search share of voice, backlink gap lists, keyword clusters and 90-day SEO plans. <!-- dir-edition:line readme-intro -->
 
-Overview, use cases and a no-terminal install guide: [Claude SEO Skills by SE Ranking](https://seranking.com/claude-seo-skills.html).
+Overview, use cases and a no-terminal install guide: [Claude SEO Skills by SE Ranking](https://seranking.com/claude-seo-skills.html). <!-- dir-edition:line readme-overview-link -->
 
 <!-- dir-edition:line readme-about-edition -->
 
@@ -209,7 +209,7 @@ The skills chain naturally. A typical agency workflow:
 4. Run `seo-backlink-gap` to identify link targets for the new content.
 5. Run `seo-ai-search-share-of-voice` quarterly to track LLM visibility.
 
-Data and privacy: the skills send the domains, URLs and keywords you give them to SE Ranking's MCP server (see the [SE Ranking privacy policy](https://seranking.com/legal/privacy-policy.html)). If you've connected Firecrawl, the URLs to scrape go to firecrawl.dev under its own terms. Content fetched from web pages is treated as data to analyse, never as instructions.
+Data and privacy: the skills send the domains, URLs and keywords you give them to SE Ranking's MCP server (see the [SE Ranking privacy policy](https://seranking.com/legal/privacy-policy.html)). If you've connected Firecrawl, the URLs to scrape go to firecrawl.dev under its own terms, and the social skills send the post drafts and page copy they write to Planable when you've connected it. The skills treat content fetched from web pages as data to analyse, never as instructions.
 
 <!-- dir-edition:begin readme-layout -->
 ## Repository layout

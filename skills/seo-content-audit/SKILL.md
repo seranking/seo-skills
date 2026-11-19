@@ -134,7 +134,7 @@ Step files 01 + 02 are inlined as a "Snapshot" / "AIO context" section in `VERDI
 - Gap vs cited sources: {bulleted gaps}
 
 ## Snapshot (measured)
-- GA4 organic last 28d: {sessions} sessions / {users} users / avg engagement {n}s  *(or `not in top-100` / `not configured (Tier 2 required)`)* <!-- dir-edition:line seo-content-audit-report-ga4 -->
+- GA4 organic last 28d: {sessions} sessions / {users} users / avg engagement {n}s  *(or `not in top-100` / `not configured (Tier 2 required)`)*
 
 ## Top 5 fixes
 

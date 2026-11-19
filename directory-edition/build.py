@@ -63,6 +63,8 @@ TEXT_SUFFIXES = {".md", ".txt", ".json", ".yaml", ".yml"}
 ALLOWED_MIME = {"text/plain", "application/json", "text/markdown", "image/png", "image/jpeg", "image/gif", "image/webp"}
 
 MARKER = re.compile(r"<!-- dir-edition:(begin|remove|end|line) ([a-z0-9][a-z0-9-]*) -->")
+MARKETPLACE_DESCRIPTION = "SE Ranking's plugin marketplace for Claude: SEO skills built on the SE Ranking MCP server."
+BRAND_WORDS = {"anthropic"}
 GITHUB_REPO = "https://github.com/seranking/seo-skills"
 
 # Text the directory refuses or flags, or that points at files the edition doesn't ship.
@@ -109,8 +111,11 @@ def copy_sources(src: Path, out: Path) -> None:
             shutil.copyfile(file, target)
 
 
-def apply_markers(out: Path, snippets: Path) -> list[str]:
-    """Replace or drop the marked text; every marker must pair up and every snippet must be used once."""
+def apply_markers(out: Path, snippets: Path, ref: str = "main") -> list[str]:
+    """Replace or drop the marked text; every marker must pair up and every snippet must be used once.
+
+    `{ref}` in a snippet becomes the git ref the edition is built from.
+    """
     problems: list[str] = []
     available = {p.stem: p for p in snippets.glob("*.md")} if snippets.is_dir() else {}
     used: dict[str, str] = {}
@@ -122,7 +127,7 @@ def apply_markers(out: Path, snippets: Path) -> list[str]:
         if snippet_id not in available:
             problems.append(f"{where}: no snippet directory-edition/snippets/{snippet_id}.md")
             return ""
-        text = available[snippet_id].read_text(encoding="utf-8")
+        text = available[snippet_id].read_text(encoding="utf-8").replace("{ref}", ref)
         if "dir-edition:" in text:
             problems.append(f"{where}: snippet {snippet_id}.md contains a marker")
         return text if text.endswith("\n") else text + "\n"
@@ -172,6 +177,39 @@ def apply_markers(out: Path, snippets: Path) -> list[str]:
     return problems
 
 
+SUBSTITUTION = re.compile(r"file: (\S+)\n=== find\n(.*?)\n=== replace\n(.*?)\n?", re.S)
+
+
+def apply_substitutions(src: Path, out: Path) -> list[str]:
+    """Exact-text replacements for text markers can't wrap, such as lines inside fenced templates.
+
+    Each substitutions/*.md file names one file and the text to find there, which must occur
+    exactly once, so a change to the source text fails the build instead of shipping stale text.
+    """
+    problems: list[str] = []
+    folder = src / "directory-edition" / "substitutions"
+    for spec in sorted(folder.glob("*.md")) if folder.is_dir() else []:
+        name = spec.relative_to(src).as_posix()
+        match = SUBSTITUTION.fullmatch(spec.read_text(encoding="utf-8"))
+        if not match:
+            problems.append(f"{name}: expected a 'file:' line, then '=== find' and '=== replace' sections")
+            continue
+        rel, find, replace = match.groups()
+        target = out / rel
+        if not target.is_file():
+            problems.append(f"{name}: {rel} is not in the edition")
+            continue
+        body = target.read_text(encoding="utf-8")
+        count = body.count(find)
+        if count != 1:
+            problems.append(f"{name}: the find text occurs {count} times in {rel} (expected once); update it to match the source")
+            continue
+        if replace == "" and body.count(find + "\n") == 1:
+            find += "\n"  # an empty replacement drops the whole line
+        target.write_text(body.replace(find, replace), encoding="utf-8")
+    return problems
+
+
 def apply_overrides(src: Path, out: Path) -> None:
     overrides = src / "directory-edition" / "overrides"
     if not overrides.is_dir():
@@ -194,9 +232,17 @@ def set_description(src: Path, out: Path) -> list[str]:
     plugin_path.write_text(json.dumps(plugin, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     market_path = out / ".claude-plugin" / "marketplace.json"
     market = json.loads(market_path.read_text(encoding="utf-8"))
+    # Nothing in the edition should read as an Anthropic or "official" listing.
+    market.setdefault("metadata", {})["description"] = MARKETPLACE_DESCRIPTION
     for entry in market.get("plugins", []):
         if entry.get("name") == plugin.get("name"):
             entry["description"] = description
+            for key in ("tags", "keywords"):
+                if key in entry:
+                    entry[key] = [word for word in entry[key] if word not in BRAND_WORDS]
+    if "keywords" in plugin:
+        plugin["keywords"] = [word for word in plugin["keywords"] if word not in BRAND_WORDS]
+        plugin_path.write_text(json.dumps(plugin, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     market_path.write_text(json.dumps(market, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return []
 
@@ -288,7 +334,8 @@ def build(src: Path, out: Path, ref: str, require_sniff: bool = False) -> list[s
         shutil.rmtree(out)
     out.mkdir(parents=True)
     copy_sources(src, out)
-    problems = apply_markers(out, src / "directory-edition" / "snippets")
+    problems = apply_markers(out, src / "directory-edition" / "snippets", ref)
+    problems += apply_substitutions(src, out)
     apply_overrides(src, out)
     problems += set_description(src, out)
     rewrite_missing_links(out, ref)

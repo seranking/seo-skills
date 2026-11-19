@@ -150,9 +150,7 @@ Reasoning: {1–2 sentences anchored in concrete numbers from the data}.
 | {domain1} | ✓ / ✗ | {note if unverified} |
 | ... |
 
-<!-- dir-edition:begin seo-hreflang-gsc-output -->
 (Or: `GSC verification: not configured (run bash extensions/google/install.sh)`.)
-<!-- dir-edition:end seo-hreflang-gsc-output -->
 
 ## Coverage notes
 

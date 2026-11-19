@@ -4,6 +4,7 @@ The Claude Plugins Directory accepts only Markdown, text, JSON, YAML and image f
 
 - `build.py` builds the edition into a folder outside the repo and checks it: file types, content sniffing with `file` (libmagic; Markdown it reads as HTML or Python counts as a refused type), `#!` lines, credential reads, download-and-run commands and references to files the edition doesn't ship. `test_build.py` covers the markers and the checks.
 - `snippets/<id>.md` holds the text that replaces a marked block or line in the edition.
+- `substitutions/<id>.md` holds exact-text replacements for places a marker can't go, such as lines inside a fenced report template (a marker there would show on GitHub and could be copied into a report). Each names a file, the text to find (which must occur exactly once) and its replacement; an empty replacement drops the line. When the source text changes, the build fails until the substitution is updated.
 - `overrides/` holds whole files that replace their GitHub-edition version (today: the `seo-google` pointer skill).
 - `description.txt` is the plugin description the edition's manifests carry; the directory listing shows it.
 - `.github/workflows/directory-edition.yml` publishes the edition of each release to the `claude-directory` branch; `release.yml` runs it after every release. The directory listing tracks that branch.
@@ -19,7 +20,9 @@ Markers carry only an id, so an agent reading the GitHub edition's raw Markdown 
 <!-- dir-edition:end seo-page-gsc -->
 ```
 
-The block is replaced by `snippets/seo-page-gsc.md`. Use `remove` instead of `begin` to drop a block without a replacement. To swap a single line, such as a table row or a list item, add `<!-- dir-edition:line <id> -->` at the end of the line; the whole line is replaced by `snippets/<id>.md`. GitHub shows none of the markers. Relative links to files the edition doesn't ship are rewritten to GitHub URLs at the released tag.
+The block is replaced by `snippets/seo-page-gsc.md`. Use `remove` instead of `begin` to drop a block without a replacement. To swap a single line, such as a table row or a list item, add `<!-- dir-edition:line <id> -->` at the end of the line; the whole line is replaced by `snippets/<id>.md`. Never put a marker inside a fenced code block: use a substitution there. Outside fences, GitHub shows none of the markers. `{ref}` in a snippet becomes the released tag, and relative links to files the edition doesn't ship are rewritten to GitHub URLs at that tag.
+
+The edition's marketplace description and keywords are set by `build.py` so nothing reads as an Anthropic or "official" listing.
 
 ## Releasing and the listing
 
