@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
-## [Unreleased]
+## [2.11.3] — 2026-11-19
 
 Gets the plugin back into the Claude Plugins Directory, which refused v2.11.2. The directory now gets its own edition without the scripts, installers and examples it refuses from organizations it hasn't verified, published to the `claude-directory` branch on every release. It also fixes the privacy policy, credential and download-and-run findings in the files both editions share.
 
