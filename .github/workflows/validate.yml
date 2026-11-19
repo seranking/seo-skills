@@ -21,9 +21,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Node.js
+        # Claude Code needs Node 22+. On Node 20, npm silently installs the last
+        # release that supports it (2.1.197), whose validator is out of date.
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install Claude Code CLI
         # Pin a version (e.g. @anthropic-ai/claude-code@2.1.161) for reproducible

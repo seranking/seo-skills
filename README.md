@@ -311,7 +311,7 @@ This repo is the official Skills catalogue for the SE Ranking MCP server. See [`
 - SE Ranking API: https://seranking.com/api.html
 - SE Ranking MCP: https://seranking.com/mcp.html
 - SE Ranking MCP Docs: https://seranking.com/api/integrations/mcp/
-- SE Ranking privacy policy (covers the data the SE Ranking MCP server processes): https://seranking.com/legal/privacy-policy.html
+- SE Ranking privacy policy (covers the data the SE Ranking MCP server processes): [seranking.com/legal/privacy-policy.html](https://seranking.com/legal/privacy-policy.html)
 - Claude SEO Skills: https://seranking.com/claude-seo-skills.html
 - Claude Agent Skills: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
 - Claude Code Plugins: https://code.claude.com/docs/en/plugins
