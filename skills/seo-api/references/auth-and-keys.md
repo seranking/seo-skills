@@ -72,8 +72,10 @@ Pass the key directly. Server skips OAuth entirely.
 
 ```bash
 claude mcp add --transport http se-ranking https://api.seranking.com/mcp \
-  --header "X-Api-Key: $SERANKING_API_KEY"
+  --header "X-Api-Key: YOUR_API_KEY"
 ```
+
+Replace `YOUR_API_KEY` with your SE Ranking API key.
 
 The header `X-Data-Api-Key` is still accepted as an alias for `X-Api-Key` (backwards compat with older self-hosted installs).
 
@@ -132,15 +134,11 @@ experimental_use_rmcp_client = true
 
 ### VS Code
 
-`Cmd+P` → `MCP: Add Server` → `Command (stdio)`:
-
-```bash
-npx -y mcp-remote https://api.seranking.com/mcp
-```
+Command Palette → `MCP: Add Server` → `HTTP`, then enter `https://api.seranking.com/mcp`.
 
 ### Windsurf / Zed / Gemini CLI / others
 
-All use the same `npx -y mcp-remote https://api.seranking.com/mcp` pattern via their respective MCP config files (`~/.codeium/windsurf/mcp_config.json`, `~/.config/zed/settings.json`, `~/.gemini/settings.json`).
+Add a remote (HTTP) server with the URL `https://api.seranking.com/mcp` in the client's MCP config file (`~/.codeium/windsurf/mcp_config.json`, `~/.config/zed/settings.json`, `~/.gemini/settings.json`). A client that only runs local (stdio) servers needs a bridge such as `mcp-remote`; follow the bridge's own setup instructions.
 
 ## Sub-accounts on a shared workspace
 

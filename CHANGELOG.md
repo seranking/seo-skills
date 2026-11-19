@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [Unreleased]
+
+Addresses the privacy policy, credential and download-and-run findings that the Claude Plugins Directory raised on v2.11.2. These changes don't clear the main refusal ("Files outside the allowed list accepted only from Verified organizations"), which needs the plugin to ship without its scripts.
+
+### Fixed
+- **No privacy policy URL.** `.claude-plugin/plugin.json` sets `privacyPolicyUrl` to the SE Ranking privacy policy, and the README links it under Links.
+- **Credential from the user's environment.** The `seo-api` API-key example passes the placeholder `YOUR_API_KEY` instead of reading `$SERANKING_API_KEY` from the environment.
+- **Download-and-run commands.** The README no longer offers the `curl … | bash` one-liner for `install.sh`; the `git clone` + `bash install.sh` path stays, and its non-interactive flags moved next to it. The `seo-api` client cheat-sheet now tells VS Code, Windsurf, Zed and Gemini CLI users to add the server as a remote (HTTP) server instead of running `npx -y mcp-remote`.
+- **CI validated with an outdated Claude Code.** The `Validate plugin` workflow ran on Node 20, and Claude Code needs Node 22+, so npm silently installed 2.1.197 instead of the latest release. That version doesn't know `privacyPolicyUrl` and failed `--strict` on it. The workflow now uses Node 22.
+
 ## [2.11.2] — 2026-11-18
 
 Lets the plugin pass Claude Plugins Directory validation again. The directory rejected every version after 2.10.4 with "MCP server: invalid configuration" and "Remote MCP server has no \"type\"".

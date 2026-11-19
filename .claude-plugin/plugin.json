@@ -10,6 +10,7 @@
   "homepage": "https://github.com/seranking/seo-skills",
   "repository": "https://github.com/seranking/seo-skills",
   "license": "MIT",
+  "privacyPolicyUrl": "https://seranking.com/legal/privacy-policy.html",
   "mcpServers": {
     "se-ranking": {
       "type": "http",

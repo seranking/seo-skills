@@ -47,18 +47,7 @@ git clone --depth 1 https://github.com/seranking/seo-skills.git
 bash seo-skills/install.sh
 ```
 
-The installer is interactive — it asks which extensions to install. Accept the defaults and you're done. Re-running pulls the latest version and re-runs the chosen extensions. Requires `git`, `python3` 3.10+, and (for Firecrawl) `node` 20+.
-
-<details>
-<summary>One-liner (curl)</summary>
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/seranking/seo-skills/main/install.sh | bash -s -- --all
-```
-
-`--all` enables both extensions. Use `--firecrawl` / `--google` individually, or `--no-extensions` to clone only. Default clone target is `~/.local/share/seo-skills`; override with `--target /path/to/dir`.
-
-</details>
+The installer is interactive — it asks which extensions to install. Accept the defaults and you're done. Re-running pulls the latest version and re-runs the chosen extensions. Requires `git`, `python3` 3.10+, and (for Firecrawl) `node` 20+. To skip the questions, pass `--all` (both extensions), `--firecrawl` or `--google` (one of them), or `--no-extensions`.
 
 The manual install only wires your *environment* (extensions, Python deps, `~/.config/seo-skills/`). You still need Option 1 or 2 above so Claude can find the skill files.
 
@@ -322,6 +311,7 @@ This repo is the official Skills catalogue for the SE Ranking MCP server. See [`
 - SE Ranking API: https://seranking.com/api.html
 - SE Ranking MCP: https://seranking.com/mcp.html
 - SE Ranking MCP Docs: https://seranking.com/api/integrations/mcp/
+- SE Ranking privacy policy (covers the data the SE Ranking MCP server processes): [seranking.com/legal/privacy-policy.html](https://seranking.com/legal/privacy-policy.html)
 - Claude SEO Skills: https://seranking.com/claude-seo-skills.html
 - Claude Agent Skills: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
 - Claude Code Plugins: https://code.claude.com/docs/en/plugins
