@@ -1,0 +1,167 @@
+# Rate Limits & Credits
+
+Everything the `seo-api` skill needs to forecast cost and pace requests against the Data API and Project API.
+
+## Rate limits
+
+**Per API key, not per IP.** All threads, workers, and servers sharing one key contribute to the same RPS budget. For production fan-outs, mint multiple keys via the API Dashboard.
+
+| API | Standard limit | Trial accounts |
+|---|---|---|
+| Data API | **10 requests per second** | 1 RPS (can be raised on request — email api@seranking.com) |
+| Project API | **5 requests per second** | 1 RPS (same path to raise) |
+
+**Async operations.** Endpoints like `/backlinks/export` create a task; subsequent polls of `*ExportStatus` count against the same RPS budget (but cost 0 credits).
+
+**Custom limits.** Production workloads needing higher throughput: contact `api@seranking.com`. Custom plans are available.
+
+## Handling 429 — exponential backoff with jitter
+
+The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.3/skills/seo-api/references/rate-limits-and-credits.md
+
+```typescript
+async function call(url: string, headers: HeadersInit, maxAttempts = 5): Promise<Response> {
+  let delay = 1000;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const r = await fetch(url, { headers });
+    if (r.status !== 429) return r;
+    const jitter = (Math.random() * 0.4 - 0.2) * delay;
+    await new Promise((resolve) => setTimeout(resolve, delay + jitter));
+    delay *= 2;
+  }
+  throw new Error(`Rate-limited after ${maxAttempts} attempts`);
+}
+```
+
+**Why jitter matters.** Without it, multiple clients hitting the limit simultaneously synchronise their retries and re-hit the limit at the next interval — the thundering-herd problem. A ±20% randomisation spreads them out.
+
+**Simple delays (use with caution).** Because the API uses a rolling 1s window, a brief pause (200–500ms) is enough for occasional, isolated overages. But it doesn't survive bursty traffic — use exponential backoff for anything production.
+
+## Client-side throttling
+
+Better than reactive 429 handling: proactively pace requests to stay under the limit.
+
+The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.3/skills/seo-api/references/rate-limits-and-credits.md
+
+## Credit system (Data API)
+
+Pay-as-you-go. Plans start at 1 million credits.
+
+### Two billing models
+
+1. **Cost per record** — credits charged per row returned. Example: `/backlinks/summary` at 100 credits/record, request 250 domains → 25,000 credits.
+2. **Cost per request** — flat fee per successful call regardless of payload size. Example: `/keywords/research` at 5 credits/request, 1000 keywords returned → still 5 credits.
+
+**Failed requests are free.** 4xx and 5xx never consume credits. Don't over-engineer error retries to "save credits".
+
+### Reading current balance
+
+```bash
+curl -X GET 'https://api.seranking.com/v1/account/subscription' \
+  -H 'Authorization: Token YOUR_API_KEY'
+```
+
+Or via MCP: `DATA_getSubscription` (0 credits, returns `subscription_info.units_left`). It counts plan and add-on credits only, not the wallet, and never goes below 0, so on an account with a wallet a 0 does not mean requests will be refused.
+
+Response shape:
+```json
+{
+  "subscription_info": {
+    "status": "active",
+    "start_date": "2026-01-18 14:20:02",
+    "expiration_date": "2027-01-18 14:20:02",
+    "units_limit": 5000000,
+    "units_left": 4975033
+  }
+}
+```
+
+### Forecasting
+
+Before running a large workflow:
+
+1. List every API call.
+2. Multiply by per-call cost (see canonical table at <https://seranking.com/api/data/getting-started/#unit-costs>, or check each MCP tool's own description for the per-tool figure).
+3. Sum.
+4. Compare against `units_left`.
+
+**Worked example.** Pull backlink summaries for 250 domains + full export for one:
+
+| Call | Records | Per-record cost | Total |
+|---|---|---|---|
+| `/backlinks/summary` | 250 | 100 credits | 25,000 |
+| `/backlinks/export` (task creation) | 50,000 (links in target domain) | 1 credit | 50,000 |
+| `/backlinks/export/status` (poll 2×) | 2 | 0 credits/request | 0 |
+| **Total** | | | **75,000 credits** |
+
+### Insufficient credits — 403
+
+```json
+{
+  "error": {
+    "code": 403,
+    "message": "Insufficient funds",
+    "description": "Your current credit balance is too low to process this request."
+  }
+}
+```
+
+No partial billing — the entire request is rejected. Top up at the API Dashboard or contact `api@seranking.com` for overage billing.
+
+## Plan limits (Project API)
+
+The Project API doesn't use credits. It consumes the same limits as the SE Ranking web platform.
+
+| Action | Limit consumed | When |
+|---|---|---|
+| `PROJECT_createProject` | 1 Site | On creation |
+| `PROJECT_addKeywords` | N Keywords | Each new keyword tracked |
+| `PROJECT_runPositionCheck` | (free — uses tracking schedule) | — |
+| `PROJECT_addAuditSourcePages` + audit run | N Audit Pages | Per page crawled |
+| `PROJECT_createAudit` (advanced) | Audit Pages × pages | Per crawl |
+| `PROJECT_addPrompts` | N AIRT Prompts | Per prompt added to AIRT |
+| `PROJECT_addCompetitor` | (free) | — |
+| `PROJECT_addProjectBacklink` | (free — uses Backlinks tier) | — |
+
+**Read the user's plan limits before mutating.** `PROJECT_getUserProfile` returns the current plan tier and remaining quota. If the integration would push a limit over, surface upfront and ask whether to proceed or downsize.
+
+### Insufficient plan limits
+
+```json
+{
+  "error": {
+    "code": 403,
+    "message": "Limit reached",
+    "description": "Cannot add 50 keywords — you have 32 keywords remaining on the Pro plan."
+  }
+}
+```
+
+Fix paths:
+- Upgrade plan: <https://seranking.com/subscription.html>.
+- Free up quota: delete unused projects, keywords, AIRT prompts via the matching `PROJECT_delete*` tool.
+
+## Per-endpoint cost cheat-sheet
+
+Credit costs are **not** carried in the MCP tool descriptions — the canonical source is the per-endpoint pages on `seranking.com/api/data/*` and the unit-costs table at <https://seranking.com/api/data/getting-started/#unit-costs>. Always confirm there before a large run; SE Ranking updates costs periodically.
+
+**Verified against the docs (2026-05-22):**
+
+| Endpoint | MCP tool | Cost |
+|---|---|---|
+| Account subscription | `DATA_getSubscription` | 0 |
+| Credit balance | none (the MCP removed `DATA_getCreditBalance` on 2026-05-22) | 0 |
+| Domain overview (worldwide) | `DATA_getDomainOverviewWorldwide` | 100 / request |
+| Domain overview (regional) | `DATA_getDomainOverviewDatabases` | 100 / request |
+| Domain competitors | `DATA_getDomainCompetitors` | 100 / request (flat — *not* per-competitor) |
+| Backlinks summary | `DATA_getBacklinksSummary` | 100 / target |
+
+For any endpoint not in this table, read the **"Cost:"** line on its docs page before forecasting — do not guess a figure. Apply the two billing models described above: **per request** (flat fee per call — most overview / summary / competitor endpoints) and **per record** (one charge per row — list and export endpoints; e.g. `DATA_exportBacklinksData` charges per backlink record, `DATA_getDomainKeywords` per keyword returned). When unsure, run the smallest possible request first and read the actual charge against the docs.
+
+## Combined rate-limit + credit safety pattern
+
+The end-to-end shape for any production integration:
+
+The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.3/skills/seo-api/references/rate-limits-and-credits.md
+
+A production client should cover rate-limit pacing, exponential backoff with jitter, a terminal 403 and transient 5xx, and pace at 5 requests per second for the Project API and 10 for the Data API.

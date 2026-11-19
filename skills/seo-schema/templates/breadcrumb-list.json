@@ -1,0 +1,18 @@
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "{REPLACE: breadcrumb 1 label}",
+      "item": "{REPLACE: breadcrumb 1 URL}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "{REPLACE: breadcrumb 2 label}",
+      "item": "{REPLACE: breadcrumb 2 URL}"
+    }
+  ]
+}

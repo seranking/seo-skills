@@ -1,0 +1,23 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{REPLACE: page title, max 110 chars}",
+  "description": "{REPLACE: meta description, ~155 chars}",
+  "author": {
+    "@type": "Person",
+    "name": "{REPLACE: author name}",
+    "url": "{REPLACE: author profile URL}"
+  },
+  "datePublished": "{REPLACE: ISO 8601 date, e.g. 2026-04-27}",
+  "dateModified": "{REPLACE: ISO 8601 date}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "{REPLACE: brand name}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{REPLACE: logo URL, min 112x112px}"
+    }
+  },
+  "image": "{REPLACE: hero image URL, min 1200x800px}",
+  "mainEntityOfPage": "{REPLACE: canonical URL of this page}"
+}

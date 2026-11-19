@@ -1,0 +1,25 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "{REPLACE: product name}",
+  "description": "{REPLACE: product description}",
+  "image": ["{REPLACE: product image URL}"],
+  "sku": "{REPLACE: SKU}",
+  "brand": {
+    "@type": "Brand",
+    "name": "{REPLACE: brand name}"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "{REPLACE: product URL}",
+    "priceCurrency": "USD",
+    "price": "{REPLACE: price as STRING, e.g. \"49.00\"}",
+    "availability": "https://schema.org/InStock",
+    "itemCondition": "https://schema.org/NewCondition"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{REPLACE: average rating as string, e.g. \"4.6\"}",
+    "reviewCount": "{REPLACE: total reviews as string}"
+  }
+}

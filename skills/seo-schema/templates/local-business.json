@@ -1,0 +1,32 @@
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": "{REPLACE: canonical URL}",
+  "name": "{REPLACE: business name}",
+  "description": "{REPLACE: short description}",
+  "url": "{REPLACE: website URL}",
+  "telephone": "{REPLACE: phone in international format, e.g. +14155550100}",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{REPLACE: street}",
+    "addressLocality": "{REPLACE: city}",
+    "addressRegion": "{REPLACE: state/region}",
+    "postalCode": "{REPLACE: postal code}",
+    "addressCountry": "{REPLACE: ISO country code, e.g. US}"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "{REPLACE: latitude}",
+    "longitude": "{REPLACE: longitude}"
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "09:00",
+      "closes": "17:00"
+    }
+  ],
+  "priceRange": "$$",
+  "image": "{REPLACE: storefront/exterior image URL}"
+}

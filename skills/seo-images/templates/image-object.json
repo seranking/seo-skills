@@ -1,0 +1,23 @@
+{
+  "@context": "https://schema.org",
+  "@type": "ImageObject",
+  "contentUrl": "{REPLACE: absolute image URL, e.g. https://example.com/images/hero.webp}",
+  "name": "{REPLACE: short name for the image, ~50 chars}",
+  "caption": "{REPLACE: visible caption or descriptive sentence}",
+  "description": "{REPLACE: longer description, ~155 chars — match the page's alt-text intent}",
+  "width": "{REPLACE: intrinsic width in pixels, as Number, e.g. 1200}",
+  "height": "{REPLACE: intrinsic height in pixels, as Number, e.g. 800}",
+  "creator": {
+    "@type": "Organization",
+    "name": "{REPLACE: creator / studio / brand name}",
+    "url": "{REPLACE: creator URL}"
+  },
+  "copyrightHolder": {
+    "@type": "Organization",
+    "name": "{REPLACE: copyright holder, often same as creator}"
+  },
+  "copyrightNotice": "{REPLACE: copyright string, e.g. © 2026 Brand Name}",
+  "creditText": "{REPLACE: how the image should be credited when used, e.g. Photo by Brand Name}",
+  "license": "{REPLACE: URL to license page, e.g. https://example.com/licensing}",
+  "acquireLicensePage": "{REPLACE: URL where users can buy/license the image, e.g. https://example.com/licensing#buy}"
+}
