@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [Unreleased]
+
+### Changed
+- **Claude Plugins Directory description.** `directory-edition/description.txt` now holds the listing text from the SE Ranking marketing team: who the skills are for, what they turn SE Ranking data into, and that AI search share of voice runs on SE Visible.
+
 ## [2.11.3] — 2026-11-19
 
 Gets the plugin back into the Claude Plugins Directory, which refused v2.11.2. The directory now gets its own edition without the scripts, installers and examples it refuses from organizations it hasn't verified, published to the `claude-directory` branch on every release. It also fixes the privacy policy, credential and download-and-run findings in the files both editions share.
