@@ -18,7 +18,7 @@ Connect SE Ranking (where the demand and the gaps live) to Planable (where conte
 ## Prerequisites
 
 - **SE Ranking MCP** connected (Data API for research; a project is optional but unlocks ranking-loss detection).
-- **Planable MCP** connected, with the destination workspace and at least one connected page.
+- **Planable connector** (from the Claude directory) connected, with the destination workspace and at least one connected page.
 - The user provides: target domain, market/country (default `us`), the Planable workspace, and ideally 1–3 competitor domains. Number of posts defaults to 6 if unspecified.
 
 ## Connector health check
@@ -28,7 +28,7 @@ Before doing anything else, verify both MCPs are reachable:
 - **SE Ranking:** call `DATA_getSubscription`. If it fails or returns an auth error, stop immediately and tell the user:
   > "The SE Ranking connector isn't responding — please reconnect it before we continue. Setup guide: https://seranking.com/api/integrations/mcp/"
 - **Planable:** call `list_workspaces`. If it fails or returns an auth error, stop immediately and tell the user:
-  > "The Planable connector isn't responding — please reconnect it before we continue. Setup guide: https://help.planable.io/hc/en-us/articles/27538577098780-How-to-connect-Planable-MCP-to-your-AI-tools"
+  > "The Planable connector isn't responding — please reconnect it before we continue. It's in the Claude directory: search for Planable."
 
 Only continue to the process steps below once both calls return a successful response.
 

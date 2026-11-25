@@ -156,7 +156,7 @@ Top-level: `RECIPE.md` + `code/`. The `evidence/` folder preserves the reasoning
 
 ## Tips
 
-- **Single API key authenticates everything.** `API_TOKEN` (or `X-Api-Key` header for headless) covers both `DATA_*` and `PROJECT_*`. The legacy split into separate Data and Project keys is gone — passing both still works as headers for backwards compatibility, but you can use just `X-Api-Key` now. See `references/auth-and-keys.md`.
+- **Single API key authenticates everything.** One SE Ranking API key covers both `DATA_*` and `PROJECT_*`: the `Authorization: Token` header for REST calls, or the `X-Api-Key` header for headless MCP. See `references/auth-and-keys.md`.
 - **Rate limits are per-API-key, not per-IP.** All threads / workers / servers sharing one key contribute to the same 10-RPS (Data) or 5-RPS (Project) budget. For production fan-outs, mint multiple keys via the API Dashboard.
 - **Failed requests are free.** 4xx and 5xx never consume credits. Don't over-engineer cost protection for normal error retries.
 - **Project API limits are not credits.** They consume your subscription's "Sites", "Keywords", "Audit Pages", "AIRT Prompts" quotas. Surface plan-limit impact upfront for any mutating call — these limits are stickier than credits because the user has to upgrade their plan to lift them, not just buy a credit pack.

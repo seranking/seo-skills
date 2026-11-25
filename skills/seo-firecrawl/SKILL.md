@@ -1,12 +1,12 @@
 ---
 name: seo-firecrawl
-description: Ad-hoc web scraping, site mapping, and full-site crawling via Firecrawl MCP. Returns raw HTML, parsed metadata (og:*, twitter:*, JSON-LD, canonical, robots), JS-rendered DOM, and screenshots that WebFetch cannot. Distinct from the SE Ranking skills (which give keyword/traffic/SERP data) and from WebFetch (which gives markdown prose only). Use when the user says "scrape this page", "crawl this site", "map this site", "find all pages on", "get the OG tags", "get the JSON-LD", "render this JS-heavy page", or any task where raw HTML head metadata, structured-data scripts, or post-JS DOM are the actual deliverable. Also invoked as a sub-step from other skills that need raw HTML.
+description: Ad-hoc web scraping, site mapping, and full-site crawling via the Firecrawl connector. Returns raw HTML, parsed metadata (og:*, twitter:*, JSON-LD, canonical, robots), JS-rendered DOM, and screenshots that WebFetch cannot. Distinct from the SE Ranking skills (which give keyword/traffic/SERP data) and from WebFetch (which gives markdown prose only). Use when the user says "scrape this page", "crawl this site", "map this site", "find all pages on", "get the OG tags", "get the JSON-LD", "render this JS-heavy page", or any task where raw HTML head metadata, structured-data scripts, or post-JS DOM are the actual deliverable. Also invoked as a sub-step from other skills that need raw HTML.
 ---
-> Example output: [examples/seo-firecrawl-stripe-com-20260514/scrape/FIRECRAWL.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-firecrawl-stripe-com-20260514/scrape/FIRECRAWL.md)
+> Example output: [examples/seo-firecrawl-stripe-com-20260514/scrape/FIRECRAWL.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-firecrawl-stripe-com-20260514/scrape/FIRECRAWL.md)
 
 # Firecrawl Orchestrator
 
-A direct interface to Firecrawl MCP for tasks that fall outside the data-driven SE Ranking skills. Use when:
+A direct interface to the Firecrawl connector for tasks that fall outside the data-driven SE Ranking skills. Use when:
 
 - You need raw HTML, `head` metadata, JSON-LD, or post-JS DOM that WebFetch's markdown conversion strips.
 - You need a list of all URLs on a domain without pulling each one.
@@ -16,12 +16,12 @@ A direct interface to Firecrawl MCP for tasks that fall outside the data-driven 
 
 ## Prerequisites
 
-- **Required:** the `firecrawl-mcp` MCP server. If `mcp__firecrawl-mcp__firecrawl_scrape` is unavailable, abort and tell the user to add the Firecrawl MCP server (setup and signup at firecrawl.dev, free tier 500 credits/month). Don't attempt fallbacks; this skill exists for the cases WebFetch can't cover.
+- **Required:** the Firecrawl connector. If Firecrawl's `firecrawl_scrape` tool is unavailable, abort and tell the user to connect the Firecrawl connector from the Claude directory (Firecrawl's free tier covers 500 credits a month). Don't attempt fallbacks; this skill exists for the cases WebFetch can't cover.
 - User provides: a target URL or domain, plus optionally a mode (`scrape` / `map` / `crawl` / `search`). If mode unspecified, infer from input shape (single URL → `scrape`, single domain → `map`).
 
 ## Process
 
-1. **Preflight.** Confirm `firecrawl-mcp` is connected. If not, surface the install command and stop.
+1. **Preflight.** Confirm the Firecrawl connector is connected. If not, tell the user to connect it from the Claude directory and stop.
 2. **Mode selection.** Resolve user intent into one of:
    - `scrape` — single URL, full data (default if user supplies one URL).
    - `map` — single domain, list of URLs only (cheap reconnaissance).
@@ -31,7 +31,7 @@ A direct interface to Firecrawl MCP for tasks that fall outside the data-driven 
    - `scrape` (1 credit), `map` (~0.5 credit per discovered URL — estimate using a `map` first if scope unclear), `crawl` (1 credit per page crawled), `search` (1 credit per result returned).
    - For `crawl` and for `map` of >50 expected URLs, surface the estimate and require explicit go-ahead before calling.
    - Always read remaining credits implicitly via Firecrawl's response metadata (`creditsUsed` / `creditsRemaining` in `metadata`).
-4. **Execute.** Call the matching `mcp__firecrawl-mcp__firecrawl_*` tool.
+4. **Execute.** Call the matching Firecrawl tool (`firecrawl_scrape`, `firecrawl_map`, `firecrawl_crawl` or `firecrawl_search`).
    - `scrape`: pass `formats: ["markdown", "html"]` by default (markdown for prose, html for `head` + JSON-LD). Add `formats: ["screenshot"]` only if the deliverable visibly uses one. SPAs: pass `waitFor: 2000` (or a CSS selector) so the JS-rendered DOM is captured. Default `onlyMainContent: true` to drop nav/footer noise — override only on explicit request.
    - `map`: default `limit: 500` (hard cap). Pass `excludePaths: ["/admin/*", "/api/*", "/wp-admin/*", "/feed/*"]` as a sane default.
    - `crawl`: default `limit: 50` (default cap), hard cap `limit: 200`. Always pass `excludePaths` to prune. Poll `firecrawl_check_crawl_status` if the job returns asynchronously.

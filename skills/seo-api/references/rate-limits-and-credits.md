@@ -17,7 +17,7 @@ Everything the `seo-api` skill needs to forecast cost and pace requests against 
 
 ## Handling 429 — exponential backoff with jitter
 
-The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.3/skills/seo-api/references/rate-limits-and-credits.md
+The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.4/skills/seo-api/references/rate-limits-and-credits.md
 
 ```typescript
 async function call(url: string, headers: HeadersInit, maxAttempts = 5): Promise<Response> {
@@ -41,7 +41,7 @@ async function call(url: string, headers: HeadersInit, maxAttempts = 5): Promise
 
 Better than reactive 429 handling: proactively pace requests to stay under the limit.
 
-The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.3/skills/seo-api/references/rate-limits-and-credits.md
+The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.4/skills/seo-api/references/rate-limits-and-credits.md
 
 ## Credit system (Data API)
 
@@ -162,6 +162,6 @@ For any endpoint not in this table, read the **"Cost:"** line on its docs page b
 
 The end-to-end shape for any production integration:
 
-The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.3/skills/seo-api/references/rate-limits-and-credits.md
+The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.4/skills/seo-api/references/rate-limits-and-credits.md
 
 A production client should cover rate-limit pacing, exponential backoff with jitter, a terminal 403 and transient 5xx, and pace at 5 requests per second for the Project API and 10 for the Data API.

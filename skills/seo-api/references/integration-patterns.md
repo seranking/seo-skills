@@ -23,7 +23,7 @@ Five canonical recipes the `seo-api` skill draws from. Each one is ready to past
 
 ### Python equivalent
 
-The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.3/skills/seo-api/references/integration-patterns.md
+The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.4/skills/seo-api/references/integration-patterns.md
 
 ### When to use
 
@@ -56,7 +56,7 @@ User says: "set up rank tracking for X", "create a new project for client Y", "I
 
 ### Python skeleton
 
-The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.3/skills/seo-api/references/integration-patterns.md
+The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.4/skills/seo-api/references/integration-patterns.md
 
 (See `references/rate-limits-and-credits.md` for the `client` wrapper — it handles 429 + 403 + throttling.)
 
@@ -179,7 +179,7 @@ write to CSV
 
 ### Python skeleton
 
-The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.3/skills/seo-api/references/integration-patterns.md
+The Python version of this example is in the full edition on GitHub: https://github.com/seranking/seo-skills/blob/v2.11.4/skills/seo-api/references/integration-patterns.md
 
 ### When to use
 

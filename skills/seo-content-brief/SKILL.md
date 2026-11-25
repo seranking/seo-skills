@@ -3,7 +3,7 @@ name: seo-content-brief
 description: Generate a writer-ready SEO content brief from a target domain and topic. Pulls domain overview, competitors, keyword gaps, SERP analysis, related and question keywords, AI Search citations, and existing internal-link sources, then synthesises a complete editorial brief a freelance writer can start from immediately. Use when the user asks for a content brief, blog brief, article outline, editor brief, or wants to capture organic traffic their competitors have.
 ---
 
-> Example output: [examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md)
+> Example output: [examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md)
 
 # Content Brief
 
@@ -40,7 +40,7 @@ Turn a domain plus a topic intent into a complete content editor brief: target k
    - `DATA_getKeywordQuestions` for People-Also-Ask and question-based variations.
    - `DATA_getAiOverview` + `DATA_getAiOverviewLeaderboard` to see which brands LLMs cite today for the topic.
 
-6. **Top 3 content analysis** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
+6. **Top 3 content analysis** `WebFetch` (always) + Firecrawl's `firecrawl_scrape` tool (when available)
    - **WebFetch first** (free, instant): pull markdown for the top 3 ranking URLs. Extract H1/H2/H3 spine, word count per article, shared subtopics, gaps, and prose-level formatting patterns.
    - **Firecrawl second** (3 Firecrawl credits — 1 per top-3 winner) — recovers what WebFetch's markdown can't show:
      - From `metadata`: `title` length (the real string, not markdown's first heading), meta description length, `og:title`, `og:description`, `og:image`, `twitter:card`.
@@ -121,7 +121,7 @@ Cite: {sources to link out to}
 | Byline structure (DOM) | {✓/✗} | {✓/✗} | {✓/✗} | {yes/no} |
 | Word count (rendered) | {n} | {n} | {n} | {target range} |
 
-(Or: `Top-3 on-page benchmark: skipped — Firecrawl not installed.`)
+(Or: `Top-3 on-page benchmark: skipped — Firecrawl not connected.`)
 
 ## Internal linking plan
 | From existing page | Anchor text | Target section |

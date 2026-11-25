@@ -20,7 +20,7 @@ Produce the document an agency brings to the start of a client relationship: an 
 ## Prerequisites
 
 - **SE Ranking MCP** connected (Data API for research + audit; a project is optional, and an existing finished audit can be reused via `PROJECT_listAudits` instead of crawling).
-- **Planable MCP** connected, with the **client's workspace and connected social pages** available.
+- **Planable connector** (from the Claude directory) connected, with the **client's workspace and connected social pages** available.
 - The user provides: client domain + brand, market/country (default `us`), 2–4 competitors, and the Planable workspace. Optionally the engagement goals (e.g. lead gen, brand, local).
 
 ## Connector health check
@@ -30,7 +30,7 @@ Before doing anything else, verify both MCPs are reachable:
 - **SE Ranking:** call `DATA_getSubscription`. If it fails or returns an auth error, stop immediately and tell the user:
   > "The SE Ranking connector isn't responding — please reconnect it before we continue. Setup guide: https://seranking.com/api/integrations/mcp/"
 - **Planable:** call `list_workspaces`. If it fails or returns an auth error, stop immediately and tell the user:
-  > "The Planable connector isn't responding — please reconnect it before we continue. Setup guide: https://help.planable.io/hc/en-us/articles/27538577098780-How-to-connect-Planable-MCP-to-your-AI-tools"
+  > "The Planable connector isn't responding — please reconnect it before we continue. It's in the Claude directory: search for Planable."
 
 Only continue to the process steps below once both calls return a successful response.
 

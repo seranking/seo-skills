@@ -2,7 +2,7 @@
 name: seo-hreflang
 description: Hreflang and international SEO audit for multi-language and multi-region sites. Validates language-region codes, return tags, x-default, canonical alignment, and conflict detection across the per-URL HTML, the SE Ranking audit, and the XML sitemap. Use when the user asks "hreflang", "international SEO", "i18n", "language targeting", "x-default", "regional sites", or "multi-language SEO".
 ---
-> Example output: [examples/seo-hreflang-airbnb-com-20260514/HREFLANG-REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-hreflang-airbnb-com-20260514/HREFLANG-REPORT.md)
+> Example output: [examples/seo-hreflang-airbnb-com-20260514/HREFLANG-REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-hreflang-airbnb-com-20260514/HREFLANG-REPORT.md)
 
 # Hreflang Audit
 
@@ -36,10 +36,10 @@ Validate hreflang implementations on a multi-language or multi-region site. Surf
    - For each significant hreflang issue (count ≥ 1), call `DATA_getAuditPagesByIssue` to enumerate the affected URLs.
    - Persist to `01-audit-hreflang-issues.md` and feed into `hreflang-issues.csv`.
 
-4. **Per-URL hreflang tag inventory** `mcp__firecrawl-mcp__firecrawl_scrape` (preferred) / `WebFetch` (fallback)
+4. **Per-URL hreflang tag inventory** Firecrawl's `firecrawl_scrape` tool (preferred) / `WebFetch` (fallback)
    - **Sample selection:** homepage + up to 5 representative pages from `DATA_getDomainPages` (sort by traffic descending; bias toward pages on different language paths if the URL structure exposes them — `/en/`, `/fr/`, `/de/`, etc.).
    - **Firecrawl path** (1 credit per URL, ~6 total): call `firecrawl_scrape(url=..., formats=["rawHtml"])`. Pin `rawHtml` — the default `html` post-processing strips `link rel="alternate"` on many sites. Parse every `link rel="alternate" hreflang="…" href="…"` from the `head`. Capture: source URL, hreflang attribute, href, and whether it's self-referencing.
-   - **WebFetch fallback** (no Firecrawl): try fetching each URL and extracting hreflang from the markdown response. WebFetch frequently returns markdown that has stripped `head` link tags, so this path will under-report. Note in `HREFLANG-REPORT.md`: `Per-URL inventory: degraded coverage — Firecrawl not installed; some hreflang tags may be missed.`
+   - **WebFetch fallback** (no Firecrawl): try fetching each URL and extracting hreflang from the markdown response. WebFetch frequently returns markdown that has stripped `head` link tags, so this path will under-report. Note in `HREFLANG-REPORT.md`: `Per-URL inventory: degraded coverage — Firecrawl not connected; some hreflang tags may be missed.`
    - **Apply validation rules** (see references/validation-rules.md for the full list):
      - **Self-referencing tag:** the page's own URL must appear in its own hreflang set.
      - **Return tags:** every alternate link must reciprocate. If page A lists B as `fr`, page B must list A as `en` (or whichever).

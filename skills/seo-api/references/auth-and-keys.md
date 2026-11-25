@@ -58,13 +58,13 @@ The MCP server at `https://api.seranking.com/mcp` is the recommended interface f
 
 ### Mode 1 — OAuth 2.1 (interactive, recommended for IDEs and desktop)
 
-Opens a browser on first connect, stores the token locally, reuses across sessions. Right for Claude Desktop, Claude Code on a workstation, Cursor, Codex IDE.
+Opens a browser on first connect; the client keeps the session between runs. Right for Claude Desktop, Claude Code on a workstation, Cursor, Codex IDE.
 
 ```bash
 claude mcp add --transport http se-ranking https://api.seranking.com/mcp
 ```
 
-First tool call triggers the browser sign-in. Subsequent calls reuse the refresh token (30-day sliding window, configurable via `MCP_REFRESH_TOKEN_TTL` server-side).
+First tool call triggers the browser sign-in. Later calls reuse the session (30-day sliding window).
 
 ### Mode 2 — API key header (non-interactive, recommended for CI / headless)
 
@@ -76,8 +76,6 @@ claude mcp add --transport http se-ranking https://api.seranking.com/mcp \
 ```
 
 Replace `YOUR_API_KEY` with your SE Ranking API key.
-
-The header `X-Data-Api-Key` is still accepted as an alias for `X-Api-Key` (backwards compat with older self-hosted installs).
 
 ### Precedence when both are present
 
@@ -175,7 +173,7 @@ Rotation:
 
 ## Storing keys safely
 
-- **Never commit keys to git.** Even in private repos. Use `.env` (gitignored) + a secret manager (1Password, Doppler, AWS Secrets Manager, Vault).
+- **Never commit keys to git**, even in private repos.
 - **Don't pass keys in URL query parameters.** They leak into access logs.
 - **For client-side code:** API keys must never reach the browser. Proxy through your own backend.
 - **For CI:** use the platform's secret store (GitHub Actions secrets, GitLab CI variables, etc.).

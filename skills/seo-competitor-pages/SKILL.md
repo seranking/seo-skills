@@ -3,7 +3,7 @@ name: seo-competitor-pages
 description: Generate SEO-optimized "X vs Y" comparison and "alternatives to X" landing pages targeting comparative-intent keywords. Pulls competitor data, comparative-intent SERPs, and existing comparison pages to produce a balanced, structured page draft with feature matrix, schema, and conversion blocks. Distinct from `seo-agency-landing-page` (top-of-funnel demand-gen). Use when the user asks for "comparison page", "vs page", "alternatives page", "X vs Y", "alternative to X", or "competitor comparison page".
 ---
 
-> Example output: [examples/seo-competitor-pages-linear-vs-jira-20260514/COMPARISON.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-competitor-pages-linear-vs-jira-20260514/COMPARISON.md)
+> Example output: [examples/seo-competitor-pages-linear-vs-jira-20260514/COMPARISON.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-competitor-pages-linear-vs-jira-20260514/COMPARISON.md)
 
 # Competitor Comparison & Alternatives Pages
 
@@ -41,7 +41,7 @@ Produce conversion-tuned landing pages targeting comparative-intent keywords ("X
      - PAA questions (these become FAQ section content).
      - Featured snippet (if present, capture the answer pattern).
 
-5. **Fetch existing comparison pages** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
+5. **Fetch existing comparison pages** `WebFetch` (always) + Firecrawl's `firecrawl_scrape` tool (when available)
    - **WebFetch first** (free): pull the top 3 SERP winners' markdown. Extract H2 outline, feature-matrix dimensions, verdict pattern, CTA placement.
    - **Firecrawl second** (3 Firecrawl credits — 1 per winner) — recovers what WebFetch markdown can't show:
      - Schema types from `script type="application/ld+json"` blocks (`Product` ×N, `BreadcrumbList`, `FAQPage`, `Review`, `AggregateRating`).
@@ -50,7 +50,7 @@ Produce conversion-tuned landing pages targeting comparative-intent keywords ("X
    - **If Firecrawl unavailable:** WebFetch portion runs unchanged. The "schema types" line in `evidence/04-existing-pages-teardown.md` reads `(skipped — Firecrawl required for JSON-LD)`. Schema generation in step 8 falls back to a default `Product + BreadcrumbList + FAQPage` template instead of mirroring whatever the winners use.
    - This anchors the draft in observed-rewarded-pattern.
 
-5b. **Bulk competitor scrape** `mcp__firecrawl-mcp__firecrawl_scrape` (optional, opt-in)
+5b. **Bulk competitor scrape** Firecrawl's `firecrawl_scrape` tool (optional, opt-in)
    - When user passes `--bulk-scrape <urls>` or supplies a list of competitor URLs to compare directly (beyond the SERP top-3), Firecrawl-scrape each URL.
    - For each URL, extract: `title`, `og:*`, `twitter:*`, JSON-LD `@type`s, hero-image presence, pricing-block detection (regex on prose for `$N/mo`, `€N/mo`, etc.), CTA count, comparison-table presence, free-tier-mention boolean.
    - Output `competitor-elements.csv` — one row per competitor URL × these signals.

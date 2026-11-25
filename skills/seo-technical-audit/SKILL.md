@@ -3,7 +3,7 @@ name: seo-technical-audit
 description: Focused one-shot technical SEO audit for a domain. Crawlability, indexability, security, mobile, structured data, JS rendering — single-pass deliverable, not a diff. Distinct from `seo-drift` (which tracks changes over time) and from `seo-page` (which audits keywords/traffic for one URL, not technical health). Use when the user asks "technical audit", "site audit", "audit my site", "crawl issues", "indexation issues", or "technical SEO check".
 ---
 
-> Example output: [examples/seo-technical-audit-linear-app-20260514/TECH-AUDIT.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-technical-audit-linear-app-20260514/TECH-AUDIT.md)
+> Example output: [examples/seo-technical-audit-linear-app-20260514/TECH-AUDIT.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-technical-audit-linear-app-20260514/TECH-AUDIT.md)
 
 # Technical Audit
 
@@ -58,7 +58,7 @@ A one-shot technical SEO audit for a domain. Pulls SE Ranking's audit data, cate
    - Score each finding: severity × affected-page-count / effort.
    - Build the top-10 fix list.
 
-8. **Modern signals checklist** `mcp__firecrawl-mcp__firecrawl_scrape`
+8. **Modern signals checklist** Firecrawl's `firecrawl_scrape` tool
    - SE Ranking's audit crawler doesn't execute JS and doesn't expose response headers per page. This step surfaces what's invisible to it.
    - **If Firecrawl available** (~6 Firecrawl credits, hard cap): pick 5 sample URLs from the audit — bias toward high-traffic landing pages and pages already flagged with noindex / canonical issues. For each:
      - **JS-rendered canonical vs initial-HTML canonical (`js_canonical_mismatch`).** Compare `metadata.canonical` (after JS render) against the canonical the audit recorded. Flag any divergence — per Google's Dec-2025 JavaScript SEO guidance, when a canonical in raw HTML differs from one injected by JS, Google MAY use either one, making canonical decisions non-deterministic. JS-injected canonical changes silently break indexing on JS-heavy sites.
@@ -70,7 +70,7 @@ A one-shot technical SEO audit for a domain. Pulls SE Ranking's audit data, cate
        - **Risk 3 — CSR pitfalls (`js_csr_meta_drift`).** Diff initial-HTML `<title>`, `<h1>`, and `<meta name="description">` against the same fields in the JS-rendered DOM. Flag any divergence — Google does not reliably index content that only appears post-render, so the empty/wrong initial values may be what gets indexed.
        - **Risk 4 — Soft-404 from JS errors (`js_soft_404`).** Flag rendered pages where body text content is <500 chars but the HTTP response status is 200. This pattern indicates a JS render failure that Google treats as a soft-404 — the page returns 200 (so it's "live") but contains no real content (so it's "empty").
      - Then make one additional call: `firecrawl_scrape` on `/robots.txt` (1 credit). Parse for AI-crawler User-Agent rules — `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended`, `ChatGPT-User`, `Bytespider`, `CCBot`. Surface allow/disallow scope per agent.
-   - **If Firecrawl unavailable:** skip this step. Note in `TECH-AUDIT.md`: `Modern signals (JS canonical/noindex divergence, X-Robots-Tag, AI-crawler robots.txt rules, Dec-2025 JS-SEO risks): skipped — Firecrawl not installed.`
+   - **If Firecrawl unavailable:** skip this step. Note in `TECH-AUDIT.md`: `Modern signals (JS canonical/noindex divergence, X-Robots-Tag, AI-crawler robots.txt rules, Dec-2025 JS-SEO risks): skipped — Firecrawl not connected.`
 
 8b–8c. **CWV field data and GSC URL Inspection** — not available in the Claude Plugins Directory edition (they need the Google API scripts from the full edition on GitHub). Skip steps 8b and 8c; the report uses SE Ranking's lab CWV only.
 
@@ -164,7 +164,7 @@ Top-level: `TECH-AUDIT.md` + `issues.csv` + `03-key-pages-issues.md`. The audit 
 - {URL} — rendered body <500 chars but HTTP 200 (`js_soft_404` — likely JS render failure, treated as soft-404 by Google)
 - robots.txt — `GPTBot`: {allow / disallow `/path`}, `ClaudeBot`: {…}, `Google-Extended`: {…}, ...
 - IndexNow — configured: {Y/N} · key-file: `/<key>.txt` {found / missing / mismatch} · last-key-rotation: {YYYY-MM-DD or "unknown"}
-- (Or: `Modern signals: skipped — Firecrawl not installed`)
+- (Or: `Modern signals: skipped — Firecrawl not connected`)
 
 ### Security headers (extended — WebFetch)
 

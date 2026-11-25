@@ -2,7 +2,7 @@
 name: seo-schema
 description: Detect existing JSON-LD structured data on a page, validate against Google's rich-result requirements, and generate missing schema markup (Article, Product, LocalBusiness, FAQPage, BreadcrumbList). Produces paste-ready JSON-LD script blocks. Use when the user asks for "schema markup", "structured data", "JSON-LD", "rich results", "schema validation", or "fix the schema on this page".
 ---
-> Example output: [examples/seo-schema-budgetbytes-slow-cooker-chicken-noodle-soup-20260514/SCHEMA.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-schema-budgetbytes-slow-cooker-chicken-noodle-soup-20260514/SCHEMA.md)
+> Example output: [examples/seo-schema-budgetbytes-slow-cooker-chicken-noodle-soup-20260514/SCHEMA.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-schema-budgetbytes-slow-cooker-chicken-noodle-soup-20260514/SCHEMA.md)
 
 # Schema Markup
 
@@ -10,16 +10,16 @@ Detect, validate, and generate Schema.org JSON-LD for a page. Output is paste-re
 
 ## Prerequisites
 
-- **Required for detect/validate paths:** `mcp__firecrawl-mcp__firecrawl_scrape` (raw HTML access). WebFetch returns markdown only — every `script type="application/ld+json"` block is stripped before the skill ever sees it. Without Firecrawl, the skill can still generate new schema from intent detection (steps 4–6) but cannot detect or validate what's already on the page (steps 2–3, 7).
+- **Required for detect/validate paths:** Firecrawl's `firecrawl_scrape` tool (raw HTML access). WebFetch returns markdown only — every `script type="application/ld+json"` block is stripped before the skill ever sees it. Without Firecrawl, the skill can still generate new schema from intent detection (steps 4–6) but cannot detect or validate what's already on the page (steps 2–3, 7).
 - Optional: SE Ranking MCP server (used in step 7 for benchmarking competitor schema).
 - User provides: a target URL. Optionally a hint about page intent ("this is a product page", "this is a how-to") if the URL pattern doesn't make it obvious.
 
 ## Process
 
-1. **Fetch HTML** `mcp__firecrawl-mcp__firecrawl_scrape` (preferred) or degrade
+1. **Fetch HTML** Firecrawl's `firecrawl_scrape` tool (preferred) or degrade
    - **Cost note.** Firecrawl: 1 credit for the target URL, +10 credits if step 7 (competitor benchmark) runs (1 per top-10 SERP result). User may pass `--no-firecrawl` to force the degraded path (generate-only mode) for credit conservation.
    - **If Firecrawl available:** scrape the target URL. For SPAs, pass `waitFor: 2000` (or a CSS selector for the main content) so the JS-rendered DOM is captured. Use the response's `html` for JSON-LD parsing in step 2 and `metadata` for canonical/robots cross-reference.
-   - **If Firecrawl unavailable:** skip steps 2, 3, and 7 entirely (they all need raw HTML). Steps 4–6 still run — the skill becomes "generate-only", producing recommended JSON-LD blocks from intent detection without comparing to what's on the page. Surface clearly in `SCHEMA.md`: `Existing-schema detection: skipped — Firecrawl required (WebFetch returns markdown only). Add the Firecrawl MCP server from firecrawl.dev.`
+   - **If Firecrawl unavailable:** skip steps 2, 3, and 7 entirely (they all need raw HTML). Steps 4–6 still run — the skill becomes "generate-only", producing recommended JSON-LD blocks from intent detection without comparing to what's on the page. Surface clearly in `SCHEMA.md`: `Existing-schema detection: skipped — Firecrawl required (WebFetch returns markdown only). Connect the Firecrawl connector from the Claude directory.`
    - Even with Firecrawl: if JSON-LD blocks appear only after JS render, flag in the output: "JS-rendered schema may not be detected by all crawlers — server-side render JSON-LD where possible."
 
 2. **Detect existing schema** (requires Firecrawl HTML from step 1)
@@ -55,7 +55,7 @@ Detect, validate, and generate Schema.org JSON-LD for a page. Output is paste-re
    - Re-run the same validation rubric from step 3 on the generated blocks.
    - Surface any required fields still marked `{REPLACE: ...}`.
 
-7. **Optional: benchmark against top SERP results** `DATA_getSerpResults` + `mcp__firecrawl-mcp__firecrawl_scrape`
+7. **Optional: benchmark against top SERP results** `DATA_getSerpResults` + Firecrawl's `firecrawl_scrape` tool
    - Identify the page's primary keyword (from `title` or user input).
    - Pull top 10 organic results.
    - **If Firecrawl available:** scrape each of the top 10 (10 Firecrawl credits). For each, parse JSON-LD blocks from the returned `html` and list detected `@type`s. This produces real schema data, not inferences from markdown.

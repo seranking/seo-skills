@@ -20,7 +20,7 @@ Use SE Ranking's AI Search data to see which prompts and narratives a brand owns
 ## Prerequisites
 
 - **SE Ranking MCP** connected (AI Search Data API; optionally a project for the AI Result Tracker, which enables ongoing prompt tracking).
-- **Planable MCP** connected, with the destination workspace and pages.
+- **Planable connector** (from the Claude directory) connected, with the destination workspace and pages.
 - The user provides: target domain + brand name, country (default `us`), competitor domains + brand names (up to 10), and optionally which engines to focus on (default: all of `ai-overview`, `ai-mode`, `chatgpt`, `perplexity`, `gemini`).
 
 ## Connector health check
@@ -30,7 +30,7 @@ Before doing anything else, verify both MCPs are reachable:
 - **SE Ranking:** call `DATA_getSubscription`. If it fails or returns an auth error, stop immediately and tell the user:
   > "The SE Ranking connector isn't responding — please reconnect it before we continue. Setup guide: https://seranking.com/api/integrations/mcp/"
 - **Planable:** call `list_workspaces`. If it fails or returns an auth error, stop immediately and tell the user:
-  > "The Planable connector isn't responding — please reconnect it before we continue. Setup guide: https://help.planable.io/hc/en-us/articles/27538577098780-How-to-connect-Planable-MCP-to-your-AI-tools"
+  > "The Planable connector isn't responding — please reconnect it before we continue. It's in the Claude directory: search for Planable."
 
 Only continue to the process steps below once both calls return a successful response.
 

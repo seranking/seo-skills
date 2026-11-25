@@ -2,7 +2,7 @@
 name: seo-sitemap
 description: Pull a domain's XML sitemap (and sitemap-of-sitemaps), then compare against the most recent SE Ranking website audit. Surfaces (a) sitemap entries the crawler couldn't find (orphans from the sitemap), (b) audit pages missing from the sitemap (probably an oversight), (c) sitemap entries that are now 404, (d) lastmod inconsistencies. Use when the user asks for "sitemap analysis", "check my sitemap", "sitemap vs audit", "missing pages", "orphan pages", or "sitemap health".
 ---
-> Example output: [examples/seo-sitemap-notion-so-20260514/SITEMAP.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-sitemap-notion-so-20260514/SITEMAP.md)
+> Example output: [examples/seo-sitemap-notion-so-20260514/SITEMAP.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-sitemap-notion-so-20260514/SITEMAP.md)
 
 # Sitemap Analysis
 
@@ -21,13 +21,13 @@ Compare a domain's XML sitemap against the most recent SE Ranking website audit.
    - Normalise the domain.
    - `DATA_listAudits` → confirm an audit exists for this domain. If none, surface a clear message: "Run `seo-technical-audit` first; this skill compares the sitemap to that audit's crawl."
    - Use the most recent `done` audit by default.
-   - **Firecrawl availability check.** If `mcp__firecrawl-mcp__firecrawl_map` is available, Mode-2 (URL discovery via crawl) is offered when the sitemap is missing or suspect. Cost: ~0.5 Firecrawl credits per URL discovered, hard cap 500 URLs (~250 credits). Without Firecrawl, the skill runs Mode-1 only and notes the gap if Mode-2 was needed. User may pass `--no-firecrawl` to force Mode-1 even when Firecrawl is available (saves credits at the cost of orphan/missing analysis when sitemap is broken).
+   - **Firecrawl availability check.** If Firecrawl's `firecrawl_map` tool is available, Mode-2 (URL discovery via crawl) is offered when the sitemap is missing or suspect. Cost: ~0.5 Firecrawl credits per URL discovered, hard cap 500 URLs (~250 credits). Without Firecrawl, the skill runs Mode-1 only and notes the gap if Mode-2 was needed. User may pass `--no-firecrawl` to force Mode-1 even when Firecrawl is available (saves credits at the cost of orphan/missing analysis when sitemap is broken).
 
-2. **Build URL lists** `WebFetch` (sitemap) + `mcp__firecrawl-mcp__firecrawl_map` (optional Mode-2)
+2. **Build URL lists** `WebFetch` (sitemap) + Firecrawl's `firecrawl_map` tool (optional Mode-2)
    - **Mode-1 (default).** Try `https://{domain}/sitemap.xml`. If 404, fetch `/robots.txt` and look for `Sitemap:` directives. For sitemap-of-sitemaps, recursively fetch each child sitemap. Build the canonical URL list from the sitemap.
    - **Mode-2 trigger.** Switch on Mode-2 when (a) no sitemap is reachable, (b) the sitemap returns < 10% of the audit's `DATA_getCrawledPages` count, or (c) the user explicitly requests `--discover`. Always surface the trigger and the cost estimate to the user before running Mode-2.
    - **Mode-2 execution** (requires Firecrawl): call `firecrawl_map(url=domain, limit=500)`. The response is the URL list Firecrawl could discover from the homepage and internal linking. Use this list as the "sitemap-equivalent" in step 6 — the diffs run identically, just with discovered URLs in place of declared sitemap URLs.
-   - **If Mode-2 is needed but Firecrawl is unavailable:** continue with whatever sitemap data Mode-1 returned (possibly empty). Surface clearly in `SITEMAP.md`: `Mode-2 (Firecrawl URL discovery) needed but Firecrawl not installed — sitemap-vs-audit diffs run on partial data only.`
+   - **If Mode-2 is needed but Firecrawl is unavailable:** continue with whatever sitemap data Mode-1 returned (possibly empty). Surface clearly in `SITEMAP.md`: `Mode-2 (Firecrawl URL discovery) needed but Firecrawl not connected — sitemap-vs-audit diffs run on partial data only.`
 
 3. **Pull the audit's crawled pages** `DATA_getCrawledPages`
    - All URLs the crawler found, with status codes, indexability flags, depth.
@@ -77,7 +77,7 @@ Top-level: `SITEMAP.md` + `recommended-sitemap-diff.md`. The seven raw step file
 ## Mode
 
 - **Mode-1 (sitemap-vs-audit):** {ran / skipped — no sitemap reachable}
-- **Mode-2 (Firecrawl URL discovery):** {ran with {n} URLs / not triggered / triggered but Firecrawl not installed}
+- **Mode-2 (Firecrawl URL discovery):** {ran with {n} URLs / not triggered / triggered but Firecrawl not connected}
 
 ## Health summary
 

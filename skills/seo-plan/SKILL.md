@@ -2,7 +2,7 @@
 name: seo-plan
 description: Build a phased SEO roadmap for a domain — quarter-by-quarter, tied to the site's competitive position, content gaps, technical debt, and AI Search readiness. Synthesises the outputs of multiple skills (`seo-technical-audit`, `seo-content-audit`, `seo-keyword-cluster`, `seo-competitor-gap-analysis`, `seo-ai-search-share-of-voice`) into one site-level plan with sequencing, owners, and success metrics. Distinct from `seo-keyword-cluster` (keyword architecture for one topic), `seo-content-brief` (one article), and `seo-keyword-niche` (longtail content tier). Use when the user asks for an "SEO plan", "SEO strategy", "SEO roadmap", "90-day plan", "quarterly SEO plan", "site SEO strategy", or "where do we focus next".
 ---
-> Example output: [examples/seo-plan-wix-com-20260514/PLAN.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-plan-wix-com-20260514/PLAN.md)
+> Example output: [examples/seo-plan-wix-com-20260514/PLAN.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-plan-wix-com-20260514/PLAN.md)
 
 # SEO Plan
 

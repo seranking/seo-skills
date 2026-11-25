@@ -2,7 +2,7 @@
 name: seo-competitor-gap-analysis
 description: Compare a target domain to its top organic competitors and surface keywords the competitors rank for that the target does not, filtered by intent, volume, and difficulty. Use when the user asks for a competitor gap analysis, keyword gap, organic content gap, missing keyword opportunities, or wants to see what their competitors are ranking for that they are not.
 ---
-> Example output: [examples/seo-competitor-gap-analysis-wix-com-20260514/REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-competitor-gap-analysis-wix-com-20260514/REPORT.md)
+> Example output: [examples/seo-competitor-gap-analysis-wix-com-20260514/REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-competitor-gap-analysis-wix-com-20260514/REPORT.md)
 
 # Competitor Gap Analysis
 

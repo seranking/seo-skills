@@ -11,7 +11,7 @@ A focused, page-level (or domain-sample) audit of every `<img>` and `<picture>` 
 
 ## Prerequisites
 
-- **Required for inventory:** `mcp__firecrawl-mcp__firecrawl_scrape` (raw HTML access). `WebFetch` returns markdown only — every `<img>` attribute (`srcset`, `sizes`, `loading`, `fetchpriority`, `width`, `height`, `data-src*` lazy variants) is stripped before the skill ever sees it. Without Firecrawl the audit cannot run. Add the Firecrawl MCP server from firecrawl.dev.
+- **Required for inventory:** Firecrawl's `firecrawl_scrape` tool (raw HTML access). `WebFetch` returns markdown only — every `<img>` attribute (`srcset`, `sizes`, `loading`, `fetchpriority`, `width`, `height`, `data-src*` lazy variants) is stripped before the skill ever sees it. Without Firecrawl the audit cannot run. Connect the Firecrawl connector from the Claude directory.
 - **Optional (PSI byte-saving estimates):** not available in the Claude Plugins Directory edition; step 10 needs the Google API scripts from the full edition on GitHub (https://github.com/seranking/seo-skills).
 - **Optional (SE Ranking audit cross-reference):** SE Ranking MCP server connected and a recent audit for the domain. When present, step 11 elevates image-related audit issues onto the same remediation list.
 - User provides: a target URL (single-page audit) or a domain (sampled audit). For domains, the skill confirms how many pages to sample before spending Firecrawl credits.
@@ -22,11 +22,11 @@ A focused, page-level (or domain-sample) audit of every `<img>` and `<picture>` 
    - **URL mode** (default for inputs that look like a single page): the target is one URL. Cost: 1 Firecrawl credit.
    - **Domain mode** (input is a bare domain or the user explicitly asks for a domain-wide audit): map first, then scrape a sample.
    - **Preflight checks** (mirror `skills/seo-firecrawl/references/preflight.md` where it applies):
-     - Confirm Firecrawl is connected. If not, tell the user to add the Firecrawl MCP server (firecrawl.dev) and stop.
+     - Confirm Firecrawl is connected. If not, tell the user to connect the Firecrawl connector from the Claude directory and stop.
      - Mark step 10 (PageSpeed Insights byte savings) as skipped: Google APIs are not available in this edition.
      - If SE Ranking MCP is connected and a recent audit exists for the domain, record the audit ID; step 11 will use it. If not, mark step 11 as skipped.
 
-2. **Gather image inventory** `mcp__firecrawl-mcp__firecrawl_scrape` (URL mode) or `firecrawl_map` + `firecrawl_scrape` (domain mode)
+2. **Gather image inventory** Firecrawl's `firecrawl_scrape` tool (URL mode) or `firecrawl_map` + `firecrawl_scrape` (domain mode)
    - **URL mode:** scrape the target with `formats: ["html", "markdown"]` and `onlyMainContent: false` (we want nav/footer images too — hero logo, footer trust badges, decorative imagery all matter for the audit). For SPAs, pass `waitFor: 2000` so lazy-injected images appear in the rendered DOM. Parse every `<img>` and every `<picture>` from the returned `html`. Capture per image:
      - `src`, `srcset`, `sizes`, `alt`, `loading`, `fetchpriority`, `decoding`, `width`, `height`, `role`, `aria-hidden`
      - Lazy-loader attributes: `data-src`, `data-srcset`, `data-lazy-src`, `data-original`, `data-perfmatters-src`, `data-perfmatters-srcset`, `data-ewww-src`, `data-eio`

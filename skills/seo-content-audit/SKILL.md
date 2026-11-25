@@ -3,7 +3,7 @@ name: seo-content-audit
 description: E-E-A-T + CITE quality audit for an EXISTING piece of content. Scores Experience, Expertise, Authoritativeness, Trustworthiness, and citation-readiness for AI search; surfaces veto items that block publication; produces a publish / publish-with-fixes / no-publish verdict. Distinct from `seo-content-brief` (produces a NEW article from a topic) and from `seo-page` (URL-level keyword/traffic intelligence). Use when the user asks "content quality audit", "E-E-A-T check", "is this content good", "review this article", "content audit", "citation readiness", or "AI search readiness".
 ---
 
-> Example output: [examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md)
+> Example output: [examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md)
 
 # Content Quality Audit
 
@@ -17,7 +17,7 @@ Score an existing piece of content against modern E-E-A-T (Experience, Expertise
 
 ## Process
 
-1. **Fetch content** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
+1. **Fetch content** `WebFetch` (always) + Firecrawl's `firecrawl_scrape` tool (when available)
    - **Validate target & preflight.** See `skills/seo-firecrawl/references/preflight.md` for the canonical 3-stage preflight (credit balance, Firecrawl availability, Google APIs). Skill-specific notes:
      - Estimated SE Ranking cost for this skill: ~10–15 credits typical (AIO context + AIO prompt sampling for the target keyword + audited URL).
      - Firecrawl: optional with WebFetch fallback, 1 Firecrawl credit per URL audited (default cap 50 URLs, hard cap 200). Surface the projected Firecrawl credit count before continuing. Pass `--no-firecrawl` to force WebFetch-only inspection (lower-confidence veto checks; see step 4 caveat).
@@ -143,7 +143,7 @@ See:
 ## Tips
 
 - Respect rate limit. AIO + AIO-prompts queries are ~5–10 calls; plenty of headroom.
-- Call `DATA_getSubscription` before running. ~10–15 SE Ranking credits typical, plus 1 Firecrawl credit per URL audited when Firecrawl is installed (default cap 50 URLs).
+- Call `DATA_getSubscription` before running. ~10–15 SE Ranking credits typical, plus 1 Firecrawl credit per URL audited when Firecrawl is connected (default cap 50 URLs).
 - The thresholds (75% E-E-A-T, 70% CITE) are starting points. Tune per domain — a YMYL site (medical, financial) should require higher (85%/80%); a general-interest blog can run lower (65%/60%).
 - The veto checks are not negotiable. A piece with anonymous authorship on a YMYL topic doesn't pass regardless of score.
 - For pieces that score "publish with fixes," the top-5 list is the deliverable. Hand it to the writer; re-audit after fixes.

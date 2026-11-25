@@ -18,7 +18,7 @@ Close the loop between *finding* SEO problems (SE Ranking) and *fixing and promo
 ## Prerequisites
 
 - **SE Ranking MCP** connected (a project enables repeatable audits + competitive context; one-off audits work without one).
-- **Planable MCP** connected, with a **Universal content page** for the page-copy review and **social pages** for distribution. Pages are added inside Planable — they can't be created via the connector.
+- **Planable connector** (from the Claude directory) connected, with a **Universal content page** for the page-copy review and **social pages** for distribution. Pages are added inside Planable — they can't be created via the connector.
   - These two may live in **different workspaces** (e.g. a "Universal pages" workspace for page copy and a brand workspace for social). That's fine — run the rewrite in whichever workspace has the Universal page, and the distribution in whichever has the connected social pages. Confirm both up front with `list_pages`; if the Universal page is missing, ask the user to add one.
 
 ## Connector health check
@@ -28,7 +28,7 @@ Before doing anything else, verify both MCPs are reachable:
 - **SE Ranking:** call `DATA_getSubscription`. If it fails or returns an auth error, stop immediately and tell the user:
   > "The SE Ranking connector isn't responding — please reconnect it before we continue. Setup guide: https://seranking.com/api/integrations/mcp/"
 - **Planable:** call `list_workspaces`. If it fails or returns an auth error, stop immediately and tell the user:
-  > "The Planable connector isn't responding — please reconnect it before we continue. Setup guide: https://help.planable.io/hc/en-us/articles/27538577098780-How-to-connect-Planable-MCP-to-your-AI-tools"
+  > "The Planable connector isn't responding — please reconnect it before we continue. It's in the Claude directory: search for Planable."
 
 Only continue to the process steps below once both calls return a successful response.
 

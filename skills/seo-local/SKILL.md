@@ -3,7 +3,7 @@ name: seo-local
 description: Local SEO audit for brick-and-mortar, service-area, and multi-location businesses. Covers Google Business Profile signals on the website, NAP consistency across page and schema, local-pack rank tracking, citation samples on Tier-1 directories, and reviews on Google / Yelp / Trustpilot. Distinct from `seo-page` (URL-level keywords, no local layer) and from `seo-schema` (which generates LocalBusiness markup — this skill defers to it). Use when the user asks "local SEO", "GBP", "Google Business Profile", "NAP", "local pack", "citations", "near me", "service area", or "multi-location SEO".
 ---
 
-> Example output: [examples/seo-local-sweetgreen-com-20260514/LOCAL-SEO-REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-local-sweetgreen-com-20260514/LOCAL-SEO-REPORT.md)
+> Example output: [examples/seo-local-sweetgreen-com-20260514/LOCAL-SEO-REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-local-sweetgreen-com-20260514/LOCAL-SEO-REPORT.md)
 
 # Local SEO
 
@@ -37,7 +37,7 @@ Score a local business's website against the signals that drive local-pack and "
    - From URL patterns (`/menu`, `/practice-areas`, `/listings`, `/inventory`), `title`, page prose, infer one of: Restaurant / Healthcare / Legal / Home Services / Real Estate / Automotive / Generic.
    - This routes citation-source recommendations and schema-subtype recommendations later — load `references/local-citation-sources.md` for the vertical's Tier-1 directories.
 
-4. **GBP signals on the page** `mcp__firecrawl-mcp__firecrawl_scrape` (with `formats: ["rawHtml"]`)
+4. **GBP signals on the page** Firecrawl's `firecrawl_scrape` tool (with `formats: ["rawHtml"]`)
    - Scrape homepage + `/contact` (or whichever page has the most local intent).
    - From `rawHtml` extract:
      - Embedded Google Maps iframe (`iframe src="https://www.google.com/maps/embed?..."`) — record place ID if present.
@@ -48,7 +48,7 @@ Score a local business's website against the signals that drive local-pack and "
      - GBP profile link: any `a href` to `https://g.page/...` or `https://maps.app.goo.gl/...` or `https://www.google.com/maps/place/...`.
    - **If Firecrawl unavailable:** WebFetch markdown can detect a `tel:` link in some renderings but loses iframes and JSON-LD. Mark Maps embed / aggregateRating / GBP profile-link detection as `(skipped — Firecrawl required)`.
 
-5. **NAP consistency** `mcp__firecrawl-mcp__firecrawl_scrape` on homepage + 5 sample pages
+5. **NAP consistency** Firecrawl's `firecrawl_scrape` tool on homepage + 5 sample pages
    - Sample pages: homepage, `/contact`, `/about`, plus 2 service or location pages (pick from sitemap or top traffic pages).
    - For each, extract:
      - **Visible NAP from rendered prose.** Address pattern (street + city + region + postal), phone (`tel:` href + display format), business name (logo alt, footer, schema `name`).
@@ -65,7 +65,7 @@ Score a local business's website against the signals that drive local-pack and "
    - **Save the parsed result per keyword to `local-keywords.csv`** (columns: `keyword,country,location,local_pack_present,target_in_pack,target_pack_position,target_organic_position,top_pack_competitor_1,top_pack_competitor_2,top_pack_competitor_3`).
    - Note the local-pack-ads caveat: the SE Ranking SERP returns the AI/ads-modified pack as Google serves it. If the local pack shows ads, record that — local-pack ad density jumped from 1% to 22% of mobile US local searches in 2025–2026 per Sterling Sky.
 
-7. **Reviews scraping** `mcp__firecrawl-mcp__firecrawl_scrape` on user-provided review URLs
+7. **Reviews scraping** Firecrawl's `firecrawl_scrape` tool on user-provided review URLs
    - **Inputs (user-provided, optional).** GBP listing URL (`https://www.google.com/maps/place/...`), Yelp business URL, Trustpilot business URL, BBB profile URL.
    - **For each provided URL:** scrape with `formats: ["rawHtml"]`. From the parsed DOM, extract: total review count, average rating, date of most recent review (review velocity proxy), count of owner responses on the most recent 10 reviews.
    - **Aggregate signals:**
@@ -200,7 +200,7 @@ This skill could NOT assess:
 ## Tips
 
 - Respect SE Ranking Data API rate limit: 10 requests per second. Pace the per-keyword `DATA_getSerpResults` calls sequentially.
-- Call `DATA_getSubscription` before running. ~15–25 SE Ranking credits typical, plus 6–12 Firecrawl credits when Firecrawl is installed.
+- Call `DATA_getSubscription` before running. ~15–25 SE Ranking credits typical, plus 6–12 Firecrawl credits when Firecrawl is connected.
 - Verdict heuristic:
   - **STRONG**: composite ≥7/10, NAP consistent across all sampled pages, target in local pack on majority of keywords, valid LocalBusiness schema with industry-correct subtype, ≥10 Google reviews with healthy velocity.
   - **NEEDS WORK**: composite 4–6.9/10, OR 1+ NAP discrepancy, OR target out of local pack on majority of keywords. The "Top fixes" section is the deliverable here — most local-SEO audits land in this bucket.

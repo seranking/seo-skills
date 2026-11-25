@@ -3,7 +3,7 @@ name: seo-sxo
 description: Diagnose why a page is not ranking by reading the SERP backwards. Identifies the page type Google rewards for the target keyword, scores the candidate page against that pattern from multiple persona perspectives, and recommends the page format that would win the SERP. Use when the user asks "why isn't this page ranking", "page type mismatch", "SXO", "search experience optimization", "intent mismatch", or wants a wireframe.
 ---
 
-> Example output: [examples/seo-sxo-bigin-com-20260514/SXO-REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-sxo-bigin-com-20260514/SXO-REPORT.md)
+> Example output: [examples/seo-sxo-bigin-com-20260514/SXO-REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-sxo-bigin-com-20260514/SXO-REPORT.md)
 
 # SEO SXO — Search Experience Optimization
 
@@ -33,7 +33,7 @@ Diagnose why a "well-optimized" page doesn't rank. Reads the actual SERP for the
    - If AIO is present for the keyword, capture the answer text and citation list.
    - Note which top-10 organic results are also cited in the AIO.
 
-4. **Fetch user's page + top 3 winners** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
+4. **Fetch user's page + top 3 winners** `WebFetch` (always) + Firecrawl's `firecrawl_scrape` tool (when available)
    - **WebFetch first** (free): pull markdown for the user's page + top 3 winners. Extract `title`, all H-tags, primary content structure (numbered list / table / prose / Q&A), word count, image mentions, comparison-table presence, CTA mentions.
    - **Firecrawl second** (4 Firecrawl credits typical — 1 per page) — recovers what WebFetch can't show:
      - JSON-LD `@type`s per page (Product, FAQPage, BreadcrumbList, Article, Review, ItemList, etc.) — these are **load-bearing** for page-type classification in step 5. WebFetch's markdown can't see schema.

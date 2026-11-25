@@ -2,7 +2,7 @@
 name: seo-drift
 description: Capture an SEO baseline snapshot for a domain or URL, then on later runs compare the current state and surface regressions. Tracks authority, traffic, keywords, backlinks, and on-page content. Three subcommands — `baseline`, `compare`, `history`. Use when the user asks for "SEO drift", "baseline this site", "did anything break", "SEO regression check", "compare before and after", "deployment check", or "monthly SEO snapshot".
 ---
-> Example output: [examples/seo-drift-wix-com-20260514/compare/DRIFT-REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-drift-wix-com-20260514/compare/DRIFT-REPORT.md)
+> Example output: [examples/seo-drift-wix-com-20260514/compare/DRIFT-REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-drift-wix-com-20260514/compare/DRIFT-REPORT.md)
 
 # SEO Drift
 
@@ -20,7 +20,7 @@ Git for SEO. Capture a snapshot of a domain or URL's SEO state ("baseline"), the
 
 | Flag | Mode | Effect |
 |---|---|---|
-| `--no-firecrawl` | baseline, compare | Skip Firecrawl-based `head` + JSON-LD capture even when Firecrawl is installed (saves credits at the cost of canonical / robots / og:* / JSON-LD diff coverage). |
+| `--no-firecrawl` | baseline, compare | Skip Firecrawl-based `head` + JSON-LD capture even when Firecrawl is connected (saves credits at the cost of canonical / robots / og:* / JSON-LD diff coverage). |
 | `--skip-cwv` | baseline, compare | Accepted for compatibility with the full edition. This edition never captures Google CrUX data (step 4b), so the flag changes nothing. |
 | `--baseline-id <n>` | compare | Compare against a specific baseline by ID rather than the most recent. |
 | `--limit <n>` | history | Cap the number of historical entries shown. |
@@ -51,7 +51,7 @@ List all stored baselines for the target with their dates and key metrics (DA, t
    - `DATA_getDomainKeywords` — top 100 organic keywords with positions.
    - `DATA_getBacklinksSummary` — backlinks total, referring domains total.
    - `DATA_getBacklinksRefDomains` — top 20 referring domains with authority.
-4. **Page snapshot** (if target is a URL): `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
+4. **Page snapshot** (if target is a URL): `WebFetch` (always) + Firecrawl's `firecrawl_scrape` tool (when available)
    - **WebFetch** (free): extract `title`, all `h1..h6`, lang, word count, internal-link count, image count, body markdown for prose-level diff.
    - **Firecrawl** (1 Firecrawl credit per URL) — recovers `head` and `script` content WebFetch strips:
      - From `metadata`: canonical URL, robots meta, og:title, og:description, og:image, twitter:card.

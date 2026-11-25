@@ -2,7 +2,7 @@
 name: seo-backlinks-profile
 description: Full backlink profile for a domain — referring domains, anchor text distribution, authority distribution, IP and subnet diversity, growth/decay trend, toxic-candidate flagging. Distinct from `seo-backlink-gap` (which is gap-vs-competitor only). Produces a profile health score and reviewable disavow candidate list (never auto-disavow). Use when the user asks "backlink profile", "link profile audit", "anchor distribution", "toxic links", "disavow candidates", or "backlink health".
 ---
-> Example output: [examples/seo-backlinks-profile-stripe-com-20260514/PROFILE.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-backlinks-profile-stripe-com-20260514/PROFILE.md)
+> Example output: [examples/seo-backlinks-profile-stripe-com-20260514/PROFILE.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-backlinks-profile-stripe-com-20260514/PROFILE.md)
 
 # Backlinks Profile
 
@@ -23,7 +23,7 @@ If your workflow specifically *requires* multi-source blending (large agencies, 
 - SE Ranking MCP server connected.
 - User provides: a target domain.
 - Claude's `WebFetch` tool optional (for spot-checking flagged toxic candidates).
-- `mcp__firecrawl-mcp__firecrawl_scrape` optional (for the new step 8b — link-source verification).
+- Firecrawl's `firecrawl_scrape` tool optional (for the new step 8b — link-source verification).
 
 ## Process
 
@@ -60,7 +60,7 @@ If your workflow specifically *requires* multi-source blending (large agencies, 
 8. **Lost links list** `DATA_listNewLostBacklinks`, `DATA_listNewLostReferringDomains`
    - Sample recent losses. Are any high-authority losses?
 
-8b. **Optional: live link-source verification** `mcp__firecrawl-mcp__firecrawl_scrape`
+8b. **Optional: live link-source verification** Firecrawl's `firecrawl_scrape` tool
    - Triggered only when `--verify-sources` is passed (default off — credit-conscious).
    - For the top 20 referring domains by authority (from step 3), pick the highest-authority linking page per domain. Scrape each (20 Firecrawl credits typical).
    - For each scrape, parse the returned `html` for `<a href>` matching the target domain. Capture: link still present (`true`/`false`/`page-404`), `rel` attribute (`dofollow` if absent or empty, else the literal value: `nofollow`, `ugc`, `sponsored`, or combinations), surrounding context (anchor text + 50 chars before/after).

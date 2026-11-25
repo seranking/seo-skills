@@ -2,7 +2,7 @@
 name: seo-page
 description: URL-level SEO intelligence — which keywords this page ranks for, traffic captured, position history, SERP context, and AI Search citation status. Produces a keep / refresh / consolidate / kill verdict for one page. Distinct from `seo-technical-audit` (which checks technical health, not keyword/traffic performance) and from `seo-content-brief` (which produces a NEW article from a topic). Use when the user asks "analyze this page", "page SEO performance", "what does this URL rank for", "page traffic", "should I refresh this page", or provides a single URL for analysis.
 ---
-> Example output: [examples/seo-page-notion-keyboard-shortcuts-20260514/PAGE.md](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-page-notion-keyboard-shortcuts-20260514/PAGE.md)
+> Example output: [examples/seo-page-notion-keyboard-shortcuts-20260514/PAGE.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-page-notion-keyboard-shortcuts-20260514/PAGE.md)
 
 # Page Intelligence
 
@@ -19,7 +19,7 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
 1. **Validate target & preflight.** See `skills/seo-firecrawl/references/preflight.md` for the canonical 3-stage preflight (credit balance, Firecrawl availability, Google APIs). Skill-specific notes:
    - Confirm the URL is fetchable; derive parent domain. If the user supplied a primary keyword, use it; otherwise infer it in step 3.
    - Estimated SE Ranking cost for this skill: ~10–15 credits typical (URL overview, ranking keywords, page authority, SERP context for top 3–5 keywords).
-   - Firecrawl: optional with WebFetch fallback, ~1 Firecrawl credit if available. When available, step 6 recovers `og:*`, `twitter:*`, canonical, robots meta, JSON-LD types, and hreflang count from raw `head` — WebFetch returns markdown only and strips those fields. Without Firecrawl, the affected lines in `PAGE.md` emit `(skipped — Firecrawl not installed)`. Pass `--no-firecrawl` to treat Firecrawl as unavailable even when installed (credit conservation).
+   - Firecrawl: optional with WebFetch fallback, ~1 Firecrawl credit if available. When available, step 6 recovers `og:*`, `twitter:*`, canonical, robots meta, JSON-LD types, and hreflang count from raw `head` — WebFetch returns markdown only and strips those fields. Without Firecrawl, the affected lines in `PAGE.md` emit `(skipped — Firecrawl not connected)`. Pass `--no-firecrawl` to treat Firecrawl as unavailable even when installed (credit conservation).
    - Google APIs: not available in this edition (step 4b is skipped).
 
 2. **URL-level overview** `DATA_getUrlOverviewWorldwide`
@@ -43,13 +43,13 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
      - SERP features present (PAA, image carousel, video, shopping, etc.).
      - AIO presence and citations — is this URL cited in the AIO?
 
-6. **HTML sense-check** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
+6. **HTML sense-check** `WebFetch` (always) + Firecrawl's `firecrawl_scrape` tool (when available)
    - **WebFetch first** (free, instant): extract `title`, meta description, all `h1..h6`, lang, word count, internal-link count, image count. WebFetch returns markdown so anything in `head` beyond `title` is lost — the next bullet recovers it.
    - **Firecrawl second** (1 Firecrawl credit; pass `formats: ["rawHtml"]`) — recovers what WebFetch can't see. Pin the format to `rawHtml`; the default `html` is post-processed and silently strips canonical, hreflang, and `script type="application/ld+json"` blocks on many sites. If those head fields come back zero on a site that obviously has them (any major SaaS homepage), you forgot the `rawHtml` flag — re-run.
      - From `metadata`: `og:title`, `og:description`, `og:image`, `twitter:card`, `viewport`, robots meta, canonical URL.
      - From the returned `rawHtml`: every `<script type="application/ld+json">` block. Parse each as JSON, list detected `@type`s (Article, BreadcrumbList, Organization, Product, etc.). Note any block that fails to parse.
      - hreflang: count `<link rel="alternate" hreflang="…">` occurrences in `rawHtml`.
-   - **If Firecrawl unavailable:** the WebFetch portion still runs; populate Page basics' OG / Twitter / canonical / robots / JSON-LD / hreflang lines as `(skipped — Firecrawl not installed)`. Don't infer from markdown.
+   - **If Firecrawl unavailable:** the WebFetch portion still runs; populate Page basics' OG / Twitter / canonical / robots / JSON-LD / hreflang lines as `(skipped — Firecrawl not connected)`. Don't infer from markdown.
    - **Sense-check:** does the page actually talk about its top-ranking keyword in title and H1? If a page ranks for keywords it doesn't address textually, that's a strong consolidation signal.
 
 7. **Domain context** `DATA_getDomainOverviewWorldwide` (parent domain)

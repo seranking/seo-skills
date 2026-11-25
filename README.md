@@ -9,7 +9,7 @@ Overview and use cases: [Claude SEO Skills by SE Ranking](https://seranking.com/
 This is the Claude Plugins Directory edition: the same 32 skills, without local scripts. What it doesn't include:
 
 - **Live Google data** (Search Console, GA4, CrUX field data, PageSpeed Insights). `seo-google` points you to the full edition, and the Google steps in `seo-page`, `seo-technical-audit`, `seo-content-audit`, `seo-local`, `seo-hreflang`, `seo-drift`, `seo-images` and `seo-plan` are skipped and marked "not available in this edition" in the report.
-- **Installers** for Firecrawl and the Google APIs, and the Cursor and Codex packages.
+- **The Google API setup** for those scripts, and the Cursor and Codex packages. Firecrawl works here through its connector in the Claude directory.
 
 Everything else runs on SE Ranking data. The full edition is on GitHub: https://github.com/seranking/seo-skills
 
@@ -31,7 +31,7 @@ Trigger skills by name (`seo-content-brief`, `seo-page`, …), or just describe 
 
 ### Prefer the full edition?
 
-The full edition on GitHub adds the `seo-google` Python scripts, the Firecrawl and Google API installers, and Cursor and Codex packages. Install it from the `seranking/seo-skills` marketplace *instead of* this listing, not in addition to it, so you don't get two copies of the same skills: https://github.com/seranking/seo-skills#install
+The full edition on GitHub adds the `seo-google` Python scripts with their Google API setup, and Cursor and Codex packages. Install it from the `seranking/seo-skills` marketplace *instead of* this listing, not in addition to it, so you don't get two copies of the same skills: https://github.com/seranking/seo-skills#install
 
 ### Connect SE Ranking (any install path)
 
@@ -52,13 +52,13 @@ Then run `/mcp` and complete OAuth. (User-scope registrations [outrank plugin-bu
 
 ## What you get
 
-25 finished example outputs — covering 25 of the 32 skills — live in [`examples/`](https://github.com/seranking/seo-skills/tree/v2.11.3/examples). Each is a real run against a publicly observable target. Three flagship examples to skim before installing:
+25 finished example outputs — covering 25 of the 32 skills — live in [`examples/`](https://github.com/seranking/seo-skills/tree/v2.11.4/examples). Each is a real run against a publicly observable target. Three flagship examples to skim before installing:
 
-- **[`seo-plan` for wix.com (90-day plan)](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-plan-wix-com-20260514/PLAN.md)** — phased SEO roadmap that composes outputs from `seo-ai-search-share-of-voice`, `seo-competitor-gap-analysis`, and `seo-drift` into a 90-day plan with owners, success metrics, and a critical path. Demonstrates skill composition.
-- **[`seo-technical-audit` for linear.app](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-technical-audit-linear-app-20260514/TECH-AUDIT.md)** — top-10 priority fix list ranked by `severity × affected_pages / effort`, plus `issues.csv` for the engineering team and a per-key-page issue digest.
-- **[`seo-ai-search-share-of-voice` for wix.com](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-ai-search-share-of-voice-wix-com-20260427/REPORT.md)** — 36.1% combined share of voice across 5 LLM engines (AI Overview / ChatGPT / Perplexity / Gemini / AI Mode), heatmap, topic-cluster ownership grid, and 5 prioritised gap-closing actions.
+- **[`seo-plan` for wix.com (90-day plan)](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-plan-wix-com-20260514/PLAN.md)** — phased SEO roadmap that composes outputs from `seo-ai-search-share-of-voice`, `seo-competitor-gap-analysis`, and `seo-drift` into a 90-day plan with owners, success metrics, and a critical path. Demonstrates skill composition.
+- **[`seo-technical-audit` for linear.app](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-technical-audit-linear-app-20260514/TECH-AUDIT.md)** — top-10 priority fix list ranked by `severity × affected_pages / effort`, plus `issues.csv` for the engineering team and a per-key-page issue digest.
+- **[`seo-ai-search-share-of-voice` for wix.com](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-ai-search-share-of-voice-wix-com-20260427/REPORT.md)** — 36.1% combined share of voice across 5 LLM engines (AI Overview / ChatGPT / Perplexity / Gemini / AI Mode), heatmap, topic-cluster ownership grid, and 5 prioritised gap-closing actions.
 
-Full index of all 25 examples: [`examples/README.md`](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/README.md). Every example is dated and snapshot-disclaimed — re-run the skill for fresh numbers.
+Full index of all 25 examples: [`examples/README.md`](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/README.md). Every example is dated and snapshot-disclaimed — re-run the skill for fresh numbers.
 
 ## All 32 Claude SEO Skills
 
@@ -68,13 +68,13 @@ The seven to reach for first — each links to a real, dated example run.
 
 | Skill | What it produces | Example run |
 |---|---|---|
-| [`seo-ai-search-share-of-voice`](skills/seo-ai-search-share-of-voice/SKILL.md) | Share-of-voice heatmap across ChatGPT, Perplexity, Gemini, Google AI Overview, and AI Mode, plus topic-cluster ownership per brand | [wix.com](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-ai-search-share-of-voice-wix-com-20260427/REPORT.md) |
-| [`seo-backlink-gap`](skills/seo-backlink-gap/SKILL.md) | Prospect list of referring domains linking to multiple competitors but not to your site, enriched with authority, anchor samples, and outreach angles | [linear.app](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-backlink-gap-linear-app-20260514/REPORT.md) |
-| [`seo-content-brief`](skills/seo-content-brief/SKILL.md) | Writer-ready editor brief from a domain and topic, with keyword research, SERP analysis, competitor content teardown, internal linking plan, and AI Search angle | [vercel.com](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md) |
-| [`seo-keyword-cluster`](skills/seo-keyword-cluster/SKILL.md) | Intent-grouped clusters with pillar plus spokes architecture and H1/H2 suggestions per spoke | [headless CMS](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-keyword-cluster-headless-cms-20260514/PLAN.md) |
-| [`seo-ads`](skills/seo-ads/SKILL.md) | Paid-search competitive intelligence. Domain ad footprint, bidding landscape per keyword, ad-copy patterns, SERP shopping/ad-pack visibility, recommended bid-keyword shortlist | [hostinger.com](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-ads-hostinger-com-20260514/ADS.md) |
-| [`seo-content-audit`](skills/seo-content-audit/SKILL.md) | E-E-A-T (60-item) + CITE (30-item) audit for existing content with publish / publish-with-fixes / no-publish verdict and citation-readiness analysis | [stripe.com](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md) |
-| [`seo-sxo`](skills/seo-sxo/SKILL.md) | Read SERPs backwards to find page-type mismatches. Scores the page from 4 personas; produces a wireframe for the SERP-winning page type | [bigin.com](https://github.com/seranking/seo-skills/blob/v2.11.3/examples/seo-sxo-bigin-com-20260514/SXO-REPORT.md) |
+| [`seo-ai-search-share-of-voice`](skills/seo-ai-search-share-of-voice/SKILL.md) | Share-of-voice heatmap across ChatGPT, Perplexity, Gemini, Google AI Overview, and AI Mode, plus topic-cluster ownership per brand | [wix.com](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-ai-search-share-of-voice-wix-com-20260427/REPORT.md) |
+| [`seo-backlink-gap`](skills/seo-backlink-gap/SKILL.md) | Prospect list of referring domains linking to multiple competitors but not to your site, enriched with authority, anchor samples, and outreach angles | [linear.app](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-backlink-gap-linear-app-20260514/REPORT.md) |
+| [`seo-content-brief`](skills/seo-content-brief/SKILL.md) | Writer-ready editor brief from a domain and topic, with keyword research, SERP analysis, competitor content teardown, internal linking plan, and AI Search angle | [vercel.com](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md) |
+| [`seo-keyword-cluster`](skills/seo-keyword-cluster/SKILL.md) | Intent-grouped clusters with pillar plus spokes architecture and H1/H2 suggestions per spoke | [headless CMS](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-keyword-cluster-headless-cms-20260514/PLAN.md) |
+| [`seo-ads`](skills/seo-ads/SKILL.md) | Paid-search competitive intelligence. Domain ad footprint, bidding landscape per keyword, ad-copy patterns, SERP shopping/ad-pack visibility, recommended bid-keyword shortlist | [hostinger.com](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-ads-hostinger-com-20260514/ADS.md) |
+| [`seo-content-audit`](skills/seo-content-audit/SKILL.md) | E-E-A-T (60-item) + CITE (30-item) audit for existing content with publish / publish-with-fixes / no-publish verdict and citation-readiness analysis | [stripe.com](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md) |
+| [`seo-sxo`](skills/seo-sxo/SKILL.md) | Read SERPs backwards to find page-type mismatches. Scores the page from 4 personas; produces a wireframe for the SERP-winning page type | [bigin.com](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-sxo-bigin-com-20260514/SXO-REPORT.md) |
 
 ### More skills
 
@@ -97,14 +97,14 @@ The rest of the catalogue — every other skill the plugin ships.
 | [`seo-keyword-niche`](skills/seo-keyword-niche/SKILL.md) | Mine longtail + question keywords for niche content opportunities. Outputs a content-tier plan with template spec, URL pattern, sample pages, and thin-content quality gates | "longtail keywords", "question keywords", "niche content", "content opportunities at scale", "programmatic SEO" |
 | [`seo-hreflang`](skills/seo-hreflang/SKILL.md) | Hreflang and international SEO audit for multi-language / multi-region sites. Validates language-region codes, return tags, `x-default`, and canonical alignment across per-URL HTML, the SE Ranking audit, and the XML sitemap. PASS / NEEDS-FIX / BROKEN verdict with a top-fixes table | "hreflang", "international SEO", "i18n", "language targeting", "x-default", "regional sites", "multi-language SEO" |
 | [`seo-local`](skills/seo-local/SKILL.md) | Local SEO audit for brick-and-mortar, service-area, and multi-location businesses. Scores Google Business Profile signals on the page, NAP consistency across page and schema, on-page local intent, Tier-1 citation footprint, review-platform presence, and local-pack rank. Prioritised fix list | "local SEO", "GBP", "Google Business Profile", "NAP", "local pack", "citations", "near me", "service area", "multi-location SEO" |
-| [`seo-firecrawl`](skills/seo-firecrawl/SKILL.md) | Ad-hoc web scraping, site mapping, full-site crawling, and within-domain search via Firecrawl. Returns raw HTML, JSON-LD, og:* / twitter:* metadata, JS-rendered DOM, and screenshots that WebFetch can't *(requires the Firecrawl MCP server, see [Optional extensions](#optional-extensions))* | "scrape this page", "crawl this site", "map this site", "get the OG tags", "render this JS-heavy page" |
+| [`seo-firecrawl`](skills/seo-firecrawl/SKILL.md) | Ad-hoc web scraping, site mapping, full-site crawling, and within-domain search via Firecrawl. Returns raw HTML, JSON-LD, og:* / twitter:* metadata, JS-rendered DOM, and screenshots that WebFetch can't *(requires the Firecrawl connector, see [Optional extensions](#optional-extensions))* | "scrape this page", "crawl this site", "map this site", "get the OG tags", "render this JS-heavy page" |
 | [`seo-plan`](skills/seo-plan/SKILL.md) | Phased SEO roadmap for a domain — quarter-by-quarter, tied to competitive position, content gaps, technical debt, and AI Search readiness. Sequences specialist-skill outputs into one site-level plan with owners, metrics, and a critical path | "SEO plan", "SEO strategy", "SEO roadmap", "90-day plan", "where do we focus next" |
 | [`seo-google`](skills/seo-google/SKILL.md) | Points you to the full GitHub edition for Search Console, GA4, CrUX and PageSpeed data, and offers SE Ranking data that can stand in: rankings, traffic estimates, keyword metrics and site-audit issues *(live Google data: full edition on GitHub only)* | "search console", "GSC", "PageSpeed", "CrUX", "URL inspection", "GA4 organic" |
 | [`seo-api`](skills/seo-api/SKILL.md) | SE Ranking API integration architect — covers the entire 195-tool surface (Data API + Project API), forecasts credit and plan-limit cost, emits ready-to-paste cURL / Python / TypeScript / MCP-tool-call recipes, and (with explicit confirmation) wires up Project API state (projects, keywords, search engines, audits, AIRT prompts, backlink groups) | "how do I use SE Ranking API to do X", "what endpoint gives me Y", "credit cost of workflow Z", "build a rank tracker", "set up an audit", "Postman / cURL / Python / TypeScript for SE Ranking", "rate limit for X", "integrate SE Ranking with Looker / n8n / Make" |
 
 ### Social and agency workflows
 
-These six skills combine SE Ranking data with [Planable](https://planable.io), so they need the Planable MCP server connected as well.
+These six skills combine SE Ranking data with [Planable](https://planable.io), so they need the Planable connector from the Claude directory connected as well.
 
 | Skill | What it produces | Primary triggers |
 |---|---|---|
@@ -117,7 +117,7 @@ These six skills combine SE Ranking data with [Planable](https://planable.io), s
 
 ## Optional extensions
 
-Firecrawl (raw HTML, JSON-LD, JavaScript rendering, site crawls) makes several skills more precise, and `seo-firecrawl` and `seo-images` need it. Add the Firecrawl MCP server from firecrawl.dev if you use it. Without it, the other skills fall back to `WebFetch` and still produce a deliverable. The Google API scripts ship only with the full edition on GitHub.
+Firecrawl (raw HTML, JSON-LD, JavaScript rendering, site crawls) makes several skills more precise, and `seo-firecrawl` and `seo-images` need it. Connect the Firecrawl connector from the Claude directory if you use it. Without it, the other skills fall back to `WebFetch` and still produce a deliverable. The Google API scripts ship only with the full edition on GitHub.
 
 ## How these skills work
 
@@ -154,7 +154,7 @@ Every skill in this repo is designed to pace sequentially inside these limits. T
 
 ## Contributing
 
-This repo is the official Skills catalogue for the SE Ranking MCP server. See [`CONTRIBUTING.md`](https://github.com/seranking/seo-skills/blob/v2.11.3/CONTRIBUTING.md) for the skill-authoring template, required structure, MCP tool conventions, and PR checklist.
+This repo is the official Skills catalogue for the SE Ranking MCP server. See [`CONTRIBUTING.md`](https://github.com/seranking/seo-skills/blob/v2.11.4/CONTRIBUTING.md) for the skill-authoring template, required structure, MCP tool conventions, and PR checklist.
 
 - **Bug reports** — open an issue with the skill name, the input, and the unexpected output.
 - **New skills** — PRs welcome. Use the template in `CONTRIBUTING.md`.

@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "SE Ranking's plugin marketplace for Claude: SEO skills built on the SE Ranking MCP server.",
-    "version": "2.11.3"
+    "version": "2.11.4"
   },
   "plugins": [
     {
       "name": "seo-skills",
       "source": "./",
-      "description": "Claude SEO Skills for the SE Ranking MCP server: keyword research, content briefs, page intelligence, technical and content audits, structured data, drift monitoring, SXO diagnostics, competitive and paid-search analysis, AI-search share of voice, sitemap and subdomain analysis, strategic roadmaps, local SEO (GBP / NAP / local pack), international SEO (hreflang), SEO-to-social workflows with Planable, and SE Ranking API integration recipes (Data API + Project API). Live Google data (Search Console, GA4, CrUX) is in the full edition on GitHub.",
-      "version": "2.11.3",
+      "description": "SEO skills for agencies and in-house teams using the SE Ranking MCP server. They turn SE Ranking data into decisions you can act on, from keyword research and content briefs to audits and strategic roadmaps. AI search share of voice runs on SE Visible by SE Ranking, the companion platform.",
+      "version": "2.11.4",
       "author": {
         "name": "SE Ranking",
         "email": "api@seranking.com"
