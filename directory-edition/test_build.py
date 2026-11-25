@@ -196,6 +196,19 @@ class ForbiddenTextTest(unittest.TestCase):
                 self.assertEqual(build.check_text("x.md", line), [])
 
 
+class ReadmeToolsSectionTest(unittest.TestCase):
+    def problems(self, readme: str) -> list[str]:
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "README.md").write_text(readme, encoding="utf-8")
+            return build.check(Path(tmp))
+
+    def test_readme_without_the_section_is_reported(self):
+        self.assertTrue(any(build.TOOLS_HEADING in problem for problem in self.problems("# Skills\n")))
+
+    def test_readme_with_the_section_passes(self):
+        self.assertEqual(self.problems(f"# Skills\n\n{build.TOOLS_HEADING}\n\nSome tools delete.\n"), [])
+
+
 class OutGuardTest(unittest.TestCase):
     def test_out_inside_repo_is_refused(self):
         repo = BUILD.parent.parent

@@ -90,6 +90,18 @@ Then run `/mcp` and complete OAuth. (User-scope registrations [outrank plugin-bu
 
 </details>
 
+## What the SE Ranking tools can do
+
+The plugin connects one MCP server, SE Ranking's own. Its tools act only in the SE Ranking and SE Visible account you sign in with. Most of them only read: keyword, domain, backlink, SERP and AI-search data, and the projects, audits and reports in your account. Some tools change things there:
+
+- **Create and edit:** projects and project groups, keywords and keyword groups, tags, competitors, search engines, backlinks and the disavow list, website audits and their settings, marketing-plan tasks, and AI-search prompts, engines, brands, topics and locations.
+- **Delete:** the same things, including a whole project, an audit or a brand. A deletion can't be undone from Claude.
+- **Change access:** create, edit and delete sub-accounts, and choose which projects a client sub-account can see.
+- **Send:** creating a sub-account makes SE Ranking email that person a temporary password. No other tool sends a message.
+- **Use credits:** most Data API tools (`DATA_*`), reads included, use your API credits. Audits, position checks and rechecks also count against your plan's limits.
+
+No tool publishes anything outside SE Ranking, pays for anything or changes your subscription. The six social skills also create draft posts in Planable when you've connected it; publishing stays in Planable.
+
 ## What you get
 
 25 finished example outputs — covering 25 of the 32 skills — live in [`examples/`](examples/). Each is a real run against a publicly observable target. Three flagship examples to skim before installing:

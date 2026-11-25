@@ -15,6 +15,10 @@ The Claude Plugins Directory accepts only Markdown, text, JSON, YAML and image f
 
 The directory refuses text that tells Claude or the user to add an MCP server the plugin doesn't declare. The plugin declares only the SE Ranking server, so the edition sends users to the Firecrawl and Planable connectors in the Claude directory instead of firecrawl.dev or Planable's setup guide, and names Firecrawl's tools without the `mcp__firecrawl-mcp__` prefix (a connector's tools are named differently). The build refuses the old wording.
 
+## What the server's tools can do
+
+After the other checks pass, the directory looks at the tools of the declared MCP server. If any can send, publish, delete, pay or change access, the README or the manifest has to say so in plain words, or the version is refused ("Undescribed server tools that send or delete", v2.11.5). The README's "What the SE Ranking tools can do" section covers it, and `build.py` fails without it. Update the section when the MCP server gains a tool of that kind. The submission form's Validate step doesn't run this check: only a scan of the tracked branch does.
+
 ## Credential check
 
 The directory holds a version when a file seems to read a credential from the user's machine. Its check reads a lowercase `pass` followed by text in backticks as the `pass` password manager when it stands where a shell command would start: at the start of a line, or after `;` or `(`. "Default off; pass `--no-firecrawl`" held v2.11.4. Say "use" or "set" instead; `build.py` refuses the wording.

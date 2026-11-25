@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.11.6] — 2026-11-25
+
+Answers the Claude Plugins Directory's refusal of v2.11.5: "Undescribed server tools that send or delete". With the credential hold gone, the directory looked at the SE Ranking MCP server's tools and found that neither the README nor the manifest says what they can change.
+
+### Added
+- **README: "What the SE Ranking tools can do".** In plain words: most tools read; some create, edit and delete things in the signed-in SE Ranking and SE Visible account; the sub-account tools change access, and creating a sub-account sends that person an email; the Data API tools use credits. No tool publishes outside SE Ranking, pays for anything or changes the subscription. Both editions carry the section.
+- **Build check.** `directory-edition/build.py` fails when the edition's README has no such section.
+
 ## [2.11.5] — 2026-11-25
 
 Clears the last hold on the Claude Plugins Directory edition. The directory's credential check read "pass `--no-firecrawl`" and "pass `formats: …`" in two skills as the `pass` password manager, and held v2.11.4 for "Uses a credential from the user's machine".

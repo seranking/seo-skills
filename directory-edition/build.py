@@ -67,6 +67,8 @@ ALLOWED_MIME = {"text/plain", "application/json", "text/markdown", "image/png", 
 MARKER = re.compile(r"<!-- dir-edition:(begin|remove|end|line) ([a-z0-9][a-z0-9-]*) -->")
 MARKETPLACE_DESCRIPTION = "SE Ranking's plugin marketplace for Claude: SEO skills built on the SE Ranking MCP server."
 BRAND_WORDS = {"anthropic"}
+# The directory refuses a plugin whose README doesn't say what its server's tools can change.
+TOOLS_HEADING = "## What the SE Ranking tools can do"
 GITHUB_REPO = "https://github.com/seranking/seo-skills"
 
 # Wording that repeats across many skills, rewritten in every edition Markdown file.
@@ -357,6 +359,9 @@ def check(out: Path, require_sniff: bool = False) -> list[str]:
             except json.JSONDecodeError as exc:
                 problems.append(f"{rel}: invalid JSON ({exc})")
         problems.extend(check_text(rel, text))
+    readme = out / "README.md"
+    if readme.is_file() and TOOLS_HEADING not in readme.read_text(encoding="utf-8"):
+        problems.append(f'README.md: no "{TOOLS_HEADING}" section')
     mime = sniff(files)
     if mime is None:
         if require_sniff:
