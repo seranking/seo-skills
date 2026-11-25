@@ -93,6 +93,8 @@ FORBIDDEN = [
     (r"GOOGLE_APPLICATION_CREDENTIALS|FIRECRAWL_API_KEY|GOOGLE_API_KEY", "names a credential variable"),
     (r"\b(?!YOUR_)[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*_(?:KEY|TOKEN|SECRET|PASSWORD)(?:_[A-Z0-9]+)*\b(?!\s*=\s*[\"']?YOUR_)", "names a credential variable"),
     (r"(?<![\w.])\.env\b", "points at a local credentials file"),
+    # The directory reads `pass` where a shell command starts as the password manager.
+    (r"(?:^|[;&|(])\s*pass\s+`", "reads as running the pass password manager (say use or set)"),
     # MCP servers the plugin doesn't declare: point to their Claude directory connector instead.
     (r"mcp__firecrawl|firecrawl-mcp|\b(?:Firecrawl|Planable) MCP\b|help\.planable\.io|(?:from|at)\s+firecrawl\.dev|\(firecrawl\.dev\)", "points to an MCP server the plugin doesn't declare"),
     (r"\b(?:claude|codex)\s+mcp\s+add\s+(?![^\n]*\bse-ranking\b)\S", "adds an MCP server the plugin doesn't declare"),

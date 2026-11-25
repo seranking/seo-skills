@@ -30,7 +30,7 @@ If your workflow specifically *requires* multi-source blending (large agencies, 
 1. **Validate target & preflight.** See `skills/seo-firecrawl/references/preflight.md` for the canonical 3-stage preflight (credit balance, Firecrawl availability, Google APIs). Skill-specific notes:
    - Normalise domain before continuing.
    - Estimated SE Ranking cost for this skill: moderate (full-profile run; no per-keyword multiplier).
-   - Firecrawl: optional. When `--verify-sources` is passed, step 8b (link-source verification) scrapes top-20 referring domains' linking pages to verify each link is still present and what `rel` it carries (dofollow / nofollow / sponsored / UGC), ~20 Firecrawl credits per run. Default off; pass `--no-firecrawl` to skip even if available.
+   - Firecrawl: optional. When `--verify-sources` is passed, step 8b (link-source verification) scrapes top-20 referring domains' linking pages to verify each link is still present and what `rel` it carries (dofollow / nofollow / sponsored / UGC), ~20 Firecrawl credits per run. Default off; use `--no-firecrawl` to skip even if available.
    - Google APIs: not used.
 
 2. **Profile summary** `DATA_getBacklinksSummary`

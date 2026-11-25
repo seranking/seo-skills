@@ -56,7 +56,7 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
 
 6. **HTML sense-check** `WebFetch` (always) + `mcp__firecrawl-mcp__firecrawl_scrape` (when available)
    - **WebFetch first** (free, instant): extract `title`, meta description, all `h1..h6`, lang, word count, internal-link count, image count. WebFetch returns markdown so anything in `head` beyond `title` is lost — the next bullet recovers it.
-   - **Firecrawl second** (1 Firecrawl credit; pass `formats: ["rawHtml"]`) — recovers what WebFetch can't see. Pin the format to `rawHtml`; the default `html` is post-processed and silently strips canonical, hreflang, and `script type="application/ld+json"` blocks on many sites. If those head fields come back zero on a site that obviously has them (any major SaaS homepage), you forgot the `rawHtml` flag — re-run.
+   - **Firecrawl second** (1 Firecrawl credit; use `formats: ["rawHtml"]`) — recovers what WebFetch can't see. Pin the format to `rawHtml`; the default `html` is post-processed and silently strips canonical, hreflang, and `script type="application/ld+json"` blocks on many sites. If those head fields come back zero on a site that obviously has them (any major SaaS homepage), you forgot the `rawHtml` flag — re-run.
      - From `metadata`: `og:title`, `og:description`, `og:image`, `twitter:card`, `viewport`, robots meta, canonical URL.
      - From the returned `rawHtml`: every `<script type="application/ld+json">` block. Parse each as JSON, list detected `@type`s (Article, BreadcrumbList, Organization, Product, etc.). Note any block that fails to parse.
      - hreflang: count `<link rel="alternate" hreflang="…">` occurrences in `rawHtml`.

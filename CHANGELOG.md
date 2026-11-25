@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.11.5] — 2026-11-25
+
+Clears the last hold on the Claude Plugins Directory edition. The directory's credential check read "pass `--no-firecrawl`" and "pass `formats: …`" in two skills as the `pass` password manager, and held v2.11.4 for "Uses a credential from the user's machine".
+
+### Fixed
+- **`seo-backlinks-profile` and `seo-page` say "use" where they said "pass".** The directory reads a lowercase `pass` followed by text in backticks as the password manager when it stands where a shell command would start: at the start of a line, or after `;` or `(`. Nothing else in the skills changes.
+- **Build check.** `directory-edition/build.py` refuses that wording, so it can't come back.
+
+### Changed
+- `directory-edition/README.md` says how to run the directory's own check on a build before a release: the **Validate** step of the developer portal's submission form, which submits nothing and gives the reason for each finding.
+
 ## [2.11.4] — 2026-11-25
 
 Clears the findings of the Claude Plugins Directory's first scan of the `claude-directory` edition (v2.11.3): its text told users to add MCP servers the plugin doesn't declare, and some names in `seo-api` read like credentials. Only the directory edition's text changes; the GitHub edition reads as before.

@@ -15,6 +15,10 @@ The Claude Plugins Directory accepts only Markdown, text, JSON, YAML and image f
 
 The directory refuses text that tells Claude or the user to add an MCP server the plugin doesn't declare. The plugin declares only the SE Ranking server, so the edition sends users to the Firecrawl and Planable connectors in the Claude directory instead of firecrawl.dev or Planable's setup guide, and names Firecrawl's tools without the `mcp__firecrawl-mcp__` prefix (a connector's tools are named differently). The build refuses the old wording.
 
+## Credential check
+
+The directory holds a version when a file seems to read a credential from the user's machine. Its check reads a lowercase `pass` followed by text in backticks as the `pass` password manager when it stands where a shell command would start: at the start of a line, or after `;` or `(`. "Default off; pass `--no-firecrawl`" held v2.11.4. Say "use" or "set" instead; `build.py` refuses the wording.
+
 ## Markers
 
 Markers carry only an id, so an agent reading the GitHub edition's raw Markdown sees no directory-only instructions. Each id is used once, and each snippet file must be used.
@@ -38,6 +42,15 @@ The edition's marketplace description and keywords are set by `build.py` so noth
 The first time only: the owner sets the listing's **Tracked branch or tag** to `claude-directory` on its Settings tab, after step 2. The branch can't be changed while the plugin is with a reviewer.
 
 Edition-only fixes ship in a new patch release. The workflow refuses to publish different content under a version the branch already holds, or an older version, unless it is run with `force`.
+
+## Checking a build against the directory before a release
+
+The listing's Review tab names a file but not the reason. The submission form does, and it submits nothing:
+
+1. Build the edition and push it to a temporary branch.
+2. In the developer portal (claude.ai/directory/manage), select **Submit new**, then **Plugin bundle**. Enter the repository and the branch, then select **Validate**. Don't continue past the Source step.
+3. Expand a finding to read why each file was flagged. The three name findings and the "Already in your submissions" note appear only because the form treats the build as a new plugin.
+4. Delete the temporary branch.
 
 ## Building it locally
 

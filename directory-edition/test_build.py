@@ -161,6 +161,10 @@ class ForbiddenTextTest(unittest.TestCase):
         "`API_TOKEN` (or the `X-Api-Key` header) covers both.",
         "configurable via `MCP_REFRESH_TOKEN_TTL` server-side",
         "Use `.env` (gitignored) and a secret manager.",
+        "Default off; pass `--no-firecrawl` to skip.",
+        '(1 Firecrawl credit; pass `formats: ["rawHtml"]`) recovers the rest.',
+        "pass `--no-firecrawl` to skip.",
+        "Default off (pass `--no-firecrawl` to skip).",
     ]
     GOOD = [
         '--header "X-Api-Key: YOUR_API_KEY"',
@@ -174,6 +178,11 @@ class ForbiddenTextTest(unittest.TestCase):
         "The Planable connector isn't responding.",
         "Call `DATA_getSubscription` before running.",
         "The `script type=\"application/ld+json\"` block.",
+        "Default off; use `--no-firecrawl` to skip.",
+        "Always pass `excludePaths` to prune.",
+        "For SPAs, pass `waitFor: 2000`.",
+        "Pass `--no-firecrawl` to skip both Firecrawl steps.",
+        "If no peer URL competes, pass through to step 9.",
     ]
 
     def test_bad_lines_are_flagged(self):
