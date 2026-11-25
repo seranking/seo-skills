@@ -2,7 +2,7 @@
 name: seo-page
 description: URL-level SEO intelligence — which keywords this page ranks for, traffic captured, position history, SERP context, and AI Search citation status. Produces a keep / refresh / consolidate / kill verdict for one page. Distinct from `seo-technical-audit` (which checks technical health, not keyword/traffic performance) and from `seo-content-brief` (which produces a NEW article from a topic). Use when the user asks "analyze this page", "page SEO performance", "what does this URL rank for", "page traffic", "should I refresh this page", or provides a single URL for analysis.
 ---
-> Example output: [examples/seo-page-notion-keyboard-shortcuts-20260514/PAGE.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-page-notion-keyboard-shortcuts-20260514/PAGE.md)
+> Example output: [examples/seo-page-notion-keyboard-shortcuts-20260514/PAGE.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-page-notion-keyboard-shortcuts-20260514/PAGE.md)
 
 # Page Intelligence
 
@@ -45,7 +45,7 @@ Show what a single URL ranks for, what traffic it captures, where its weak and s
 
 6. **HTML sense-check** `WebFetch` (always) + Firecrawl's `firecrawl_scrape` tool (when available)
    - **WebFetch first** (free, instant): extract `title`, meta description, all `h1..h6`, lang, word count, internal-link count, image count. WebFetch returns markdown so anything in `head` beyond `title` is lost — the next bullet recovers it.
-   - **Firecrawl second** (1 Firecrawl credit; pass `formats: ["rawHtml"]`) — recovers what WebFetch can't see. Pin the format to `rawHtml`; the default `html` is post-processed and silently strips canonical, hreflang, and `script type="application/ld+json"` blocks on many sites. If those head fields come back zero on a site that obviously has them (any major SaaS homepage), you forgot the `rawHtml` flag — re-run.
+   - **Firecrawl second** (1 Firecrawl credit; use `formats: ["rawHtml"]`) — recovers what WebFetch can't see. Pin the format to `rawHtml`; the default `html` is post-processed and silently strips canonical, hreflang, and `script type="application/ld+json"` blocks on many sites. If those head fields come back zero on a site that obviously has them (any major SaaS homepage), you forgot the `rawHtml` flag — re-run.
      - From `metadata`: `og:title`, `og:description`, `og:image`, `twitter:card`, `viewport`, robots meta, canonical URL.
      - From the returned `rawHtml`: every `<script type="application/ld+json">` block. Parse each as JSON, list detected `@type`s (Article, BreadcrumbList, Organization, Product, etc.). Note any block that fails to parse.
      - hreflang: count `<link rel="alternate" hreflang="…">` occurrences in `rawHtml`.

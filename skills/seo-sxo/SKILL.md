@@ -3,7 +3,7 @@ name: seo-sxo
 description: Diagnose why a page is not ranking by reading the SERP backwards. Identifies the page type Google rewards for the target keyword, scores the candidate page against that pattern from multiple persona perspectives, and recommends the page format that would win the SERP. Use when the user asks "why isn't this page ranking", "page type mismatch", "SXO", "search experience optimization", "intent mismatch", or wants a wireframe.
 ---
 
-> Example output: [examples/seo-sxo-bigin-com-20260514/SXO-REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-sxo-bigin-com-20260514/SXO-REPORT.md)
+> Example output: [examples/seo-sxo-bigin-com-20260514/SXO-REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-sxo-bigin-com-20260514/SXO-REPORT.md)
 
 # SEO SXO — Search Experience Optimization
 

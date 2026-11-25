@@ -2,7 +2,7 @@
 name: seo-hreflang
 description: Hreflang and international SEO audit for multi-language and multi-region sites. Validates language-region codes, return tags, x-default, canonical alignment, and conflict detection across the per-URL HTML, the SE Ranking audit, and the XML sitemap. Use when the user asks "hreflang", "international SEO", "i18n", "language targeting", "x-default", "regional sites", or "multi-language SEO".
 ---
-> Example output: [examples/seo-hreflang-airbnb-com-20260514/HREFLANG-REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-hreflang-airbnb-com-20260514/HREFLANG-REPORT.md)
+> Example output: [examples/seo-hreflang-airbnb-com-20260514/HREFLANG-REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-hreflang-airbnb-com-20260514/HREFLANG-REPORT.md)
 
 # Hreflang Audit
 

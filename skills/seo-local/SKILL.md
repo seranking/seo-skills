@@ -3,7 +3,7 @@ name: seo-local
 description: Local SEO audit for brick-and-mortar, service-area, and multi-location businesses. Covers Google Business Profile signals on the website, NAP consistency across page and schema, local-pack rank tracking, citation samples on Tier-1 directories, and reviews on Google / Yelp / Trustpilot. Distinct from `seo-page` (URL-level keywords, no local layer) and from `seo-schema` (which generates LocalBusiness markup — this skill defers to it). Use when the user asks "local SEO", "GBP", "Google Business Profile", "NAP", "local pack", "citations", "near me", "service area", or "multi-location SEO".
 ---
 
-> Example output: [examples/seo-local-sweetgreen-com-20260514/LOCAL-SEO-REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-local-sweetgreen-com-20260514/LOCAL-SEO-REPORT.md)
+> Example output: [examples/seo-local-sweetgreen-com-20260514/LOCAL-SEO-REPORT.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-local-sweetgreen-com-20260514/LOCAL-SEO-REPORT.md)
 
 # Local SEO
 

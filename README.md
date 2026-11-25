@@ -52,13 +52,13 @@ Then run `/mcp` and complete OAuth. (User-scope registrations [outrank plugin-bu
 
 ## What you get
 
-25 finished example outputs — covering 25 of the 32 skills — live in [`examples/`](https://github.com/seranking/seo-skills/tree/v2.11.4/examples). Each is a real run against a publicly observable target. Three flagship examples to skim before installing:
+25 finished example outputs — covering 25 of the 32 skills — live in [`examples/`](https://github.com/seranking/seo-skills/tree/v2.11.5/examples). Each is a real run against a publicly observable target. Three flagship examples to skim before installing:
 
-- **[`seo-plan` for wix.com (90-day plan)](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-plan-wix-com-20260514/PLAN.md)** — phased SEO roadmap that composes outputs from `seo-ai-search-share-of-voice`, `seo-competitor-gap-analysis`, and `seo-drift` into a 90-day plan with owners, success metrics, and a critical path. Demonstrates skill composition.
-- **[`seo-technical-audit` for linear.app](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-technical-audit-linear-app-20260514/TECH-AUDIT.md)** — top-10 priority fix list ranked by `severity × affected_pages / effort`, plus `issues.csv` for the engineering team and a per-key-page issue digest.
-- **[`seo-ai-search-share-of-voice` for wix.com](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-ai-search-share-of-voice-wix-com-20260427/REPORT.md)** — 36.1% combined share of voice across 5 LLM engines (AI Overview / ChatGPT / Perplexity / Gemini / AI Mode), heatmap, topic-cluster ownership grid, and 5 prioritised gap-closing actions.
+- **[`seo-plan` for wix.com (90-day plan)](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-plan-wix-com-20260514/PLAN.md)** — phased SEO roadmap that composes outputs from `seo-ai-search-share-of-voice`, `seo-competitor-gap-analysis`, and `seo-drift` into a 90-day plan with owners, success metrics, and a critical path. Demonstrates skill composition.
+- **[`seo-technical-audit` for linear.app](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-technical-audit-linear-app-20260514/TECH-AUDIT.md)** — top-10 priority fix list ranked by `severity × affected_pages / effort`, plus `issues.csv` for the engineering team and a per-key-page issue digest.
+- **[`seo-ai-search-share-of-voice` for wix.com](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-ai-search-share-of-voice-wix-com-20260427/REPORT.md)** — 36.1% combined share of voice across 5 LLM engines (AI Overview / ChatGPT / Perplexity / Gemini / AI Mode), heatmap, topic-cluster ownership grid, and 5 prioritised gap-closing actions.
 
-Full index of all 25 examples: [`examples/README.md`](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/README.md). Every example is dated and snapshot-disclaimed — re-run the skill for fresh numbers.
+Full index of all 25 examples: [`examples/README.md`](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/README.md). Every example is dated and snapshot-disclaimed — re-run the skill for fresh numbers.
 
 ## All 32 Claude SEO Skills
 
@@ -68,13 +68,13 @@ The seven to reach for first — each links to a real, dated example run.
 
 | Skill | What it produces | Example run |
 |---|---|---|
-| [`seo-ai-search-share-of-voice`](skills/seo-ai-search-share-of-voice/SKILL.md) | Share-of-voice heatmap across ChatGPT, Perplexity, Gemini, Google AI Overview, and AI Mode, plus topic-cluster ownership per brand | [wix.com](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-ai-search-share-of-voice-wix-com-20260427/REPORT.md) |
-| [`seo-backlink-gap`](skills/seo-backlink-gap/SKILL.md) | Prospect list of referring domains linking to multiple competitors but not to your site, enriched with authority, anchor samples, and outreach angles | [linear.app](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-backlink-gap-linear-app-20260514/REPORT.md) |
-| [`seo-content-brief`](skills/seo-content-brief/SKILL.md) | Writer-ready editor brief from a domain and topic, with keyword research, SERP analysis, competitor content teardown, internal linking plan, and AI Search angle | [vercel.com](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md) |
-| [`seo-keyword-cluster`](skills/seo-keyword-cluster/SKILL.md) | Intent-grouped clusters with pillar plus spokes architecture and H1/H2 suggestions per spoke | [headless CMS](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-keyword-cluster-headless-cms-20260514/PLAN.md) |
-| [`seo-ads`](skills/seo-ads/SKILL.md) | Paid-search competitive intelligence. Domain ad footprint, bidding landscape per keyword, ad-copy patterns, SERP shopping/ad-pack visibility, recommended bid-keyword shortlist | [hostinger.com](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-ads-hostinger-com-20260514/ADS.md) |
-| [`seo-content-audit`](skills/seo-content-audit/SKILL.md) | E-E-A-T (60-item) + CITE (30-item) audit for existing content with publish / publish-with-fixes / no-publish verdict and citation-readiness analysis | [stripe.com](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md) |
-| [`seo-sxo`](skills/seo-sxo/SKILL.md) | Read SERPs backwards to find page-type mismatches. Scores the page from 4 personas; produces a wireframe for the SERP-winning page type | [bigin.com](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-sxo-bigin-com-20260514/SXO-REPORT.md) |
+| [`seo-ai-search-share-of-voice`](skills/seo-ai-search-share-of-voice/SKILL.md) | Share-of-voice heatmap across ChatGPT, Perplexity, Gemini, Google AI Overview, and AI Mode, plus topic-cluster ownership per brand | [wix.com](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-ai-search-share-of-voice-wix-com-20260427/REPORT.md) |
+| [`seo-backlink-gap`](skills/seo-backlink-gap/SKILL.md) | Prospect list of referring domains linking to multiple competitors but not to your site, enriched with authority, anchor samples, and outreach angles | [linear.app](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-backlink-gap-linear-app-20260514/REPORT.md) |
+| [`seo-content-brief`](skills/seo-content-brief/SKILL.md) | Writer-ready editor brief from a domain and topic, with keyword research, SERP analysis, competitor content teardown, internal linking plan, and AI Search angle | [vercel.com](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md) |
+| [`seo-keyword-cluster`](skills/seo-keyword-cluster/SKILL.md) | Intent-grouped clusters with pillar plus spokes architecture and H1/H2 suggestions per spoke | [headless CMS](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-keyword-cluster-headless-cms-20260514/PLAN.md) |
+| [`seo-ads`](skills/seo-ads/SKILL.md) | Paid-search competitive intelligence. Domain ad footprint, bidding landscape per keyword, ad-copy patterns, SERP shopping/ad-pack visibility, recommended bid-keyword shortlist | [hostinger.com](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-ads-hostinger-com-20260514/ADS.md) |
+| [`seo-content-audit`](skills/seo-content-audit/SKILL.md) | E-E-A-T (60-item) + CITE (30-item) audit for existing content with publish / publish-with-fixes / no-publish verdict and citation-readiness analysis | [stripe.com](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md) |
+| [`seo-sxo`](skills/seo-sxo/SKILL.md) | Read SERPs backwards to find page-type mismatches. Scores the page from 4 personas; produces a wireframe for the SERP-winning page type | [bigin.com](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-sxo-bigin-com-20260514/SXO-REPORT.md) |
 
 ### More skills
 
@@ -154,7 +154,7 @@ Every skill in this repo is designed to pace sequentially inside these limits. T
 
 ## Contributing
 
-This repo is the official Skills catalogue for the SE Ranking MCP server. See [`CONTRIBUTING.md`](https://github.com/seranking/seo-skills/blob/v2.11.4/CONTRIBUTING.md) for the skill-authoring template, required structure, MCP tool conventions, and PR checklist.
+This repo is the official Skills catalogue for the SE Ranking MCP server. See [`CONTRIBUTING.md`](https://github.com/seranking/seo-skills/blob/v2.11.5/CONTRIBUTING.md) for the skill-authoring template, required structure, MCP tool conventions, and PR checklist.
 
 - **Bug reports** — open an issue with the skill name, the input, and the unexpected output.
 - **New skills** — PRs welcome. Use the template in `CONTRIBUTING.md`.

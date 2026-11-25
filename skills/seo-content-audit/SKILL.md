@@ -3,7 +3,7 @@ name: seo-content-audit
 description: E-E-A-T + CITE quality audit for an EXISTING piece of content. Scores Experience, Expertise, Authoritativeness, Trustworthiness, and citation-readiness for AI search; surfaces veto items that block publication; produces a publish / publish-with-fixes / no-publish verdict. Distinct from `seo-content-brief` (produces a NEW article from a topic) and from `seo-page` (URL-level keyword/traffic intelligence). Use when the user asks "content quality audit", "E-E-A-T check", "is this content good", "review this article", "content audit", "citation readiness", or "AI search readiness".
 ---
 
-> Example output: [examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md)
+> Example output: [examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-content-audit-stripe-rate-limiters-20260514/VERDICT.md)
 
 # Content Quality Audit
 

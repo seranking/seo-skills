@@ -2,7 +2,7 @@
 name: seo-backlinks-profile
 description: Full backlink profile for a domain — referring domains, anchor text distribution, authority distribution, IP and subnet diversity, growth/decay trend, toxic-candidate flagging. Distinct from `seo-backlink-gap` (which is gap-vs-competitor only). Produces a profile health score and reviewable disavow candidate list (never auto-disavow). Use when the user asks "backlink profile", "link profile audit", "anchor distribution", "toxic links", "disavow candidates", or "backlink health".
 ---
-> Example output: [examples/seo-backlinks-profile-stripe-com-20260514/PROFILE.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-backlinks-profile-stripe-com-20260514/PROFILE.md)
+> Example output: [examples/seo-backlinks-profile-stripe-com-20260514/PROFILE.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-backlinks-profile-stripe-com-20260514/PROFILE.md)
 
 # Backlinks Profile
 
@@ -30,7 +30,7 @@ If your workflow specifically *requires* multi-source blending (large agencies, 
 1. **Validate target & preflight.** See `skills/seo-firecrawl/references/preflight.md` for the canonical 3-stage preflight (credit balance, Firecrawl availability, Google APIs). Skill-specific notes:
    - Normalise domain before continuing.
    - Estimated SE Ranking cost for this skill: moderate (full-profile run; no per-keyword multiplier).
-   - Firecrawl: optional. When `--verify-sources` is passed, step 8b (link-source verification) scrapes top-20 referring domains' linking pages to verify each link is still present and what `rel` it carries (dofollow / nofollow / sponsored / UGC), ~20 Firecrawl credits per run. Default off; pass `--no-firecrawl` to skip even if available.
+   - Firecrawl: optional. When `--verify-sources` is passed, step 8b (link-source verification) scrapes top-20 referring domains' linking pages to verify each link is still present and what `rel` it carries (dofollow / nofollow / sponsored / UGC), ~20 Firecrawl credits per run. Default off; use `--no-firecrawl` to skip even if available.
    - Google APIs: not used.
 
 2. **Profile summary** `DATA_getBacklinksSummary`

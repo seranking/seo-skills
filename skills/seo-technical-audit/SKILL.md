@@ -3,7 +3,7 @@ name: seo-technical-audit
 description: Focused one-shot technical SEO audit for a domain. Crawlability, indexability, security, mobile, structured data, JS rendering — single-pass deliverable, not a diff. Distinct from `seo-drift` (which tracks changes over time) and from `seo-page` (which audits keywords/traffic for one URL, not technical health). Use when the user asks "technical audit", "site audit", "audit my site", "crawl issues", "indexation issues", or "technical SEO check".
 ---
 
-> Example output: [examples/seo-technical-audit-linear-app-20260514/TECH-AUDIT.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-technical-audit-linear-app-20260514/TECH-AUDIT.md)
+> Example output: [examples/seo-technical-audit-linear-app-20260514/TECH-AUDIT.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-technical-audit-linear-app-20260514/TECH-AUDIT.md)
 
 # Technical Audit
 

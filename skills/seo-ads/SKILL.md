@@ -2,7 +2,7 @@
 name: seo-ads
 description: Paid-search competitive landscape for a domain or keyword. Pulls SE Ranking's PPC data — domain ad keyword footprint, ad copy patterns, who else bids on the same keywords, SERP shopping/ad-pack visibility — and produces a competitive ads brief plus a recommended bid-keyword shortlist. Use when the user asks "paid search analysis", "competitor ads", "PPC competitive", "ad copy intelligence", "shopping pack", "who bids on this keyword", or "paid keyword footprint".
 ---
-> Example output: [examples/seo-ads-hostinger-com-20260514/ADS.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-ads-hostinger-com-20260514/ADS.md)
+> Example output: [examples/seo-ads-hostinger-com-20260514/ADS.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-ads-hostinger-com-20260514/ADS.md)
 
 # Paid-Search Intelligence (Ads)
 

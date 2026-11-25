@@ -3,7 +3,7 @@ name: seo-keyword-cluster
 description: Build a content cluster plan from seed keywords — intent-grouped clusters, pillar+spokes architecture with H1/H2 suggestions per spoke, prioritised build order, and an internal-linking map. Plans a content tier across many articles (vs `seo-content-brief` which produces a single article from a topic; vs `seo-page` which audits one existing URL). Use when the user asks for keyword clustering, topical map, pillar content strategy, content cluster plan, or content calendar from a keyword list.
 ---
 
-> Example output: [examples/seo-keyword-cluster-headless-cms-20260514/PLAN.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-keyword-cluster-headless-cms-20260514/PLAN.md)
+> Example output: [examples/seo-keyword-cluster-headless-cms-20260514/PLAN.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-keyword-cluster-headless-cms-20260514/PLAN.md)
 
 # Keyword Cluster
 

@@ -3,7 +3,7 @@ name: seo-content-brief
 description: Generate a writer-ready SEO content brief from a target domain and topic. Pulls domain overview, competitors, keyword gaps, SERP analysis, related and question keywords, AI Search citations, and existing internal-link sources, then synthesises a complete editorial brief a freelance writer can start from immediately. Use when the user asks for a content brief, blog brief, article outline, editor brief, or wants to capture organic traffic their competitors have.
 ---
 
-> Example output: [examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md)
+> Example output: [examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-content-brief-vercel-rate-limiting-20260514/BRIEF.md)
 
 # Content Brief
 

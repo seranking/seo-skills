@@ -3,7 +3,7 @@ name: seo-agency-landing-page
 description: Generate a demand-gen landing page for an SEO agency, complete with pain-point hook, proof, a free-audit lead magnet flow, and CTAs tuned for cold traffic. Pulls real competitive and AI-search data for the agency's target niche to make the copy specific and credible. Use when the user asks for an SEO agency landing page, lead-gen page for an SEO agency, demand-gen page, free-audit landing page, or wants to convert cold traffic into discovery calls.
 ---
 
-> Example output: [examples/seo-agency-landing-page-saas-founders-20260514/copy.md](https://github.com/seranking/seo-skills/blob/v2.11.4/examples/seo-agency-landing-page-saas-founders-20260514/copy.md)
+> Example output: [examples/seo-agency-landing-page-saas-founders-20260514/copy.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-agency-landing-page-saas-founders-20260514/copy.md)
 
 # Agency Landing Page
 
