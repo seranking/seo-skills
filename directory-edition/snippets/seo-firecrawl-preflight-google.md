@@ -1,4 +1,4 @@
-When unavailable, also surface the install hint: add the Firecrawl MCP server (setup at firecrawl.dev, free tier 500 credits/month — see `seo-firecrawl/SKILL.md`).
+When unavailable, also tell the user they can connect the Firecrawl connector from the Claude directory (free tier 500 credits/month — see `seo-firecrawl/SKILL.md`).
 
 ### Stage C — Google APIs
 

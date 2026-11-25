@@ -20,10 +20,12 @@ gets an edition without them, built from the same source:
 
        any line <!-- dir-edition:line ID -->  → the whole line is replaced by snippets/ID.md
 
-4. Copy overrides/ over the result (whole-file replacements).
-5. Set the manifests' description to description.txt.
-6. Point relative links to files the edition lacks at GitHub, at --ref.
-7. Check every file (type, content sniffing with `file`, forbidden text) and
+4. Apply substitutions/ (exact text, once per file) and REWRITES (wording
+   that repeats across many skills).
+5. Copy overrides/ over the result (whole-file replacements).
+6. Set the manifests' description to description.txt.
+7. Point relative links to files the edition lacks at GitHub, at --ref.
+8. Check every file (type, content sniffing with `file`, forbidden text) and
    exit non-zero with the list of problems.
 
 Usage: python3 directory-edition/build.py --out DIR [--src REPO_ROOT] [--ref TAG]
@@ -67,6 +69,20 @@ MARKETPLACE_DESCRIPTION = "SE Ranking's plugin marketplace for Claude: SEO skill
 BRAND_WORDS = {"anthropic"}
 GITHUB_REPO = "https://github.com/seranking/seo-skills"
 
+# Wording that repeats across many skills, rewritten in every edition Markdown file.
+# The directory refuses text that tells the user to add an MCP server the plugin
+# doesn't declare, so the edition points to the Claude directory connectors, whose
+# tool names differ from those of a server added in Claude Code. Each rule must
+# still match, so a source change can't leave one silently dead.
+REWRITES = [
+    (r"`mcp__firecrawl-mcp__(firecrawl_[\w*]+)`(?: tool\b)?", r"Firecrawl's `\1` tool"),
+    (r"\bFirecrawl (is )?(not )?installed\b", r"Firecrawl \1\2connected"),
+    (r"\bAdd the Firecrawl MCP server from firecrawl\.dev\b", "Connect the Firecrawl connector from the Claude directory"),
+    (r"\*\*Planable MCP\*\* connected", "**Planable connector** (from the Claude directory) connected"),
+    (r"Setup guide: https://help\.planable\.io/[^\s\"]+", "It's in the Claude directory: search for Planable."),
+]
+REWRITES_RE = [(re.compile(pattern), replacement) for pattern, replacement in REWRITES]
+
 # Text the directory refuses or flags, or that points at files the edition doesn't ship.
 FORBIDDEN = [
     # Credentials read from the user's machine (the checklist forbids it "even in a README example").
@@ -75,6 +91,11 @@ FORBIDDEN = [
     (r"\b(?:sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{20,}|xox[bp]-[A-Za-z0-9-]{10,})", "looks like a real token"),
     (r"~/\.(?:aws|ssh|netrc|config/gcloud)\b|\.config/seo-skills|google-api\.json", "reads a local credentials file"),
     (r"GOOGLE_APPLICATION_CREDENTIALS|FIRECRAWL_API_KEY|GOOGLE_API_KEY", "names a credential variable"),
+    (r"\b(?!YOUR_)[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*_(?:KEY|TOKEN|SECRET|PASSWORD)(?:_[A-Z0-9]+)*\b(?!\s*=\s*[\"']?YOUR_)", "names a credential variable"),
+    (r"(?<![\w.])\.env\b", "points at a local credentials file"),
+    # MCP servers the plugin doesn't declare: point to their Claude directory connector instead.
+    (r"mcp__firecrawl|firecrawl-mcp|\b(?:Firecrawl|Planable) MCP\b|help\.planable\.io|(?:from|at)\s+firecrawl\.dev|\(firecrawl\.dev\)", "points to an MCP server the plugin doesn't declare"),
+    (r"\b(?:claude|codex)\s+mcp\s+add\s+(?![^\n]*\bse-ranking\b)\S", "adds an MCP server the plugin doesn't declare"),
     # Download-and-run commands.
     (r"\b(?:curl|wget|irm|iwr|Invoke-WebRequest|Invoke-RestMethod)\b[^\n]*\|\s*(?:sudo\s+(?:-\S+\s+)*)?(?:/\S*/)?(?:env\s+)?(?:ba|z|da|k|fi)?sh\b", "pipes a download into a shell"),
     (r"\b(?:curl|wget)\b[^\n]*\|\s*(?:sudo\s+)?(?:python3?|node|ruby|perl)\b", "pipes a download into an interpreter"),
@@ -210,6 +231,22 @@ def apply_substitutions(src: Path, out: Path) -> list[str]:
     return problems
 
 
+def apply_rewrites(out: Path, rewrites: list[tuple[re.Pattern[str], str]] = REWRITES_RE) -> list[str]:
+    hits = [0] * len(rewrites)
+    for file in sorted(out.rglob("*.md")):
+        text = new = file.read_text(encoding="utf-8")
+        for index, (pattern, replacement) in enumerate(rewrites):
+            new, count = pattern.subn(replacement, new)
+            hits[index] += count
+        if new != text:
+            file.write_text(new, encoding="utf-8")
+    return [
+        f"build.py REWRITES: '{pattern.pattern}' matches nothing in the edition; update or remove it"
+        for (pattern, _), count in zip(rewrites, hits)
+        if not count
+    ]
+
+
 def apply_overrides(src: Path, out: Path) -> None:
     overrides = src / "directory-edition" / "overrides"
     if not overrides.is_dir():
@@ -336,6 +373,7 @@ def build(src: Path, out: Path, ref: str, require_sniff: bool = False) -> list[s
     copy_sources(src, out)
     problems = apply_markers(out, src / "directory-edition" / "snippets", ref)
     problems += apply_substitutions(src, out)
+    problems += apply_rewrites(out)
     apply_overrides(src, out)
     problems += set_description(src, out)
     rewrite_missing_links(out, ref)

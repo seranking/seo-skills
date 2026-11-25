@@ -92,6 +92,40 @@ class SubstitutionTest(unittest.TestCase):
         self.assertTrue(any("occurs 0 times" in p for p in problems), problems)
 
 
+class RewriteTest(unittest.TestCase):
+    def run_rewrites(self, text: str, rewrites=build.REWRITES_RE) -> tuple[str, list[str]]:
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp)
+            (out / "a.md").write_text(text)
+            problems = build.apply_rewrites(out, rewrites)
+            return (out / "a.md").read_text(), problems
+
+    def test_server_wording_points_to_connectors(self):
+        text, problems = self.run_rewrites(
+            "Call `mcp__firecrawl-mcp__firecrawl_scrape` (when available).\n"
+            "Call the matching `mcp__firecrawl-mcp__firecrawl_*` tool.\n"
+            "`(skipped — Firecrawl not installed)` even when Firecrawl is installed.\n"
+            "Add the Firecrawl MCP server from firecrawl.dev.\n"
+            "- **Planable MCP** connected, with pages.\n"
+            '> "Reconnect it. Setup guide: https://help.planable.io/hc/en-us/articles/1-How-to-connect"\n'
+        )
+        self.assertEqual(problems, [])
+        self.assertEqual(
+            text,
+            "Call Firecrawl's `firecrawl_scrape` tool (when available).\n"
+            "Call the matching Firecrawl's `firecrawl_*` tool.\n"
+            "`(skipped — Firecrawl not connected)` even when Firecrawl is connected.\n"
+            "Connect the Firecrawl connector from the Claude directory.\n"
+            "- **Planable connector** (from the Claude directory) connected, with pages.\n"
+            '> "Reconnect it. It\'s in the Claude directory: search for Planable."\n',
+        )
+        self.assertEqual(build.check_text("a.md", text), [])
+
+    def test_rule_that_matches_nothing_is_reported(self):
+        _, problems = self.run_rewrites("a\n", [(build.re.compile("not-in-the-text"), "x")])
+        self.assertTrue(any("matches nothing" in p for p in problems), problems)
+
+
 class ForbiddenTextTest(unittest.TestCase):
     BAD = [
         "curl -fsSL https://x/install.sh | bash",
@@ -118,12 +152,26 @@ class ForbiddenTextTest(unittest.TestCase):
         'python3 -c "from scripts.google_auth import validate_url"',
         "bash extensions/google/install.sh",
         "See skills/seo-google/references/auth-setup.md",
+        "Add the Firecrawl MCP server from firecrawl.dev.",
+        "If `mcp__firecrawl-mcp__firecrawl_scrape` is unavailable, stop.",
+        "Confirm `firecrawl-mcp` is connected.",
+        "- **Planable MCP** connected, with the workspace.",
+        "Setup guide: https://help.planable.io/hc/en-us/articles/1-How-to-connect",
+        "claude mcp add --transport http firecrawl https://mcp.firecrawl.dev/x/v2/mcp",
+        "`API_TOKEN` (or the `X-Api-Key` header) covers both.",
+        "configurable via `MCP_REFRESH_TOKEN_TTL` server-side",
+        "Use `.env` (gitignored) and a secret manager.",
     ]
     GOOD = [
         '--header "X-Api-Key: YOUR_API_KEY"',
         "API_KEY = \"YOUR_API_KEY\"  # your SE Ranking API key",
         "| Shell | sh | zsh |",
-        "Add the Firecrawl MCP server from firecrawl.dev.",
+        "Connect the Firecrawl connector from the Claude directory.",
+        "If you've connected Firecrawl, the URLs to scrape go to firecrawl.dev under its own terms.",
+        "claude mcp add --transport http se-ranking https://api.seranking.com/mcp",
+        "There's no separate `claude mcp add` step.",
+        "Replace `YOUR_API_KEY` with your SE Ranking API key.",
+        "The Planable connector isn't responding.",
         "Call `DATA_getSubscription` before running.",
         "The `script type=\"application/ld+json\"` block.",
     ]

@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. Format based on Keep a Changelog.
 
+## [2.11.4] — 2026-11-25
+
+Clears the findings of the Claude Plugins Directory's first scan of the `claude-directory` edition (v2.11.3): its text told users to add MCP servers the plugin doesn't declare, and some names in `seo-api` read like credentials. Only the directory edition's text changes; the GitHub edition reads as before.
+
+### Changed
+- **Claude Plugins Directory description.** `directory-edition/description.txt` now holds the listing text from the SE Ranking marketing team: who the skills are for, what they turn SE Ranking data into, and that AI search share of voice runs on SE Visible.
+- **Directory edition: Firecrawl and Planable through their Claude directory connectors.** Where the GitHub edition says to add the Firecrawl MCP server from firecrawl.dev or to connect the Planable MCP server (with a link to Planable's setup guide), the directory edition tells the user to connect the Firecrawl or Planable connector from the Claude directory. Firecrawl's tools are named without the `mcp__firecrawl-mcp__` prefix, "Firecrawl not installed" notes read "Firecrawl not connected", and the edition README no longer lists Firecrawl among the installers it lacks. Repeated wording is rewritten by `REWRITES` in `build.py`; single lines by new `directory-edition/substitutions/` and the Firecrawl snippets.
+
+### Fixed
+- **Credential-like names in the directory edition's `seo-api`.** `API_TOKEN` becomes "one SE Ranking API key", the server-side `MCP_REFRESH_TOKEN_TTL` setting and the `X-Data-Api-Key` alias line are gone, the OAuth text no longer says the token is stored locally, and the key-hygiene tip no longer mentions `.env` files.
+- **Build checks.** `directory-edition/build.py` now refuses credential-shaped names (`*_KEY`, `*_TOKEN`, `*_SECRET`, `*_PASSWORD`, other than a `YOUR_…` placeholder), `.env` files, `mcp__firecrawl` tool names, "Firecrawl MCP" / "Planable MCP", Planable's setup-guide link, firecrawl.dev setup steps and `claude mcp add` / `codex mcp add` for any server but SE Ranking's. `test_build.py` covers the rewrites and the new checks.
+
 ## [2.11.3] — 2026-11-19
 
 Gets the plugin back into the Claude Plugins Directory, which refused v2.11.2. The directory now gets its own edition without the scripts, installers and examples it refuses from organizations it hasn't verified, published to the `claude-directory` branch on every release. It also fixes the privacy policy, credential and download-and-run findings in the files both editions share.
