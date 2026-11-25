@@ -2,7 +2,7 @@
 name: seo-subdomain
 description: Subdomain ownership map for a domain. Lists subdomains, queries overview/keywords/competitors/backlinks per subdomain, surfaces which subdomains own which topic clusters, where there's fragmentation, and whether consolidation is warranted. Use when the user asks "subdomain analysis", "subdomain ownership", "subdomain SEO", "blog vs main domain", "support vs docs subdomain", or "should I consolidate subdomains".
 ---
-> Example output: [examples/seo-subdomain-notion-so-20260514/SUBDOMAINS.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-subdomain-notion-so-20260514/SUBDOMAINS.md)
+> Example output: [examples/seo-subdomain-notion-so-20260514/SUBDOMAINS.md](https://github.com/seranking/seo-skills/blob/v2.11.6/examples/seo-subdomain-notion-so-20260514/SUBDOMAINS.md)
 
 # Subdomain Analysis
 

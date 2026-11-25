@@ -2,7 +2,7 @@
 name: seo-page
 description: URL-level SEO intelligence — which keywords this page ranks for, traffic captured, position history, SERP context, and AI Search citation status. Produces a keep / refresh / consolidate / kill verdict for one page. Distinct from `seo-technical-audit` (which checks technical health, not keyword/traffic performance) and from `seo-content-brief` (which produces a NEW article from a topic). Use when the user asks "analyze this page", "page SEO performance", "what does this URL rank for", "page traffic", "should I refresh this page", or provides a single URL for analysis.
 ---
-> Example output: [examples/seo-page-notion-keyboard-shortcuts-20260514/PAGE.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-page-notion-keyboard-shortcuts-20260514/PAGE.md)
+> Example output: [examples/seo-page-notion-keyboard-shortcuts-20260514/PAGE.md](https://github.com/seranking/seo-skills/blob/v2.11.6/examples/seo-page-notion-keyboard-shortcuts-20260514/PAGE.md)
 
 # Page Intelligence
 

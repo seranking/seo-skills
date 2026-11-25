@@ -2,7 +2,7 @@
 name: seo-backlinks-profile
 description: Full backlink profile for a domain — referring domains, anchor text distribution, authority distribution, IP and subnet diversity, growth/decay trend, toxic-candidate flagging. Distinct from `seo-backlink-gap` (which is gap-vs-competitor only). Produces a profile health score and reviewable disavow candidate list (never auto-disavow). Use when the user asks "backlink profile", "link profile audit", "anchor distribution", "toxic links", "disavow candidates", or "backlink health".
 ---
-> Example output: [examples/seo-backlinks-profile-stripe-com-20260514/PROFILE.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-backlinks-profile-stripe-com-20260514/PROFILE.md)
+> Example output: [examples/seo-backlinks-profile-stripe-com-20260514/PROFILE.md](https://github.com/seranking/seo-skills/blob/v2.11.6/examples/seo-backlinks-profile-stripe-com-20260514/PROFILE.md)
 
 # Backlinks Profile
 

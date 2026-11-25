@@ -2,7 +2,7 @@
 name: seo-geo
 description: URL-level Generative Engine Optimization (GEO) analysis. For a specific URL, pulls AI Overview citation data scoped to the URL's primary keywords, identifies which AIO queries cite the URL vs which don't but should, and recommends page-level changes that improve LLM citability. Distinct from `seo-ai-search-share-of-voice` (domain-level, brand vs brand) — this is one URL, deeper. Use when the user asks "GEO for this page", "AIO citation analysis", "AI search readiness for URL", "why isn't this page cited", or "improve LLM citations".
 ---
-> Example output: [examples/seo-geo-notion-share-pages-20260514/GEO.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-geo-notion-share-pages-20260514/GEO.md)
+> Example output: [examples/seo-geo-notion-share-pages-20260514/GEO.md](https://github.com/seranking/seo-skills/blob/v2.11.6/examples/seo-geo-notion-share-pages-20260514/GEO.md)
 
 # Page-Level GEO (Generative Engine Optimization)
 

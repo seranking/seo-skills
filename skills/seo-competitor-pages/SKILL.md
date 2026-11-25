@@ -3,7 +3,7 @@ name: seo-competitor-pages
 description: Generate SEO-optimized "X vs Y" comparison and "alternatives to X" landing pages targeting comparative-intent keywords. Pulls competitor data, comparative-intent SERPs, and existing comparison pages to produce a balanced, structured page draft with feature matrix, schema, and conversion blocks. Distinct from `seo-agency-landing-page` (top-of-funnel demand-gen). Use when the user asks for "comparison page", "vs page", "alternatives page", "X vs Y", "alternative to X", or "competitor comparison page".
 ---
 
-> Example output: [examples/seo-competitor-pages-linear-vs-jira-20260514/COMPARISON.md](https://github.com/seranking/seo-skills/blob/v2.11.5/examples/seo-competitor-pages-linear-vs-jira-20260514/COMPARISON.md)
+> Example output: [examples/seo-competitor-pages-linear-vs-jira-20260514/COMPARISON.md](https://github.com/seranking/seo-skills/blob/v2.11.6/examples/seo-competitor-pages-linear-vs-jira-20260514/COMPARISON.md)
 
 # Competitor Comparison & Alternatives Pages
 
