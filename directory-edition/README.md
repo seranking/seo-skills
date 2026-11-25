@@ -2,13 +2,18 @@
 
 The Claude Plugins Directory accepts only Markdown, text, JSON, YAML and image files from organizations it hasn't verified, and it refuses plugins whose files read credentials from the user's machine or download and run code. This repo's GitHub edition needs its Python scripts, installers and examples, so the directory gets its own edition, built from the same files:
 
-- `build.py` builds the edition into a folder outside the repo and checks it: file types, content sniffing with `file` (libmagic; Markdown it reads as HTML or Python counts as a refused type), `#!` lines, credential reads, download-and-run commands and references to files the edition doesn't ship. `test_build.py` covers the markers and the checks.
+- `build.py` builds the edition into a folder outside the repo and checks it: file types, content sniffing with `file` (libmagic; Markdown it reads as HTML or Python counts as a refused type), `#!` lines, credential reads and credential-shaped names, download-and-run commands, MCP servers the plugin doesn't declare and references to files the edition doesn't ship. `test_build.py` covers the markers and the checks.
 - `snippets/<id>.md` holds the text that replaces a marked block or line in the edition.
 - `substitutions/<id>.md` holds exact-text replacements for places a marker can't go, such as lines inside a fenced report template (a marker there would show on GitHub and could be copied into a report). Each names a file, the text to find (which must occur exactly once) and its replacement; an empty replacement drops the line. When the source text changes, the build fails until the substitution is updated.
+- `REWRITES` in `build.py` rewrites wording that repeats across many skills (Firecrawl tool names, "Firecrawl not installed", the Planable setup line). Each rule must still match somewhere, or the build fails.
 - `overrides/` holds whole files that replace their GitHub-edition version (today: the `seo-google` pointer skill).
 - `description.txt` is the plugin description the edition's manifests carry; the directory listing shows it.
 - `.github/workflows/directory-edition.yml` publishes the edition of each release to the `claude-directory` branch; `release.yml` runs it after every release. The directory listing tracks that branch.
 - The `validate` workflow runs the tests and builds the edition on every pull request, so a change the directory would refuse fails CI.
+
+## MCP servers
+
+The directory refuses text that tells Claude or the user to add an MCP server the plugin doesn't declare. The plugin declares only the SE Ranking server, so the edition sends users to the Firecrawl and Planable connectors in the Claude directory instead of firecrawl.dev or Planable's setup guide, and names Firecrawl's tools without the `mcp__firecrawl-mcp__` prefix (a connector's tools are named differently). The build refuses the old wording.
 
 ## Markers
 
